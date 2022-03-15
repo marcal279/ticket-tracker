@@ -43,7 +43,17 @@ export type GroupedBarChartOptions = {
   plotOptions: ApexPlotOptions;
   xaxis: ApexXAxis;
   stroke: ApexStroke;
-  title: ApexTitleSubtitle; // lets see if this works
+  title: ApexTitleSubtitle;
+};
+
+export type PolarChartOptions = {
+  series: ApexNonAxisChartSeries;
+  chart: ApexChart;
+  responsive: ApexResponsive[];
+  labels: any;
+  stroke: ApexStroke;
+  fill: ApexFill;
+  title: ApexTitleSubtitle;
 };
 
 @Component({
@@ -61,6 +71,8 @@ export class DashboardComponent implements OnInit {
   @ViewChild("grBarChart") grBarChart: ChartComponent | undefined;
   public grBarChartOptions!: Partial<GroupedBarChartOptions>;
 
+  @ViewChild("polarChart") polarChart: ChartComponent | undefined;
+  public polarChartOptions!: Partial<PolarChartOptions>;
 
   timeOfDay:string='';
   getTimeOfDay():void{
@@ -82,12 +94,12 @@ export class DashboardComponent implements OnInit {
         }
       ],
       chart: {
-        height: 350,
+        height: 200,
         type: "line",
         zoom: {
           enabled: false
         },
-        fontFamily: 'Merriweather Sans, sans-serif'
+        fontFamily: 'Roboto, sans-serif'
       },
       dataLabels: {
         enabled: false
@@ -103,6 +115,9 @@ export class DashboardComponent implements OnInit {
         row: {
           colors: ["#f3f3f3", "transparent"], // takes an array which will be repeated on columns
           opacity: 0.5
+        },
+        padding: {
+          bottom: 10 
         }
       },
       xaxis: {
@@ -124,16 +139,17 @@ export class DashboardComponent implements OnInit {
       series: [20, 25, 13, 43, 45],
       chart: {
         type: "donut",
-        fontFamily: "Merriweather Sans, sans-serif"
+        height: 200,
+        fontFamily: "Roboto, sans-serif"
       },
       title:{
-        text:"Tickets Status",
+        text:"Aggregated Tickets Status",
         align:"left"
       },
       labels: ["Pending", "Production", "Testing", "Approval", "Closed"],
       dataLabels: {
         style: {
-          fontSize: "12px",
+          fontSize: "9px",
           fontWeight: 400,
           colors: ["#fff"]
         }
@@ -170,8 +186,8 @@ export class DashboardComponent implements OnInit {
       },
       chart: {
         type: "bar",
-        height: 430,
-        fontFamily: 'Merriweather Sans, sans-serif'
+        height: 400,
+        fontFamily: 'Roboto, sans-serif'
       },
       plotOptions: {
         bar: {
@@ -185,7 +201,7 @@ export class DashboardComponent implements OnInit {
         enabled: true,
         offsetX: -6,
         style: {
-          fontSize: "10px",
+          fontSize: "9px",
           fontWeight: 400,
           colors: ["#fff"]
         }
@@ -201,6 +217,7 @@ export class DashboardComponent implements OnInit {
     };
     // NXT labels:["LCO Portal","LCO App","LCO Admin","Selfcare Portal", "Selfcare App", "DP Portal", "DP App", "DP Admin Portal", "Website","MSO"],
     // IMCL labels:["LCO Portal","LCO App","LCO Admin","Selfcare Portal", "Selfcare App","Selfcare Admin Portal","DP Portal", "DP App", "DP Admin Portal", "Website"],
+    
     
   }
 
