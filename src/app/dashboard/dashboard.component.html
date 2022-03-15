@@ -1,0 +1,65 @@
+<!-- <app-navbar></app-navbar> -->
+<style>
+    #allContent{
+        padding: 2rem;
+    }
+    mat-icon{
+        font-size: 2rem;
+        margin-right: 0.75rem;
+        position: relative;
+        top: 0.5rem;
+    }
+    #allCharts{
+        display: flex;
+        flex-flow: row wrap;
+        align-items: center;
+        justify-content: space-evenly;
+    }
+    .BIchart{
+        display: inline-block;
+        width: 25rem;
+        border-right: 2px rgb(236, 239, 241) solid;
+    }
+
+    div, p, span, h1,h2,h3,h4,h5,h6{
+        font-family: 'Fredoka', sans-serif;
+    }
+</style>
+<div id="allContent">
+    <div style="display: block;">
+        <mat-icon>account_circle</mat-icon>
+        <h2 style="display: inline-block;">Good {{this.timeOfDay}} User</h2>
+    </div>
+    <h3 class="divHeading">Business Summaries</h3>
+    <div id="allCharts">
+        <div class="BIchart" id="lineChart" *ngIf="lineChartOptions.series && lineChartOptions.chart && lineChartOptions.xaxis  && lineChartOptions.dataLabels && lineChartOptions.grid && lineChartOptions.stroke && lineChartOptions.title">
+            <apx-chart
+            [series]="lineChartOptions.series"
+            [chart]="lineChartOptions.chart"
+            [xaxis]="lineChartOptions.xaxis"
+            [dataLabels]="lineChartOptions.dataLabels"
+            [grid]="lineChartOptions.grid"
+            [stroke]="lineChartOptions.stroke"
+            [title]="lineChartOptions.title"></apx-chart>
+        </div>
+        <div class="BIchart" id="donutChart" *ngIf="donutChartOptions.series && donutChartOptions.chart && donutChartOptions.responsive && donutChartOptions.title && donutChartOptions.dataLabels">
+            <apx-chart
+                [series]="donutChartOptions.series"
+                [chart]="donutChartOptions.chart"
+                [labels]="donutChartOptions.labels"
+                [responsive]="donutChartOptions.responsive"
+                [dataLabels]="donutChartOptions.dataLabels"
+                [title]="donutChartOptions.title"></apx-chart>
+        </div>
+        <div class="BIchart" id="NXTvIMCL" *ngIf="grBarChartOptions.series && grBarChartOptions.chart && grBarChartOptions.dataLabels && grBarChartOptions.plotOptions && grBarChartOptions.xaxis && grBarChartOptions.stroke && grBarChartOptions.title">
+            <apx-chart
+                [series]="grBarChartOptions.series"
+                [chart]="grBarChartOptions.chart"
+                [dataLabels]="grBarChartOptions.dataLabels"
+                [plotOptions]="grBarChartOptions.plotOptions"
+                [xaxis]="grBarChartOptions.xaxis"
+                [stroke]="grBarChartOptions.stroke"
+                [title]="grBarChartOptions.title"></apx-chart>
+        </div>
+    </div>
+</div>

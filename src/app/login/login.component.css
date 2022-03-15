@@ -1,0 +1,90 @@
+    .centerAll{
+        display: flex;
+        flex-flow: row wrap;
+        align-items: center;
+        justify-content: center;
+    }
+    #fullBody{
+        height: 100%;
+        width: 100%;
+        background-color: rgb(40, 138, 250);
+    }
+    .loginHalf{
+        height: 100%;
+        width: 50%;
+    }
+
+    mat-card{
+        display: flex;
+        flex-flow: row wrap;
+        height: 70%; width: 62.5%;
+        padding: 2rem 0.5rem 0rem;
+        border-radius: 0.5rem;
+    }
+
+    #loginImg{
+        height: 23rem;
+    }
+
+    #loginForm{
+        margin: 1rem 0rem 0rem 1rem;
+    }
+
+    mat-card-title{
+        margin: 2rem 0rem;
+        font-size: 1.75rem;
+        font-weight: 600;
+        color: rgb(5, 106, 221);
+        font-family: 'Merriweather Sans', sans-serif;
+    }
+
+    mat-form-field, mat-checkbox{
+        margin-bottom: 0.75rem;
+    }
+
+    mat-checkbox{
+        font-size: 0.85rem;
+    }
+
+    #forgotPassword{
+        font-size: 0.80rem;
+        font-weight: 600;
+        color: rgb(0, 98, 209);
+    }
+    #forgotPassword:hover{
+        cursor: pointer;
+    }
+
+    .looks-good-tick{
+        color: rgb(0, 196, 33); 
+        font-size: 2rem;
+        position: relative; 
+        top: 0.3rem; 
+        left: 0.5rem; 
+    }
+
+    .login-button{
+        width: 39%; 
+        padding: 0.25rem 0rem;
+        border-radius: 1.5rem;
+        background-color: rgb(40, 138, 250);
+        color: white;
+        font-family: 'Merriweather Sans', sans-serif;
+    }
+    .login-button:hover{
+        background-color: rgb(236, 239, 241);
+        color: rgb(0, 98, 209);
+        font-weight: 600;
+    }
+
+    @media screen and (max-width: 1095px) {
+        .loginHalf{height: 50%; width: 100%;}
+        #loginImg{height: 15.5rem;}
+        #imgContainer{height: 20%;}
+        mat-card{height: 120%; width: 95%; margin-top: 0rem;}
+        #loginForm{}
+        mat-card-title,mat-form-field, mat-checkbox, #forgotPassword{margin-bottom: 0.5rem;}
+        mat-card-title{font-size: 1.5rem; margin-bottom: 0.5rem;}
+        mat-form-field{width: 97.5%;}
+        .login-button{padding-top: 0rem; padding-bottom: 0rem;}
+    }
