@@ -5,7 +5,7 @@
     }
     mat-icon{
         font-size: 2rem;
-        margin-right: 0.75rem;
+        margin-right: 1rem;
         position: relative;
         top: 0.5rem;
     }
@@ -18,22 +18,40 @@
     #lineChart{grid-area: lineCh;}
     #donutChart{grid-area: donutCh;}
     #NXTvIMCL{grid-area: doubleBarCh;}
-    #latestTickets{grid-area: latestTicks;
-        border: 2px rgb(236, 239, 241) solid;
-        border-radius: 1rem;
-        padding: 1rem;
-    }
     #gridContent{
         display: grid;
         grid-template-rows: 200px 250px;
+        grid-template-columns: 400px 430px;
         gap: 1rem 0rem;
         padding: 0.5rem;
         grid-template-areas: 
-        'lineCh donutCh doubleBarCh'
-        'latestTicks latestTicks doubleBarCh';
-        justify-content: space-around;
+        'lineCh doubleBarCh'
+        'donutCh doubleBarCh';
+        justify-content: space-evenly;
     }
-    
+
+
+    #dashboard{
+        display: flex;
+        flex-flow: row wrap;
+        justify-content: space-evenly;
+    }
+    #summaries{
+        display: inline-block;
+        border-right: 3px rgb(236, 239, 241) solid;
+        border-bottom: 3px rgb(236, 239, 241) solid;
+        border-radius: 1rem;
+    }
+    #yourInsights{
+        width: 25rem;
+        background-color: rgb(236, 239, 241);
+        /* border-right: 2px rgb(209, 213, 214) solid;
+        border-bottom: 2px rgb(209, 213, 214) solid; */
+        border-radius: 1rem;
+        padding: 1rem;
+    }
+
+
     .BIchart{
         display: inline-block;
         width: 25rem;
@@ -51,47 +69,52 @@
         <mat-icon>account_circle</mat-icon>
         <h2 style="display: inline-block;">Good {{this.timeOfDay}} User</h2>
     </div>
-    <div id="summaries">
-        <h3 class="divHeading">Business Summaries</h3>
-        <div id="gridContent">
-            <div class="BIchart" id="lineChart" *ngIf="lineChartOptions.series && lineChartOptions.chart && lineChartOptions.xaxis  && lineChartOptions.dataLabels && lineChartOptions.grid && lineChartOptions.stroke && lineChartOptions.title">
-                <apx-chart
-                [series]="lineChartOptions.series"
-                [chart]="lineChartOptions.chart"
-                [xaxis]="lineChartOptions.xaxis"
-                [dataLabels]="lineChartOptions.dataLabels"
-                [grid]="lineChartOptions.grid"
-                [stroke]="lineChartOptions.stroke"
-                [title]="lineChartOptions.title"></apx-chart>
+    <div id="dashboard">
+        <div id="summaries">
+            <h3 class="divHeading">Dashboard</h3>
+            <div id="gridContent">
+                <div class="BIchart" id="lineChart" *ngIf="lineChartOptions.series && lineChartOptions.chart && lineChartOptions.xaxis  && lineChartOptions.dataLabels && lineChartOptions.grid && lineChartOptions.stroke && lineChartOptions.title">
+                    <apx-chart
+                    [series]="lineChartOptions.series"
+                    [chart]="lineChartOptions.chart"
+                    [xaxis]="lineChartOptions.xaxis"
+                    [dataLabels]="lineChartOptions.dataLabels"
+                    [grid]="lineChartOptions.grid"
+                    [stroke]="lineChartOptions.stroke"
+                    [title]="lineChartOptions.title"></apx-chart>
+                </div>
+                <div class="BIchart" id="donutChart" *ngIf="donutChartOptions.series && 
+                donutChartOptions.chart && donutChartOptions.responsive &&
+                donutChartOptions.title && 
+                donutChartOptions.dataLabels">
+                <!-- donutChartOptions.theme &&  -->
+                    <apx-chart
+                        [series]="donutChartOptions.series"
+                        [chart]="donutChartOptions.chart"
+                        [labels]="donutChartOptions.labels"
+                        [responsive]="donutChartOptions.responsive"
+                        [dataLabels]="donutChartOptions.dataLabels"
+                        [title]="donutChartOptions.title"></apx-chart>
+                </div>
+                <div class="BIchart" id="NXTvIMCL" 
+                *ngIf="grBarChartOptions.series && 
+                grBarChartOptions.chart && grBarChartOptions.dataLabels && 
+                grBarChartOptions.plotOptions && grBarChartOptions.xaxis &&
+                grBarChartOptions.stroke && grBarChartOptions.title"
+                style="padding-bottom: 0rem;">
+                    <apx-chart
+                        [series]="grBarChartOptions.series"
+                        [chart]="grBarChartOptions.chart"
+                        [dataLabels]="grBarChartOptions.dataLabels"
+                        [plotOptions]="grBarChartOptions.plotOptions"
+                        [xaxis]="grBarChartOptions.xaxis"
+                        [stroke]="grBarChartOptions.stroke"
+                        [title]="grBarChartOptions.title"></apx-chart>
+                </div>
             </div>
-            <div class="BIchart" id="donutChart" *ngIf="donutChartOptions.series && donutChartOptions.chart && donutChartOptions.responsive && donutChartOptions.title && donutChartOptions.dataLabels">
-                <apx-chart
-                    [series]="donutChartOptions.series"
-                    [chart]="donutChartOptions.chart"
-                    [labels]="donutChartOptions.labels"
-                    [responsive]="donutChartOptions.responsive"
-                    [dataLabels]="donutChartOptions.dataLabels"
-                    [title]="donutChartOptions.title"></apx-chart>
-            </div>
-            <div class="BIchart" id="NXTvIMCL" 
-            *ngIf="grBarChartOptions.series && 
-            grBarChartOptions.chart && grBarChartOptions.dataLabels && 
-            grBarChartOptions.plotOptions && grBarChartOptions.xaxis &&
-            grBarChartOptions.stroke && grBarChartOptions.title"
-            style="padding-bottom: 0rem;">
-                <apx-chart
-                    [series]="grBarChartOptions.series"
-                    [chart]="grBarChartOptions.chart"
-                    [dataLabels]="grBarChartOptions.dataLabels"
-                    [plotOptions]="grBarChartOptions.plotOptions"
-                    [xaxis]="grBarChartOptions.xaxis"
-                    [stroke]="grBarChartOptions.stroke"
-                    [title]="grBarChartOptions.title"></apx-chart>
-            </div>
-            <div id="latestTickets">
-                here we have the latest tickets jksdfjhdsafksaghfkgdfkuasgfusgf
-                Or Activity Table (maybe last 5 tickets youve given and their statuses?)
-            </div>
+        </div>
+        <div id="yourInsights">
+            <h3 class="divHeading"><mat-icon>insights</mat-icon>Your Insights</h3>
         </div>
     </div>
 </div>

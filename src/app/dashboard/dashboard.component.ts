@@ -14,7 +14,8 @@ import {
   ApexStroke,
   ApexGrid,
   ApexFill,
-  ApexPlotOptions
+  ApexPlotOptions,
+  ApexTheme
 } from "ng-apexcharts";
 
 export type LineChartOptions = {
@@ -25,6 +26,7 @@ export type LineChartOptions = {
   grid: ApexGrid;
   stroke: ApexStroke;
   title: ApexTitleSubtitle;
+  theme: ApexTheme;
 };
 
 export type DonutChartOptions = {
@@ -34,6 +36,7 @@ export type DonutChartOptions = {
   labels: any;
   dataLabels: ApexDataLabels;
   title: ApexTitleSubtitle;
+  // theme: ApexTheme;
 };
 
 export type GroupedBarChartOptions = {
@@ -140,7 +143,8 @@ export class DashboardComponent implements OnInit {
       chart: {
         type: "donut",
         height: 200,
-        fontFamily: "Roboto, sans-serif"
+        fontFamily: "Roboto, sans-serif",
+        // background: "rgb(236, 239, 241)",
       },
       title:{
         text:"Aggregated Tickets Status",
@@ -166,7 +170,17 @@ export class DashboardComponent implements OnInit {
             }
           }
         }
-      ]
+      ],
+      // theme: {
+      //   mode: 'light', 
+      //   palette: 'palette1', 
+      //   monochrome: {
+      //       enabled: false,
+      //       color: '#0027a7',
+      //       shadeTo: 'light',
+      //       shadeIntensity: 0.6
+      //   },
+      // }
     };
 
     this.grBarChartOptions = {
