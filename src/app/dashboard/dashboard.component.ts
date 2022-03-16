@@ -1,5 +1,5 @@
 // https://apexcharts.com/docs/angular-charts/
-import { Component, ViewChild, OnInit } from '@angular/core';
+import { Component, ViewChild, OnInit, ElementRef } from '@angular/core';
 import { DatePipe } from '@angular/common';
 
 import {
@@ -36,7 +36,6 @@ export type DonutChartOptions = {
   labels: any;
   dataLabels: ApexDataLabels;
   title: ApexTitleSubtitle;
-  // theme: ApexTheme;
 };
 
 export type GroupedBarChartOptions = {
@@ -65,6 +64,10 @@ export type PolarChartOptions = {
   styleUrls: ['./dashboard.component.css']
 })
 export class DashboardComponent implements OnInit {
+  currPage:string = 'Dashboard';
+  sideNavIconList : string[] = ['severity--v2', 'two-tickets', 'bar-chart'];
+  sideNavSectionList: string[] = ['Dashboard', 'Ticket Manager', 'Analytics'];
+
   @ViewChild("lineChart") lineChart: ChartComponent | undefined;
   public lineChartOptions: Partial<LineChartOptions>;
 
@@ -87,6 +90,14 @@ export class DashboardComponent implements OnInit {
     }
     else this.timeOfDay = 'Morning';
   }
+
+  iconColour : string = "056ADD";
+  pageActive(iconName: string) : Boolean{
+    if(this.currPage == this.sideNavSectionList[this.sideNavIconList.indexOf(iconName)]) return true;
+    return false;
+  }
+  // rgb(177,0,111) nxt
+  //#2070a3 imcl
 
   constructor(public datepipe: DatePipe){
     this.lineChartOptions = {
@@ -187,11 +198,13 @@ export class DashboardComponent implements OnInit {
       series: [
         {
           name: "NXT",
-          data: [44, 55, 41, 64, 22, 43, 21, 13, 15]
+          data: [44, 55, 41, 64, 22, 43, 21, 13, 15],
+          color: '#B1006F'
         },
         {
           name: "IMCL",
-          data: [53, 32, 33, 52, 13, 44, 32, 20, 10]
+          data: [53, 32, 33, 52, 13, 44, 32, 20, 10],
+          color: '#2070a3'
         }
       ],
       title: {
