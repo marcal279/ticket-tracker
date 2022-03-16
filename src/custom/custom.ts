@@ -11,6 +11,8 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {MatButtonModule} from '@angular/material/button';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import {MatSidenavModule} from '@angular/material/sidenav';
+import {MatTableModule} from '@angular/material/table';
+import {MatChipsModule} from '@angular/material/chips';
 
 // Charts and BI
 import { NgApexchartsModule } from "ng-apexcharts";
@@ -30,6 +32,8 @@ import { NgApexchartsModule } from "ng-apexcharts";
         MatCheckboxModule,
         MatSidenavModule,
         NgApexchartsModule,
+        MatTableModule,
+        MatChipsModule,
     ],
     exports:[
         MatToolbarModule,
@@ -44,6 +48,8 @@ import { NgApexchartsModule } from "ng-apexcharts";
         MatCheckboxModule,
         MatSidenavModule,
         NgApexchartsModule,
+        MatTableModule,
+        MatChipsModule,
     ],
 })
 export class CustomMaterialModule{}

@@ -17,6 +17,7 @@ import {
   ApexPlotOptions,
   ApexTheme
 } from "ng-apexcharts";
+import { Ticket } from '../ticket';
 
 export type LineChartOptions = {
   series: ApexAxisChartSeries;
@@ -99,12 +100,31 @@ export class DashboardComponent implements OnInit {
   // rgb(177,0,111) nxt
   //#2070a3 imcl
 
+  sampleTickets: Ticket[] = [];
+  generateSampleTickets(){
+    for(let i=1; i<=5;i++){
+      let newTicket: Ticket = {
+        tid: String(50+i),
+        // empid: Math.random()>0.5?'NXT1234':'NXT9876',
+        empid: 'NXT1234',
+        title: 'Ticket No. '+ String(50+i),
+        desc: Math.random()>0.5?'desc':null,
+        status: ['Pending','Production','Testing','Approval','Closed'][Math.floor(Math.random()*5)],
+        // issueDate: 
+      }
+      this.sampleTickets.push(newTicket);
+    }
+  }
+  displayedColumns: string[] = ['tid','title','desc','status'];
+  dataSource = this.sampleTickets;
+
+
   constructor(public datepipe: DatePipe){
     this.lineChartOptions = {
       series: [
         {
           name: "Tickets",
-          data: [10, 41, 35, 51, 40, 62, 14, 74, 102]
+          data: [10, 41, 35, 51, 40, 62, 14, 74, 102, 22, 10, 34]
         }
       ],
       chart: {
@@ -119,7 +139,7 @@ export class DashboardComponent implements OnInit {
         enabled: false
       },
       stroke: {
-        curve: "smooth"
+        // curve: "smooth"
       },
       title: {
         text: "Avg. Total Tickets per Month",
@@ -144,7 +164,10 @@ export class DashboardComponent implements OnInit {
           "Jun",
           "Jul",
           "Aug",
-          "Sep"
+          "Sep",
+          "Oct",
+          "Nov",
+          "Dec"
         ]
       }
     };
@@ -250,6 +273,7 @@ export class DashboardComponent implements OnInit {
 
   ngOnInit(): void {
     this.getTimeOfDay();
+    this.generateSampleTickets();
   }
 
 }

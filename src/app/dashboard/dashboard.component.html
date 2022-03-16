@@ -75,7 +75,7 @@
     #yourInsights{
         width: 25rem;
         background-color: azure;
-        padding: 1rem;
+        padding: 0.45rem;
     }
 
 
@@ -86,6 +86,29 @@
         padding: 0.5rem 0.5rem 12.5rem 0.25rem;
     }
 
+    #yourInsights table{
+        margin: 1rem 1rem 1rem 2rem;
+        border-radius: 0.5rem;
+    }
+    #yourInsights tr{
+
+    }
+    /* .mat-chip.mat-standard-chip{
+        background-color: green;
+        color: white;
+    } */
+    .greenBG{
+        background-color: green;
+        color: white;
+    }
+    .redBG{
+        background-color: red;
+        color: white;
+    }
+    .purpleBG{
+        background-color: rgb(76, 0, 255);
+        color: white;
+    }
     
 </style>
 <div id="allContent">
@@ -156,7 +179,42 @@
     </div>
     <div id="yourInsights">
         <h3 class="divHeading" style="color:rgb(5, 106, 221);">
-            <img class="headingIcon" src="https://img.icons8.com/fluency-systems-regular/30/056ADD/statistic-document.png">Your Insights
+            <img class="headingIcon" src="https://img.icons8.com/fluency-systems-regular/30/056ADD/statistic-document.png">
+            Your Insights
         </h3>
+        <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+            <!-- 'tid','title','desc','status' -->
+
+            <!-- generate columns -->
+            <!-- tid -->
+            <ng-container matColumnDef="tid">
+                <th mat-header-cell *matHeaderCellDef>TID</th>
+                <td mat-cell *matCellDef="let element">{{element.tid}}</td>
+            </ng-container>
+            <!-- title -->
+            <ng-container matColumnDef="title">
+                <th mat-header-cell *matHeaderCellDef>Title</th>
+                <td mat-cell *matCellDef="let element">{{element.title}}</td>
+            </ng-container>
+            <!-- desc -->
+            <ng-container matColumnDef="desc">
+                <th mat-header-cell *matHeaderCellDef>Description</th>
+                <td mat-cell *matCellDef="let element">{{element.desc}}</td>
+            </ng-container>
+            <!-- status -->
+            <ng-container matColumnDef="status">
+                <th mat-header-cell *matHeaderCellDef>Status</th>
+                <td mat-cell *matCellDef="let element">
+                    <mat-chip-list>
+                        <mat-chip [ngClass]="{'greenBG': element.status == 'Closed', 'redBG' : element.status=='Pending', 'purpleBG': element.status == 'Production'||element.status == 'Testing'||element.status == 'Approval'}">{{element.status}}
+                        </mat-chip>
+                    </mat-chip-list>
+                </td>
+            </ng-container>
+
+            <!-- generate rows -->
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
     </div>
 </div>
