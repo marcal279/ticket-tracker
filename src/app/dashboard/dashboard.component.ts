@@ -18,6 +18,7 @@ import {
   ApexTheme
 } from "ng-apexcharts";
 import { Ticket } from '../ticket';
+import { style } from '@angular/animations';
 
 export type LineChartOptions = {
   series: ApexAxisChartSeries;
@@ -110,12 +111,12 @@ export class DashboardComponent implements OnInit {
         title: 'Ticket No. '+ String(50+i),
         desc: Math.random()>0.5?'desc':null,
         status: ['Pending','Production','Testing','Approval','Closed'][Math.floor(Math.random()*5)],
-        // issueDate: 
+        duration: String(Math.ceil(Math.random()*3))+'w',
       }
       this.sampleTickets.push(newTicket);
     }
   }
-  displayedColumns: string[] = ['tid','title','desc','status'];
+  displayedColumns: string[] = ['tid','title','duration','status'];
   dataSource = this.sampleTickets;
 
 
@@ -142,8 +143,11 @@ export class DashboardComponent implements OnInit {
         // curve: "smooth"
       },
       title: {
-        text: "Avg. Total Tickets per Month",
-        align: "left"
+        text: "Tickets Raised per Month 2021",
+        align: "left",
+        style: {
+          fontFamily: 'Fredoka, san-serif'
+        }
       },
       grid: {
         row: {
@@ -182,7 +186,10 @@ export class DashboardComponent implements OnInit {
       },
       title:{
         text:"Aggregated Tickets Status",
-        align:"left"
+        align:"left",
+        style: {
+          fontFamily: 'Fredoka, san-serif'
+        }
       },
       labels: ["Pending", "Production", "Testing", "Approval", "Closed"],
       dataLabels: {
@@ -222,17 +229,20 @@ export class DashboardComponent implements OnInit {
         {
           name: "NXT",
           data: [44, 55, 41, 64, 22, 43, 21, 13, 15],
-          color: '#B1006F'
+          // color: '#B1006F'
         },
         {
           name: "IMCL",
           data: [53, 32, 33, 52, 13, 44, 32, 20, 10],
-          color: '#2070a3'
+          // color: '#2070a3'
         }
       ],
       title: {
-        text: "NXT vs IMCL Tickets",
-        align: "left"
+        text: "NXT vs IMCL Tickets 2021",
+        align: "left",
+        style: {
+          fontFamily: 'Fredoka, san-serif'
+        }
       },
       chart: {
         type: "bar",
