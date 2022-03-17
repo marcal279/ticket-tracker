@@ -229,16 +229,16 @@ export class DashboardComponent implements OnInit {
         {
           name: "NXT",
           data: [44, 55, 41, 64, 22, 43, 21, 13, 15],
-          // color: '#B1006F'
+          color: '#B1006F'
         },
         {
           name: "IMCL",
           data: [53, 32, 33, 52, 13, 44, 32, 20, 10],
-          // color: '#2070a3'
+          color: '#045add'
         }
       ],
       title: {
-        text: "NXT vs IMCL Tickets 2021",
+        text: "",
         align: "left",
         style: {
           fontFamily: 'Fredoka, san-serif'
@@ -246,7 +246,8 @@ export class DashboardComponent implements OnInit {
       },
       chart: {
         type: "bar",
-        height: 400,
+        width: '88%',
+        height: 360,
         fontFamily: 'Roboto, sans-serif'
       },
       plotOptions: {

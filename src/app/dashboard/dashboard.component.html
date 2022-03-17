@@ -75,13 +75,12 @@
     #NXTvIMCL{grid-area: doubleBarCh;}
     #gridContent{
         display: grid;
-        grid-template-rows: 200px 250px;
+        grid-template-rows: 200px ;
         grid-template-columns: 400px 430px;
         gap: 1rem 0rem;
         padding: 0.5rem;
         grid-template-areas: 
-        'lineCh doubleBarCh'
-        'donutCh doubleBarCh';
+        'lineCh donutCh';
         justify-content: space-evenly;
     }
 
@@ -92,11 +91,6 @@
         display: inline-block;
         border-radius: 1rem;
     }
-    #yourInsights{
-        width: 25rem;
-        background-color: rgb(230, 241, 252);
-        padding: 0.45rem;
-    }
 
 
     .BIchart{
@@ -105,55 +99,20 @@
         border-radius: 0.5rem;
         padding: 0.5rem 0.5rem 12.5rem 0.25rem;
     }
-
-    #yourInsights .mat-table{
-        margin: 1rem 1rem 1rem 2rem;
-        border-radius: 1rem;
-        overflow:hidden !important;
-    }
-    /* .mat-chip.mat-standard-chip{
-        background-color: green;
-        color: white;
-    } */
-    .greenBG{
-        background-color: green;
-        color: white;
-    }
-    .redBG{
-        background-color: red;
-        color: white;
-    }
-    .purpleBG{
-        background-color: rgb(76, 0, 255);
-        color: white;
-    }
-    
-    .mat-column-title{
-        width: 8rem;
-        text-align: center;
-    }
-    .mat-column-duration{
-        width: 3rem;  
-    }
-    .mat-column-duration, .mat-column-status{
-        text-align: center;
-    }
-    tr.mat-header-row {
-        height: 35px;
-        font-weight: 500;
-        font-size: 15px;
-        /* color: #61a6f5; */
+    #yourInsights{
+        width: 25rem;
+        background-color: rgb(230, 241, 252);
+        padding: 0.45rem;
     }
 
     #yourInsights .customButton{
         width: 9.5rem;
         border: 1px rgb(216, 245, 252) solid;
         border-radius: 1rem;
-        margin: 1.5rem 0.5rem;
+        margin: 0.75rem 0.5rem;
         padding: 0.65rem;
         background-color: white;
         color: rgb(5, 106, 221);
-        /* color: rgb(35, 94, 161); */
     }
     #yourInsights .customButton:hover{
         border: none;
@@ -173,6 +132,9 @@
     <mat-icon>add</mat-icon>
 </button>
 <div id="allContent">
+
+
+
     <div id="sideNavIcons">
         <ul style="list-style-type: none;">
             <li style="padding-left: 0.76rem;">
@@ -186,13 +148,23 @@
             </li>
         </ul>
     </div>
+
+
+
+
+
     <div id="leftContent"> <!-- all content in white -->
         <div style="display: block;">
-            <img class="headingIcon" src="https://img.icons8.com/fluency-systems-regular/30/056ADD/user-male-circle.png" >
+            <img class="headingIcon" 
+            src="https://img.icons8.com/fluency-systems-regular/30/056ADD/user-male-circle.png" >
             <h2 style="display: inline-block;" class="fredoka500">Good {{this.timeOfDay}} User</h2>
         </div>
         <div id="summaries"> <!-- grid Title + gridContent -->
-            <!-- <h3 class="divHeading">Dashboard</h3> -->
+            <h3 class="divHeading fredoka500">
+                <img class="headingIcon" 
+                src="https://img.icons8.com/fluency-systems-regular/30/056ADD/brief.png" >
+                Summaries
+            </h3>
             <div id="gridContent">
                 <div class="BIchart" id="lineChart" *ngIf="lineChartOptions.series && 
                 lineChartOptions.chart && lineChartOptions.xaxis  && 
@@ -220,86 +192,66 @@
                         [dataLabels]="donutChartOptions.dataLabels"
                         [title]="donutChartOptions.title"></apx-chart>
                 </div>
-                <div class="BIchart" id="NXTvIMCL" 
-                *ngIf="grBarChartOptions.series && 
-                grBarChartOptions.chart && grBarChartOptions.dataLabels && 
-                grBarChartOptions.plotOptions && grBarChartOptions.xaxis &&
-                grBarChartOptions.stroke && grBarChartOptions.title"
-                style="padding-bottom: 0rem;">
-                    <apx-chart
-                        [series]="grBarChartOptions.series"
-                        [chart]="grBarChartOptions.chart"
-                        [dataLabels]="grBarChartOptions.dataLabels"
-                        [plotOptions]="grBarChartOptions.plotOptions"
-                        [xaxis]="grBarChartOptions.xaxis"
-                        [stroke]="grBarChartOptions.stroke"
-                        [title]="grBarChartOptions.title"></apx-chart>
-                </div>
             </div>
+            <h3 class="divHeading fredoka500">
+                <img class="headingIcon" 
+                src="https://img.icons8.com/fluency-systems-regular/30/056ADD/time-machine.png" >
+                Recently Raised
+            </h3>
         </div>
     </div>
+
+
+
+
+
     <div id="yourInsights">
-        <h3 class="fredoka divHeading">
-            <img class="headingIcon" src="https://img.icons8.com/fluency-systems-regular/30/056ADD/statistic-document.png">
+        <h3 class="fredoka divHeading" style="margin-bottom: 0.75rem;">
+            <img class="headingIcon" 
+            src="https://img.icons8.com/fluency-systems-regular/30/056ADD/statistic-document.png">
             Your Insights
         </h3>
-        <!-- <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" style="position: absolute; height: 6rem;z-index: 1;">
-            <path fill="#244571" d="M61.3,-55.8C76.8,-45.7,85.1,-22.8,84.4,-0.8C83.6,21.3,73.8,42.7,58.2,57.3C42.7,72,21.3,79.9,0.5,79.4C-20.4,79,-40.7,70,-53,55.4C-65.3,40.7,-69.5,20.4,-66,3.5C-62.5,-13.3,-51.2,-26.6,-38.9,-36.7C-26.6,-46.8,-13.3,-53.7,4.8,-58.5C22.8,-63.3,45.7,-65.9,61.3,-55.8Z" transform="translate(100 100)" />
-        </svg> -->
         <div style="
-        margin: 1rem;
+        margin: 0.5rem 1rem 1rem;
         padding: 1rem;
         border-radius: 1rem;
         background-color: rgb(5, 106, 221);
         color: white;
         width: 85%;
-        height: 6rem;
+        height: 5rem;
         "
         class="fredoka"
         >
             
             <p style="font-size: 0.8rem;">My Tickets</p>
             <span style="font-size: 2rem; margin: 0.5rem 0.5rem 0.5rem 0rem;">4 Pending,</span> 2 production, 8 closed
-            <div style="">
-                <button class="customButton fredoka500"><mat-icon>info</mat-icon>Detailed Status</button>
-                <button class="customButton fredoka500"><mat-icon>edit</mat-icon>Edit Existing</button>
-            </div>
+            <button class="customButton fredoka500"><mat-icon>info</mat-icon>Detailed Status</button>
+            <button class="customButton fredoka500"><mat-icon>edit</mat-icon>Edit Existing</button>
         </div>
         
-        <!-- <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
-            
-            <ng-container matColumnDef="tid">
-                <th mat-header-cell *matHeaderCellDef>TID</th>
-                <td mat-cell *matCellDef="let element">{{element.tid}}</td>
-            </ng-container>
-            
-            <ng-container matColumnDef="title">
-                <th mat-header-cell *matHeaderCellDef>Title</th>
-                <td mat-cell *matCellDef="let element">{{element.title}}</td>
-            </ng-container>
-            
-            <ng-container matColumnDef="duration">
-                <th mat-header-cell *matHeaderCellDef>Duration</th>
-                <td mat-cell *matCellDef="let element">{{element.duration}}</td>
-            </ng-container>
-            
-            <ng-container matColumnDef="status">
-                <th mat-header-cell *matHeaderCellDef>Status</th>
-                <td mat-cell *matCellDef="let element">
-                    <mat-chip-list>
-                        <mat-chip [ngClass]="{'greenBG': element.status == 'Closed', 
-                        'redBG' : element.status=='Pending', 
-                        'purpleBG': element.status == 'Production'||element.status == 'Testing'||element.status == 'Approval'}"
-                        style="margin-left: 1rem;">
-                            {{element.status}}
-                        </mat-chip>
-                    </mat-chip-list>
-                </td>
-            </ng-container>
 
-            
-            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-        </table> -->
+
+        <h3 class="fredoka divHeading" style="margin-top: 2rem; margin-bottom: 0rem;">
+            <img class="headingIcon" 
+            src="https://img.icons8.com/fluency-systems-regular/30/056ADD/total-sales-1.png">
+            Total Tickets 2021 NXT vs IMCL
+        </h3>
+
+        <div class="BIchart" id="NXTvIMCL" 
+        *ngIf="grBarChartOptions.series && 
+        grBarChartOptions.chart && grBarChartOptions.dataLabels && 
+        grBarChartOptions.plotOptions && grBarChartOptions.xaxis &&
+        grBarChartOptions.stroke && grBarChartOptions.title"
+        style="margin-left: 0.3rem; padding: 0rem;">
+            <apx-chart
+                [series]="grBarChartOptions.series"
+                [chart]="grBarChartOptions.chart"
+                [dataLabels]="grBarChartOptions.dataLabels"
+                [plotOptions]="grBarChartOptions.plotOptions"
+                [xaxis]="grBarChartOptions.xaxis"
+                [stroke]="grBarChartOptions.stroke"
+                [title]="grBarChartOptions.title">
+            </apx-chart>
+        </div>
     </div>
 </div>
