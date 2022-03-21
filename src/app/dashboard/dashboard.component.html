@@ -1,44 +1,6 @@
-<!-- <app-navbar></app-navbar> -->
 <style>
-    .fredoka{
-        font-family: 'Fredoka', sans-serif;
-    }
-    .fredoka500{
-        font-family: 'Fredoka', sans-serif;
-        font-weight: 500;
-    }
 
-    #add-ticket{
-        top: auto !important;
-        right: 2rem !important;
-        bottom: 2rem !important;
-        left: auto !important;
-        position: fixed !important;
-        z-index: 10;
-        background-color: rgb(5, 106, 221);
-    }
-
-    #allContent{
-        display: flex;
-        flex-flow: row wrap;
-        justify-content: space-between;
-        height: 100%;
-    }
-    h1,h2,h3,h4,h5,h6{
-        color: rgb(5, 106, 221);
-    }
-    .headingIcon{
-        margin-right: 0.3rem;
-        position: relative;
-        top: 0.5rem;
-    }
-    .divHeading{
-        font-weight: 500;
-        font-size: 1rem;
-        margin-left: 1.5rem;
-        margin-bottom: 0rem;
-        color:rgb(5, 106, 221);
-    }
+/* some stylings also in app.css */
 
     #lineChart{grid-area: lineCh;}
     #donutChart{grid-area: donutCh;}
@@ -98,10 +60,10 @@
     }
     
 </style>
-<button mat-fab aria-label="Add Ticket" id="add-ticket">
+<button mat-fab aria-label="Add Ticket" class="add-ticket">
     <mat-icon>add</mat-icon>
 </button>
-<div id="allContent">
+<div class="allContent">
 
 
 
@@ -114,7 +76,7 @@
         <div style="display: block;">
             <img class="headingIcon" 
             src="https://img.icons8.com/fluency-systems-regular/30/056ADD/user-male-circle.png" >
-            <h2 style="display: inline-block;" class="fredoka500">Good {{this.timeOfDay}} User</h2>
+            <h2 style="display: inline-block; color: rgb(5, 106, 221);" class="fredoka500">Good {{this.timeOfDay}} User</h2>
         </div>
         <div id="summaries"> <!-- grid Title + gridContent -->
             <h3 class="divHeading fredoka500">
@@ -155,6 +117,7 @@
                 src="https://img.icons8.com/fluency-systems-regular/30/056ADD/time-machine.png" >
                 Recently Raised
             </h3>
+            add table here with 5 records
         </div>
     </div>
 

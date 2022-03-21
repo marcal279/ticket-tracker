@@ -10,13 +10,15 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 // DateTime
 import { DatePipe } from '@angular/common';
 import { SideNavComponent } from './side-nav/side-nav.component';
+import { TicketManagerComponent } from './ticket-manager/ticket-manager.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
     DashboardComponent,
-    SideNavComponent
+    SideNavComponent,
+    TicketManagerComponent
   ],
   imports: [
     BrowserModule,

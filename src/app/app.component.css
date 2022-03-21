@@ -1,9 +1,46 @@
 @import url('https://fonts.googleapis.com/css2?family=Open+Sans&family=Fredoka:wght@400;500&family=Merriweather&family=Merriweather+Sans&display=swap');
 
-.fredoka{
+/* 
+    :host ::ng-deep added in order to apply it as a global style
+    see https://stackoverflow.com/questions/49738999/css-style-from-app-component-css-not-getting-applied-to-the-tabs-body-content
+*/
+
+:host ::ng-deep .fredoka{
     font-family: 'Fredoka', sans-serif;
 }
-.fredoka500{
+:host ::ng-deep .fredoka500{
     font-family: 'Fredoka', sans-serif;
     font-weight: 500;
+}
+
+:host ::ng-deep .add-ticket{
+    top: auto !important;
+    right: 2rem !important;
+    bottom: 2rem !important;
+    left: auto !important;
+    position: fixed !important;
+    z-index: 10;
+    background-color: rgb(5, 106, 221);
+}
+
+:host ::ng-deep .allContent{
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-between;
+    height: 100%;
+}
+:host ::ng-deep h1,h2,h3,h4,h5,h6{
+    color: rgb(5, 106, 221);
+}
+:host ::ng-deep .headingIcon{
+    margin-right: 0.3rem;
+    position: relative;
+    top: 0.5rem;
+}
+:host ::ng-deep .divHeading{
+    font-weight: 500;
+    font-size: 1rem;
+    margin-left: 1.5rem;
+    margin-bottom: 0rem;
+    color:rgb(5, 106, 221);
 }
