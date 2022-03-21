@@ -1,10 +1,11 @@
 export interface Ticket{
     tid: string,
     empid: string,
+    dept: string|null,
     title: string,
     desc: string|null,
-    status: string|'Pending'|'Production'|'Testing'|'Approval'|'Closed',
+    status: string|'AAPending'|'Production'|'Testing'|'Approval'|'ZZClosed',
     // issueDate: Date|null,
     // expectedDate: Date|null,
-    duration: string|null
+    duration: string|null,
 };

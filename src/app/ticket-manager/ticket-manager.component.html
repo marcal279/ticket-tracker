@@ -51,43 +51,43 @@
     table{
         margin: 1rem 1rem 1rem 2rem;
         border-radius: 0.5rem;
-        width: 150%;
+        /* width: 125%; */
     }
-    .greenBG{
-        background-color: green;
-        color: white;
-    }
-    .redBG{
-        background-color: red;
-        color: white;
-    }
-    .purpleBG{
-        background-color: rgb(76, 0, 255);
-        color: white;
+    .mat-column-tid{
+        width: 4rem;
     }
     .mat-column-title{
+        width: 9rem;
+        /* margin-right: 7rem; */
+    }
+    .mat-column-desc{
         width: 8rem;
-        text-align: center;
+    }
+    .mat-column-empid{
+        width: 6rem;
+    }
+    .mat-column-dept{
+        width: 6rem;
     }
     .mat-column-duration{
-        width: 3rem;  
-    }
-    .mat-column-duration, .mat-column-status{
-        text-align: center;
+        width: 5rem;  
     }
     .mat-column-status{
-        margin-left: 1rem;
+        width: 5rem; 
     }
-    mat-chip{
-        margin-left: 5rem;
+
+    :host ::ng-deep .mat-paginator-container {
+        margin-left: 1.5rem;
+        justify-content: left;
     }
+    
 </style>
 
 <div class="allContent" style="justify-content: left;">
     <app-side-nav [currPage] = this.currPage></app-side-nav>
 
     <div style="padding: 1rem 2rem;">
-        <div style="display: flex; width: 250%;
+        <div style="display: flex; width: 70rem;
         align-items: baseline; justify-content: space-between;">
             <div>
                 <img class="headingIcon" 
@@ -100,38 +100,47 @@
             </div>
         </div>
         <div>
-            <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+            <table mat-table matSort  [dataSource]="dataSource" class="mat-elevation-z8">
                 <!-- 'tid','title','desc','status' -->
     
                 <!-- generate columns -->
                 <!-- tid -->
                 <ng-container matColumnDef="tid">
-                    <th mat-header-cell *matHeaderCellDef>TID</th>
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>TID</th>
                     <td mat-cell *matCellDef="let element">{{element.tid}}</td>
                 </ng-container>
                 <!-- title -->
                 <ng-container matColumnDef="title">
-                    <th mat-header-cell *matHeaderCellDef>Title</th>
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Title</th>
                     <td mat-cell *matCellDef="let element">{{element.title}}</td>
                 </ng-container>
                 <!-- desc -->
                 <ng-container matColumnDef="desc">
-                    <th mat-header-cell *matHeaderCellDef>Description</th>
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Description</th>
                     <td mat-cell *matCellDef="let element">{{element.desc}}</td>
+                </ng-container>
+                <!-- empid -->
+                <ng-container matColumnDef="empid">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Employee ID</th>
+                    <td mat-cell *matCellDef="let element">{{element.empid}}</td>
+                </ng-container>
+                <!-- dept -->
+                <ng-container matColumnDef="dept">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Dept.</th>
+                    <td mat-cell *matCellDef="let element">{{element.dept}}</td>
                 </ng-container>
                 <!-- duration -->
                 <ng-container matColumnDef="duration">
-                    <th mat-header-cell *matHeaderCellDef>Duration</th>
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Duration</th>
                     <td mat-cell *matCellDef="let element">{{element.duration}}</td>
                 </ng-container>
                 <!-- status -->
                 <ng-container matColumnDef="status">
-                    <th mat-header-cell *matHeaderCellDef>Status</th>
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Status</th>
                     <td mat-cell *matCellDef="let element">
-                        <mat-chip-list>
-                            <mat-chip [ngClass]="{'greenBG': element.status == 'Closed', 'redBG' : element.status=='Pending', 'purpleBG': element.status == 'Production'||element.status == 'Testing'||element.status == 'Approval'}">{{element.status}}
-                            </mat-chip>
-                        </mat-chip-list>
+                        <mat-icon *ngIf="statusIsClosed(element.status)" style="color: green;">done</mat-icon>
+                        <mat-icon *ngIf="statusIsPending(element.status)" style="color: red;">schedule</mat-icon>
+                        <mat-icon *ngIf="statusIsProcessing(element.status)" style="color: rgb(255, 174, 0);">construction</mat-icon>
                     </td>
                 </ng-container>
     
@@ -139,6 +148,8 @@
                 <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
                 <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
             </table>
+            <mat-paginator #ticketPaginator [length]="sampleTickets.length" [pageSize]="5" [pageSizeOptions]="[5, 10, 15, 20]" aria-label="Select page">
+            </mat-paginator>
         </div>
     </div>
 </div>

@@ -105,13 +105,14 @@ export class DashboardComponent implements OnInit {
   generateSampleTickets(){
     for(let i=1; i<=5;i++){
       let newTicket: Ticket = {
-        tid: String(50+i),
+        tid: String(50 + i),
         // empid: Math.random()>0.5?'NXT1234':'NXT9876',
         empid: 'NXT1234',
-        title: 'Ticket No. '+ String(50+i),
-        desc: Math.random()>0.5?'desc':null,
-        status: ['Pending','Production','Testing','Approval','Closed'][Math.floor(Math.random()*5)],
-        duration: String(Math.ceil(Math.random()*3))+'w',
+        title: 'Ticket No. ' + String(50 + i),
+        desc: Math.random() > 0.5 ? 'desc' : null,
+        status: ['Pending', 'Production', 'Testing', 'Approval', 'Closed'][Math.floor(Math.random() * 5)],
+        duration: String(Math.ceil(Math.random() * 3)) + 'w',
+        dept: null
       }
       this.sampleTickets.push(newTicket);
     }

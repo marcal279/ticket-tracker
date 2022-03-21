@@ -15,6 +15,7 @@ import {MatChipsModule} from '@angular/material/chips';
 import {MatTableModule} from '@angular/material/table';
 // import {CdkTableModule} from '@angular/cdk/table';
 import {MatTooltipModule} from '@angular/material/tooltip';
+import {MatPaginatorModule} from '@angular/material/paginator';
 
 // Charts and BI
 import { NgApexchartsModule } from "ng-apexcharts";
@@ -38,6 +39,7 @@ import { NgApexchartsModule } from "ng-apexcharts";
         MatChipsModule,
         // CdkTableModule,
         MatTooltipModule,
+        MatPaginatorModule,
     ],
     exports:[
         MatToolbarModule,
@@ -56,6 +58,7 @@ import { NgApexchartsModule } from "ng-apexcharts";
         MatChipsModule,
         // CdkTableModule,
         MatTooltipModule,
+        MatPaginatorModule,
     ],
 })
 export class CustomMaterialModule{}
