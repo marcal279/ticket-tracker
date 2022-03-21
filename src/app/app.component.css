@@ -29,14 +29,13 @@
     justify-content: space-between;
     height: 100%;
 }
-:host ::ng-deep h1,h2,h3,h4,h5,h6{
-    color: rgb(5, 106, 221);
-}
+
 :host ::ng-deep .headingIcon{
     margin-right: 0.3rem;
     position: relative;
     top: 0.5rem;
 }
+
 :host ::ng-deep .divHeading{
     font-weight: 500;
     font-size: 1rem;
