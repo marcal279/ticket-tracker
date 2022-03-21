@@ -40,36 +40,6 @@
         color:rgb(5, 106, 221);
     }
 
-    #sideNavIcons{
-        width: 3.5rem;
-        background-color: rgb(217, 234, 250);
-    }
-    #sideNavIcons ul{
-        margin: 0.75rem 0rem 0.75rem 0rem;
-        padding: 0.5rem 0px 0.35rem 0px;
-    }
-    #sideNavIcons li{
-        margin: 0.3rem 0px;
-        padding: 0.4rem 0rem 0.2rem 0rem;
-        border-radius: 3px;
-    }
-    #sideNavIcons img{
-        padding-left: 0.86rem;
-    }
-    #sideNavIcons img:hover{
-        cursor: pointer;
-    }
-    .pagesIcons{
-    }
-    .pagesIcons:hover{
-        cursor: pointer;
-        background-color: rgb(163, 206, 255);
-        transition-duration: 0.2s;
-    }
-    .active{
-        border-right: 3px rgb(5, 106, 221) solid;
-    }
-
     #lineChart{grid-area: lineCh;}
     #donutChart{grid-area: donutCh;}
     #NXTvIMCL{grid-area: doubleBarCh;}
@@ -133,23 +103,9 @@
 </button>
 <div id="allContent">
 
-    <div id="sideNavIcons">
-        <ul style="list-style-type: none;">
-            <li style="padding-left: 0.76rem;">
-                <img src="https://img.icons8.com/fluency-systems-regular/30/056ADD/menu--v1.png" 
-                style="margin-bottom: 1.5rem; padding-left: 0rem;" id="menuIcon">
-            </li>
-            <li class="pagesIcons" *ngFor="let icon of sideNavIconList"
-            [ngClass]="{'active': pageActive(icon)}" style="margin: 1rem 0rem 2rem 0rem;">
-                <img *ngIf="pageActive(icon)" src="https://img.icons8.com/fluency-systems-regular/25/056ADD/{{icon}}.png" #{{icon}}>
-                <img *ngIf="!pageActive(icon)" src="https://img.icons8.com/fluency-systems-regular/25/61A6F5/{{icon}}.png" #{{icon}}>
-            </li>
-        </ul>
-    </div>
 
 
-
-
+    <app-side-nav [currPage] = this.currPage></app-side-nav>
 
 
 

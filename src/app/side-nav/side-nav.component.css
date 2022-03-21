@@ -1,0 +1,28 @@
+#sideNavIcons{
+    width: 3.5rem;
+    height: 100%;
+    background-color: rgb(217, 234, 250);
+}
+#sideNavIcons ul{
+    margin: 0rem 0rem 0.75rem 0rem;
+    padding: 0.5rem 0px 0.35rem 0px;
+}
+#sideNavIcons li{
+    margin: 0.3rem 0px;
+    padding: 0.4rem 0rem 0.2rem 0rem;
+    border-radius: 3px;
+}
+#sideNavIcons img{
+    padding-left: 0.86rem;
+}
+#sideNavIcons img:hover{
+    cursor: pointer;
+}
+.pagesIcons:hover{
+    cursor: pointer;
+    background-color: rgb(163, 206, 255);
+    transition-duration: 0.2s;
+}
+.active{
+    border-right: 3px rgb(5, 106, 221) solid;
+}

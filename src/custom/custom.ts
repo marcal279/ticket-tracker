@@ -13,7 +13,8 @@ import {MatCheckboxModule} from '@angular/material/checkbox';
 import {MatSidenavModule} from '@angular/material/sidenav';
 import {MatChipsModule} from '@angular/material/chips';
 import {MatTableModule} from '@angular/material/table';
-import {CdkTableModule} from '@angular/cdk/table';
+// import {CdkTableModule} from '@angular/cdk/table';
+import {MatTooltipModule} from '@angular/material/tooltip';
 
 // Charts and BI
 import { NgApexchartsModule } from "ng-apexcharts";
@@ -35,7 +36,8 @@ import { NgApexchartsModule } from "ng-apexcharts";
         NgApexchartsModule,
         MatTableModule,
         MatChipsModule,
-        CdkTableModule,
+        // CdkTableModule,
+        MatTooltipModule,
     ],
     exports:[
         MatToolbarModule,
@@ -52,7 +54,8 @@ import { NgApexchartsModule } from "ng-apexcharts";
         NgApexchartsModule,
         MatTableModule,
         MatChipsModule,
-        CdkTableModule,
+        // CdkTableModule,
+        MatTooltipModule,
     ],
 })
 export class CustomMaterialModule{}

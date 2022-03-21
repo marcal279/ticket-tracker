@@ -1,0 +1,21 @@
+<div id="sideNavIcons">
+    <ul style="list-style-type: none;">
+        <li style="padding-left: 0.76rem;">
+            <img src="https://img.icons8.com/fluency-systems-regular/30/056ADD/menu--v1.png" 
+            style="margin-bottom: 1.5rem; padding-left: 0rem;" id="menuIcon">
+        </li>
+        
+        <li class="pagesIcons" *ngFor="let icon of sideNavIconList"
+        [ngClass]="{'active': pageActive(icon)}" style="margin: 1rem 0rem 2rem 0rem;">
+            <img matTooltip="{{ this.sideNavSectionList[this.sideNavIconList.indexOf(icon)] }}"
+                [matTooltipPosition]="toolTipPosition" 
+                *ngIf="pageActive(icon)" 
+                src="https://img.icons8.com/fluency-systems-regular/25/056ADD/{{icon}}.png" #{{icon}}>
+            
+            <img matTooltip="{{ this.sideNavSectionList[this.sideNavIconList.indexOf(icon)] }}"
+                [matTooltipPosition]="toolTipPosition"
+                *ngIf="!pageActive(icon)" 
+                src="https://img.icons8.com/fluency-systems-regular/25/61A6F5/{{icon}}.png" #{{icon}}>    
+        </li>
+    </ul>
+</div>
