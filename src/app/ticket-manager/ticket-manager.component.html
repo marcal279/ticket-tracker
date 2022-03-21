@@ -1,15 +1,69 @@
 <style>
+    button:hover{
+        cursor: pointer;
+    }
+    .customButton{
+        width: 8rem;
+        border: 1px rgb(216, 245, 252) solid;
+        border-radius: 1rem;
+        margin: 0.75rem 0.5rem;
+        padding: 0.65rem 0rem;
+        font-size: 0.9rem;
+        background-color: rgb(5, 106, 221);
+        color: white;
+    }
+    .customButton:hover{
+        border-color: rgb(5, 106, 221);
+        background-color: white;
+        color: rgb(5, 106, 221);
+        transition-duration: 0.25s;
+    }
+    .customButton mat-icon{
+        font-size: 1.1rem;
+        position: relative;
+        bottom: -4px;
+        left: -2px;
+    }
 
+    .complemCustomButton{
+        width: 8rem;
+        border: 1px rgb(5, 106, 221) solid;
+        border-radius: 1rem;
+        margin: 0.75rem 0.5rem;
+        padding: 0.65rem 0rem;
+        font-size: 0.9rem;
+        color: rgb(5, 106, 221);
+        background-color: white;
+    }
+    .complemCustomButton:hover{
+        border-color: rgb(5, 106, 221);
+        color: white;
+        background-color: rgb(5, 106, 221);
+        transition-duration: 0.25s;
+    }
+    .complemCustomButton mat-icon{
+        font-size: 1.1rem;
+        position: relative;
+        bottom: -4px;
+        left: -2px;
+    }
 </style>
 
 <div class="allContent" style="justify-content: left;">
     <app-side-nav [currPage] = this.currPage></app-side-nav>
 
-    <div style="padding: 1rem;">
-        <div style="display: block;">
-            <img class="headingIcon" 
-            src="https://img.icons8.com/fluency-systems-regular/30/056ADD/user-male-circle.png" >
-            <h2 style="display: inline-block; color: rgb(5, 106, 221);" class="fredoka500">Ticket Manager</h2>
+    <div style="padding: 1rem 2rem;">
+        <div style="display: flex; width: 250%;
+        align-items: baseline; justify-content: space-between;">
+            <div>
+                <img class="headingIcon" 
+                src="https://img.icons8.com/fluency-systems-regular/30/056ADD/two-tickets.png" >
+                <h2 style="display: inline-block; color: rgb(5, 106, 221);" class="fredoka500">Ticket Manager</h2>
+            </div>
+            <div>
+                <button class="complemCustomButton fredoka500"><mat-icon>person</mat-icon>My Tickets</button>
+                <button class="customButton fredoka500"><mat-icon>add</mat-icon>New Ticket</button>
+            </div>
         </div>
     </div>
 </div>
