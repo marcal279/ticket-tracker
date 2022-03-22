@@ -112,7 +112,8 @@ export class DashboardComponent implements OnInit {
         desc: Math.random() > 0.5 ? 'desc' : null,
         status: ['Pending', 'Production', 'Testing', 'Approval', 'Closed'][Math.floor(Math.random() * 5)],
         duration: String(Math.ceil(Math.random() * 3)) + 'w',
-        dept: null
+        dept: null,
+        priority: (Math.random()<0.333? 'High': (Math.random()<0.667? 'Medium': 'Low')),
       }
       this.sampleTickets.push(newTicket);
     }

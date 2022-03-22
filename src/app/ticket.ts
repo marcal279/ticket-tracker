@@ -4,8 +4,9 @@ export interface Ticket{
     dept: string|null,
     title: string,
     desc: string|null,
-    status: string|'AAPending'|'Production'|'Testing'|'Approval'|'ZZClosed',
+    status: string, // 'AAPending'|'Production'|'Testing'|'Approval'|'ZZClosed',
     // issueDate: Date|null,
     // expectedDate: Date|null,
     duration: string|null,
+    priority: string,// 'High'|'Medium'|'Low'
 };

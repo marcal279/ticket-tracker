@@ -13,7 +13,7 @@ import {MatCheckboxModule} from '@angular/material/checkbox';
 import {MatSidenavModule} from '@angular/material/sidenav';
 import {MatChipsModule} from '@angular/material/chips';
 import {MatTableModule} from '@angular/material/table';
-// import {CdkTableModule} from '@angular/cdk/table';
+import {CdkTableModule} from '@angular/cdk/table';
 import {MatTooltipModule} from '@angular/material/tooltip';
 import {MatPaginatorModule} from '@angular/material/paginator';
 
@@ -37,7 +37,7 @@ import { NgApexchartsModule } from "ng-apexcharts";
         NgApexchartsModule,
         MatTableModule,
         MatChipsModule,
-        // CdkTableModule,
+        CdkTableModule,
         MatTooltipModule,
         MatPaginatorModule,
     ],
@@ -56,7 +56,7 @@ import { NgApexchartsModule } from "ng-apexcharts";
         NgApexchartsModule,
         MatTableModule,
         MatChipsModule,
-        // CdkTableModule,
+        CdkTableModule,
         MatTooltipModule,
         MatPaginatorModule,
     ],

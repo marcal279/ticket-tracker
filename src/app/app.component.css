@@ -43,3 +43,52 @@
     margin-bottom: 0rem;
     color:rgb(5, 106, 221);
 }
+
+:host ::ng-deep button:hover{
+    cursor: pointer;
+}
+:host ::ng-deep .customButton{
+    width: 8rem;
+    border: 1px rgb(216, 245, 252) solid;
+    border-radius: 1rem;
+    margin: 0.75rem 0.5rem;
+    padding: 0.65rem 0rem;
+    font-size: 0.9rem;
+    background-color: rgb(5, 106, 221);
+    color: white;
+}
+/* :host ::ng-deep .customButton:hover{
+    border-color: rgb(5, 106, 221);
+    background-color: white;
+    color: rgb(5, 106, 221);
+    transition-duration: 0.25s;
+} */
+:host ::ng-deep .customButton mat-icon{
+    font-size: 1.1rem;
+    position: relative;
+    bottom: -4px;
+    left: -2px;
+}
+
+:host ::ng-deep .complemCustomButton{
+    width: 8rem;
+    border: 1px rgb(5, 106, 221) solid;
+    border-radius: 1rem;
+    margin: 0.75rem 0.5rem;
+    padding: 0.65rem 0rem;
+    font-size: 0.9rem;
+    color: rgb(5, 106, 221);
+    background-color: white;
+}
+/* :host ::ng-deep .complemCustomButton:hover{
+    border-color: rgb(5, 106, 221);
+    color: white;
+    background-color: rgb(5, 106, 221);
+    transition-duration: 0.25s;
+} */
+:host ::ng-deep .complemCustomButton mat-icon{
+    font-size: 1.1rem;
+    position: relative;
+    bottom: -4px;
+    left: -2px;
+}
