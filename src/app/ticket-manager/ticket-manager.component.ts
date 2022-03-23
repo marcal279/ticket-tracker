@@ -3,6 +3,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
+import { isSubscription } from 'rxjs/internal/Subscription';
 import { Ticket } from '../ticket';
 
 @Component({
@@ -22,6 +23,22 @@ export class TicketManagerComponent implements OnInit {
   sideNavIconList : string[] = ['severity--v2', 'two-tickets', 'bar-chart'];
   sideNavSectionList: string[] = ['Dashboard', 'Ticket Manager', 'Analytics'];
   constructor() { }
+
+  timeOptions = [
+    {
+      value: 'week-0',
+      viewValue: 'Last Week',
+    },
+    {
+      value: 'month-1',
+      viewValue: 'Last Month',
+    },
+    {
+      value: 'year-2',
+      viewValue: 'Last Year',
+    },
+  ]
+  selectedTimePeriod = 'week-0';
 
   ngOnInit(): void {
     this.generateSampleTickets();
@@ -64,9 +81,15 @@ export class TicketManagerComponent implements OnInit {
         title: 'Ticket No. ' + String(50 + i),
         desc: Math.random() > 0.5 ? 'desc' : null,
         status: ['AAPending', 'Production', 'Testing', 'Approval', 'ZZClosed'][Math.floor(Math.random() * 5)],
+        issueDate: new Date().toDateString(),
         duration: String(this.randomIntBelow(3)+1) + 'w',
+        expectedDate: null,
         priority: (Math.random()<0.333? 'High': (Math.random()<0.667? 'Medium': 'Low')),
+        comments: 'Comment commenting commented',
       }
+      let endDate = new Date(newTicket.issueDate);  // has issueDate
+      endDate.setDate(endDate.getDate() + Number(newTicket.duration?.slice(0,1))*7);  // has Date form of issueDate + days
+      newTicket.expectedDate = endDate.toDateString();
       this.sampleTickets.push(newTicket);
     }
   }
@@ -87,8 +110,8 @@ export class TicketManagerComponent implements OnInit {
   }
   lastIcon: string = 'tick';
 
-  displayedColumns: string[] = ['tid','title', 'empid', 'dept', 'priority', 'duration','status'];
-  colNames: string[] = ['TID', 'Title', 'Employee ID', 'Dept.', 'Priority', 'Duration','Status'];
+  displayedColumns: string[] = ['tid','title', 'empid', 'dept', 'priority', 'issueDate', 'duration','status'];
+  colNames: string[] = ['TID', 'Title', 'Employee ID', 'Dept.', 'Priority', 'Issued', 'Duration','Status'];
 
   dataSource = new MatTableDataSource<Ticket>(this.sampleTickets);
   @ViewChild(MatSort) sort!: MatSort;

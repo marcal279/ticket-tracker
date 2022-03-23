@@ -92,3 +92,21 @@
     bottom: -4px;
     left: -2px;
 }
+
+:host ::ng-deep .enableButtonHover .customButton:hover{
+    border-color: rgb(5, 106, 221);
+    background-color: white;
+    color: rgb(5, 106, 221);
+    transition-duration: 0.25s;
+}
+:host ::ng-deep .enableButtonHover .complemCustomButton:hover{
+    border-color: rgb(5, 106, 221);
+    color: white;
+    background-color: rgb(5, 106, 221);
+    transition-duration: 0.25s;
+}
+
+:host ::ng-deep .zoomHoverButton button:hover{
+    transform: scale(1.05);
+    transition-duration: 200ms;
+}

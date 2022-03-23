@@ -17,7 +17,7 @@
     }
 
     #leftContent{
-        padding: 1rem;
+        padding: 0.5rem 1rem 1rem;
     }
     #summaries{
         display: inline-block;
@@ -58,11 +58,64 @@
         bottom: -4px;
         left: -2px;
     }
+
+
+
+    table{
+        margin: 1rem 1rem 1rem 2rem;
+        border-radius: 0.5rem;
+    }
+    .mat-column-tid{
+        width: 6rem;
+    }
+    .mat-column-title{
+        width: 9rem;
+        /* margin-right: 7rem; */
+    }
+    .mat-column-desc{
+        width: 8rem;
+    }
+    .mat-column-empid{
+        width: 6rem;
+    }
+    .mat-column-dept{
+        width: 6rem;
+    }
+    .mat-column-priority{
+        width: 5rem;  
+    }
+    .mat-column-duration{
+        width: 5rem;  
+    }
+    .mat-column-status{
+        width: 5rem; 
+    }
+
+    :host ::ng-deep .mat-paginator-container {
+        margin-left: 1.5rem;
+        justify-content: left;
+    }
+
+    .rowDetail{
+        overflow: hidden;
+    }
+
+    .expandedDetailRow{
+        height: 0;
+    }
+
+    tr.mat-row:not(.expandedDetailRow):hover{
+        cursor: pointer;
+        background-color: rgb(233, 231, 231);
+    }
+
+    .rowDetail h2{
+        margin-top: 0.5rem;
+        margin-bottom: 0.15rem;
+    }
     
 </style>
-<button mat-fab aria-label="Add Ticket" class="add-ticket">
-    <mat-icon>add</mat-icon>
-</button>
+
 <div class="allContent">
 
 
@@ -73,10 +126,19 @@
 
 
     <div id="leftContent"> <!-- all content in white -->
-        <div style="display: block;">
-            <img class="headingIcon" 
-            src="https://img.icons8.com/fluency-systems-regular/30/056ADD/user-male-circle.png" >
-            <h2 style="display: inline-block; color: rgb(5, 106, 221);" class="fredoka500">Good {{this.timeOfDay}} User</h2>
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+            <div>
+                <img class="headingIcon" 
+                src="https://img.icons8.com/fluency-systems-regular/30/056ADD/user-male-circle.png" >
+                <h2 style="display: inline-block; color: rgb(5, 106, 221);" class="fredoka500">Good {{this.timeOfDay}} User</h2>
+            </div>
+            <div class="enableButtonHover" style="display: flex;">
+                <button class="complemCustomButton" 
+                    style="width: 3rem; padding: 0.4rem 0.3rem 0.6rem 0.5rem; border-radius: 50%;">
+                    <mat-icon style="font-size: 1.5rem;">bedtime</mat-icon>
+                </button>
+                <button class="fredoka500 customButton"><mat-icon>add</mat-icon>New Ticket</button>
+            </div>
         </div>
         <div id="summaries"> <!-- grid Title + gridContent -->
             <h3 class="divHeading fredoka500">
@@ -115,9 +177,62 @@
             <h3 class="divHeading fredoka500">
                 <img class="headingIcon" 
                 src="https://img.icons8.com/fluency-systems-regular/30/056ADD/time-machine.png" >
-                Recently Raised
+                Recently Raised Tickets
             </h3>
-            add table here with 5 records
+            <!-- table -->
+            <div>
+                <table mat-table matSort [dataSource]="dataSource" multiTemplateDataRows class="mat-elevation-z2">
+                        
+                    <!-- generate all columns except status -->
+                    <ng-container *ngFor="let column of displayedColumns.slice(0,-1); index as i" matColumnDef="{{column}}">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header>{{colNames[i]}}</th>
+                        <td mat-cell *matCellDef="let element">{{element[column]}}</td>
+                    </ng-container>
+                    <!-- status -->
+                    <ng-container matColumnDef="status">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header>Status</th>
+                        <td mat-cell *matCellDef="let element">
+                            <mat-icon *ngIf="statusIsClosed(element.status)" style="color: green;">done</mat-icon>
+                            <mat-icon *ngIf="statusIsPending(element.status)" style="color: red;">schedule</mat-icon>
+                            <mat-icon *ngIf="statusIsProcessing(element.status)" style="color: rgb(255, 174, 0);">construction</mat-icon>
+                        </td>
+                    </ng-container>
+                    <!-- <ng-container matColumnDef="comments">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header>{{colNames[i]}}</th>
+                        <td mat-cell *matCellDef="let element">{{element[column]}}</td>
+                    </ng-container> -->
+    
+                    <!-- expandable row content. one row that spans all columns -->
+                    <ng-container matColumnDef="expandedDetail">
+                        <td mat-cell *matCellDef="let element" [attr.colspan]="displayedColumns.length">
+                            <div class="rowDetail"
+                                [@detailExpand] = "element == expandedRow? 'expanded': 'collapsed'">
+                                <h2>{{element.title}} ({{element.tid}})</h2>
+                                <p *ngIf="element.desc">{{element.desc}}</p>
+                                <p><strong>Issued By: </strong>{{element.empid}}
+                                <strong style="margin-left: 2rem;">Dept: </strong>{{element.dept}}</p>
+                                <p *ngIf="element.comments"><strong>Comments: </strong>{{element.comments}}</p>
+                            </div>
+                        </td>
+                    </ng-container>
+        
+                    <!-- 
+                        ticket-row = example-element-row
+                        ticket-expanded-row = example-expanded-row
+                     -->
+                    
+                    <!-- generate rows -->
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                    <tr mat-row *matRowDef="let element; columns: displayedColumns;"
+                    class="ticket-row" [class.ticket-expanded-row]="expandedRow === element"
+                    (click)="expandedRow = (expandedRow === element ? null : element)"></tr>
+                    <tr mat-row *matRowDef="let row; columns: ['expandedDetail'];" class="expandedDetailRow"></tr>
+                </table>
+                <!-- <mat-paginator #ticketPaginator [length]="sampleTickets.length" 
+                [pageSize]="5" [pageSizeOptions]="[5, 10, 15, 20]"
+                showFirstLastButtons aria-label="Select page">
+                </mat-paginator> -->
+            </div>
         </div>
     </div>
 
