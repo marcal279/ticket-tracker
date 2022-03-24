@@ -22,6 +22,7 @@ import { animate, state, style, transition, trigger } from '@angular/animations'
 import { MatTableDataSource } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
+import { TicketsService } from '../tickets.service';
 
 export type LineChartOptions = {
   series: ApexAxisChartSeries;
@@ -108,49 +109,13 @@ export class DashboardComponent implements OnInit {
     if(this.currPage == this.sideNavSectionList[this.sideNavIconList.indexOf(iconName)]) return true;
     return false;
   }
-  randomIntBelow(ceiling: number){
-    return Math.floor(Math.random()*ceiling);
+
+  allTickets: Ticket[] = []
+  getTickets(){
+    this.ticketService.getTickets().subscribe(ticketObserver => this.allTickets = ticketObserver)
   }
 
-  platformList: String[] = ['LP','LA','SCP','SCA','DCP','DCA','WBS','LAA','DCAA']
-  randomTID(){
-    let company = Math.random()>0.5?'NXT':'IN';
-    let portal = this.platformList[this.randomIntBelow(this.platformList.length)];
-    let id = this.randomIntBelow(100);
-    return company+portal+id
-  }
-
-  departments: String[] = ['Finance','Ops','Legal','Logistics'];
-  randomDept(){
-    return this.departments[this.randomIntBelow(this.departments.length)].toString();
-  }
   
-  sampleTickets: Ticket[] = [];
-  generateSampleTickets(){
-    for(let i=1; i<=3;i++){
-      let newTicket: Ticket = {
-        tid: this.randomTID(),
-        // empid: Math.random()>0.5?'NXT1234':'NXT9876',
-        empid: (Math.random()<0.5?'NXT':'IMCL') + (this.randomIntBelow(2000)+1),
-        dept: this.randomDept(),
-        title: 'Ticket No. ' + String(50 + i),
-        desc: Math.random() > 0.5 ? 'desc' : null,
-        status: ['AAPending', 'Production', 'Testing', 'Approval', 'ZZClosed'][Math.floor(Math.random() * 5)],
-        issueDate: new Date().toDateString(),
-        duration: String(this.randomIntBelow(3)+1) + 'w',
-        expectedDate: null,
-        priority: (Math.random()<0.333? 'High': (Math.random()<0.667? 'Medium': 'Low')),
-        comments: 'Comment commenting commented',
-      }
-      let endDate = new Date(newTicket.issueDate);  // has issueDate
-      endDate.setDate(endDate.getDate() + Number(newTicket.duration?.slice(0,1))*7);  // has Date form of issueDate + days
-      newTicket.expectedDate = endDate.toDateString();
-      this.sampleTickets.push(newTicket);
-    }
-  }
-
-  // String(Math.ceil(Math.random()*3))
-
   statusIsPending(status: string): boolean{
     if(status == 'AAPending') return true;
     return false;
@@ -168,18 +133,19 @@ export class DashboardComponent implements OnInit {
   displayedColumns: string[] = ['tid','title', 'empid', 'dept', 'priority', 'duration','status'];
   colNames: string[] = ['TID', 'Title', 'Employee ID', 'Dept.', 'Priority', 'Duration','Status'];
 
-  dataSource = new MatTableDataSource<Ticket>(this.sampleTickets);
+  dataSource = new MatTableDataSource<Ticket>();
   @ViewChild(MatSort) sort!: MatSort;
   // @ViewChild('ticketPaginator') ticketPaginator !: MatPaginator;
 
   ngAfterViewInit() {
+    this.dataSource.data = this.allTickets.slice(0,3); // TODO change this to most recent 3
     this.dataSource.sort = this.sort;
-    // this.dataSource.paginator = this.ticketPaginator;
   }
 
   expandedRow: Ticket|null = null;
 
-  constructor(public datepipe: DatePipe){
+  constructor(public datepipe: DatePipe, private ticketService: TicketsService){
+    // we also use constructor to initialize charts
     this.lineChartOptions = {
       series: [
         {
@@ -343,7 +309,7 @@ export class DashboardComponent implements OnInit {
 
   ngOnInit(): void {
     this.getTimeOfDay();
-    this.generateSampleTickets();
+    this.getTickets();
   }
 
 }

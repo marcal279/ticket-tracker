@@ -7,6 +7,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { isSubscription } from 'rxjs/internal/Subscription';
 import { CreateTicketDialogComponent } from '../create-ticket-dialog/create-ticket-dialog.component';
 import { Ticket } from '../ticket';
+import { TicketsService } from '../tickets.service';
 
 @Component({
   selector: 'app-ticket-manager',
@@ -21,11 +22,24 @@ import { Ticket } from '../ticket';
   ]
 })
 export class TicketManagerComponent implements OnInit {
+  
+  allTickets: Ticket[] = [];  // will store Tickets generated from service that were passed here by Observable
+
+  constructor(public dialog: MatDialog, private ticketService: TicketsService) { }
+
+  getTickets(){
+    // this.tickets = this.ticketService.getTickets(); synchronous implementation, removed now because we're using asynchronous implem (Observables)
+    this.ticketService.getTickets().subscribe(ticketObserver => this.allTickets = ticketObserver)
+  }
+  
+  ngOnInit(): void {
+    this.getTickets();  // stored in allTickets
+    // alert('called at ngOnInit');
+  }
+
   currPage:string = 'Ticket Manager';
   sideNavIconList : string[] = ['severity--v2', 'two-tickets', 'bar-chart'];
   sideNavSectionList: string[] = ['Dashboard', 'Ticket Manager', 'Analytics'];
-  
-  constructor(public dialog: MatDialog) { }
 
   timeOptions = [
     {
@@ -43,52 +57,8 @@ export class TicketManagerComponent implements OnInit {
   ]
   selectedTimePeriod = 'week-0';
 
-  ngOnInit(): void {
-    this.generateSampleTickets();
-  }
-
-  randomIntBelow(ceiling: number){
-    return Math.floor(Math.random()*ceiling);
-  }
-
-  platformList: String[] = ['LP','LA','SCP','SCA','DCP','DCA','WBS','LAA','DCAA']
-  randomTID(){
-    let company = Math.random()>0.5?'NXT':'IN';
-    let portal = this.platformList[this.randomIntBelow(this.platformList.length)];
-    let id = this.randomIntBelow(100);
-    return company+portal+id
-  }
-
-  departments: String[] = ['Finance','Ops','Legal','Logistics'];
-  randomDept(){
-    return this.departments[this.randomIntBelow(this.departments.length)].toString();
-  }
-
-  sampleTickets: Ticket[] = [];
-  generateSampleTickets(){
-    for(let i=1; i<=20;i++){
-      let newTicket: Ticket = {
-        tid: this.randomTID(),
-        // empid: Math.random()>0.5?'NXT1234':'NXT9876',
-        empid: (Math.random()<0.5?'NXT':'IMCL') + (this.randomIntBelow(2000)+1),
-        dept: this.randomDept(),
-        title: 'Ticket No. ' + String(50 + i),
-        desc: Math.random() > 0.5 ? 'desc' : null,
-        status: ['AAPending', 'BBProduction', 'CCTesting', 'DDApproval', 'ZZClosed'][Math.floor(Math.random() * 5)],
-        issueDate: new Date().toDateString(),
-        duration: String(this.randomIntBelow(3)+1) + 'w',
-        expectedDate: null,
-        priority: (Math.random()<0.333? 'High': (Math.random()<0.667? 'Medium': 'Low')),
-        comments: 'Comment commenting commented',
-      }
-      let endDate = new Date(newTicket.issueDate);  // has issueDate
-      endDate.setDate(endDate.getDate() + Number(newTicket.duration?.slice(0,1))*7);  // has Date form of issueDate + days
-      newTicket.expectedDate = endDate.toDateString();
-      this.sampleTickets.push(newTicket);
-    }
-  }
-
-  // String(Math.ceil(Math.random()*3))
+  
+  
 
   statusIsPending(status: string): boolean{
     if(status == 'AAPending') return true;
@@ -107,11 +77,12 @@ export class TicketManagerComponent implements OnInit {
   displayedColumns: string[] = ['tid','title', 'empid', 'dept', 'priority', 'issueDate', 'duration','status'];
   colNames: string[] = ['TID', 'Title', 'Employee ID', 'Dept.', 'Priority', 'Issued', 'Duration','Status'];
 
-  dataSource = new MatTableDataSource<Ticket>(this.sampleTickets);
+  dataSource = new MatTableDataSource<Ticket>();  // added this.dataSource.data = this.allTickets; below because somehow dataSource doesnt get properly initialized if passed as new MatTableDataSource<Ticket>(this.allTickets);
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild('ticketPaginator') ticketPaginator !: MatPaginator;
 
   ngAfterViewInit() {
+    this.dataSource.data = this.allTickets;   // IMP LINE HERE. needed to add this on getting allTickets from observable, see comment just above this
     this.dataSource.sort = this.sort;
     this.dataSource.paginator = this.ticketPaginator;
   }

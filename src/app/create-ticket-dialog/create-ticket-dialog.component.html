@@ -29,7 +29,7 @@
         </mat-form-field>
         <mat-form-field appearance="outline" style="display: block !important;">
             <mat-label>Description</mat-label>
-            <input type="text" matInput placeholder="Include feature details, styles and specifics if any" style="height: 5rem;" #ticketDesc>
+            <textarea type="text" matInput placeholder="Include feature details, styles and specifics if any" style="height: 5rem;" #ticketDesc></textarea>
             <mat-hint>Explain it in detail here</mat-hint>
         </mat-form-field>  
         <mat-form-field>
@@ -40,7 +40,7 @@
         </mat-form-field>
         <mat-form-field style="margin-left: 3rem;">
             <mat-select placeholder="Select Platform" appearance="fill">
-                <mat-option *ngFor="let platform of platformList;index as i" value="{{platform}}">{{platformNames[i]}}</mat-option>
+                <mat-option *ngFor="let platform of platformConsolidatedList" value="{{platform.code}}">{{platform.name}}</mat-option>
             </mat-select>
         </mat-form-field>
         <!-- expectedDate datepicker or duration picker( As soon as possible, 1w, 2w, 3w, 4w, >4w ) -->
