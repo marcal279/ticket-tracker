@@ -1,9 +1,11 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { Component, OnInit, ViewChild } from '@angular/core';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { isSubscription } from 'rxjs/internal/Subscription';
+import { CreateTicketDialogComponent } from '../create-ticket-dialog/create-ticket-dialog.component';
 import { Ticket } from '../ticket';
 
 @Component({
@@ -22,7 +24,8 @@ export class TicketManagerComponent implements OnInit {
   currPage:string = 'Ticket Manager';
   sideNavIconList : string[] = ['severity--v2', 'two-tickets', 'bar-chart'];
   sideNavSectionList: string[] = ['Dashboard', 'Ticket Manager', 'Analytics'];
-  constructor() { }
+  
+  constructor(public dialog: MatDialog) { }
 
   timeOptions = [
     {
@@ -48,26 +51,17 @@ export class TicketManagerComponent implements OnInit {
     return Math.floor(Math.random()*ceiling);
   }
 
+  platformList: String[] = ['LP','LA','SCP','SCA','DCP','DCA','WBS','LAA','DCAA']
   randomTID(){
     let company = Math.random()>0.5?'NXT':'IN';
-    let portal ='', portalRandom = Math.random();
-    if(portalRandom<0.1) portal ='LP'
-    else if(portalRandom<0.2) portal = 'LA'
-    else if(portalRandom<0.3) portal = 'SCP'
-    else if(portalRandom<0.4) portal = 'SCA'
-    else if(portalRandom<0.5) portal = 'DCP'
-    else if(portalRandom<0.6) portal = 'DCA'
-    else if(portalRandom<0.7) portal = 'WBS'
-    else if(portalRandom<0.8) portal = 'LAA'
-    else portal = 'DCAA';
+    let portal = this.platformList[this.randomIntBelow(this.platformList.length)];
     let id = this.randomIntBelow(100);
-
     return company+portal+id
   }
 
+  departments: String[] = ['Finance','Ops','Legal','Logistics'];
   randomDept(){
-    let randomVal = Math.random();
-    return randomVal<0.2?'Finance':( randomVal<0.4?'Ops': (randomVal<0.6?'Legal':'Logistics') );
+    return this.departments[this.randomIntBelow(this.departments.length)].toString();
   }
 
   sampleTickets: Ticket[] = [];
@@ -80,7 +74,7 @@ export class TicketManagerComponent implements OnInit {
         dept: this.randomDept(),
         title: 'Ticket No. ' + String(50 + i),
         desc: Math.random() > 0.5 ? 'desc' : null,
-        status: ['AAPending', 'Production', 'Testing', 'Approval', 'ZZClosed'][Math.floor(Math.random() * 5)],
+        status: ['AAPending', 'BBProduction', 'CCTesting', 'DDApproval', 'ZZClosed'][Math.floor(Math.random() * 5)],
         issueDate: new Date().toDateString(),
         duration: String(this.randomIntBelow(3)+1) + 'w',
         expectedDate: null,
@@ -127,6 +121,15 @@ export class TicketManagerComponent implements OnInit {
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
+  }
+
+  createTicket(): void{
+    const dialogConfig = new MatDialogConfig();
+
+    dialogConfig.autoFocus = true;  // automatically sets focus to first text box
+    dialogConfig.width = '35rem';
+
+    const dialogRef = this.dialog.open(CreateTicketDialogComponent, dialogConfig);
   }
 
 }

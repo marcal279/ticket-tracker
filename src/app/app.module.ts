@@ -11,6 +11,7 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { DatePipe } from '@angular/common';
 import { SideNavComponent } from './side-nav/side-nav.component';
 import { TicketManagerComponent } from './ticket-manager/ticket-manager.component';
+import { CreateTicketDialogComponent } from './create-ticket-dialog/create-ticket-dialog.component';
 
 @NgModule({
   declarations: [
@@ -18,7 +19,8 @@ import { TicketManagerComponent } from './ticket-manager/ticket-manager.componen
     LoginComponent,
     DashboardComponent,
     SideNavComponent,
-    TicketManagerComponent
+    TicketManagerComponent,
+    CreateTicketDialogComponent
   ],
   imports: [
     BrowserModule,

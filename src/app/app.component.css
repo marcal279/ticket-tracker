@@ -13,7 +13,7 @@
     font-weight: 500;
 }
 
-:host ::ng-deep .add-ticket{
+/* :host ::ng-deep .add-ticket{
     top: auto !important;
     right: 2rem !important;
     bottom: 2rem !important;
@@ -21,7 +21,7 @@
     position: fixed !important;
     z-index: 10;
     background-color: rgb(5, 106, 221);
-}
+} */
 
 :host ::ng-deep .allContent{
     display: flex;
@@ -57,12 +57,7 @@
     background-color: rgb(5, 106, 221);
     color: white;
 }
-/* :host ::ng-deep .customButton:hover{
-    border-color: rgb(5, 106, 221);
-    background-color: white;
-    color: rgb(5, 106, 221);
-    transition-duration: 0.25s;
-} */
+
 :host ::ng-deep .customButton mat-icon{
     font-size: 1.1rem;
     position: relative;
@@ -80,12 +75,7 @@
     color: rgb(5, 106, 221);
     background-color: white;
 }
-/* :host ::ng-deep .complemCustomButton:hover{
-    border-color: rgb(5, 106, 221);
-    color: white;
-    background-color: rgb(5, 106, 221);
-    transition-duration: 0.25s;
-} */
+
 :host ::ng-deep .complemCustomButton mat-icon{
     font-size: 1.1rem;
     position: relative;
