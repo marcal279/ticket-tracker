@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
-// import { NavbarComponent } from '../navbar/navbar.component';
+import { User } from '../user';
+import { UserService } from '../user.service';
 
 @Component({
   selector: 'app-login',
@@ -16,7 +17,7 @@ export class LoginComponent implements OnInit {
   }
 
   invalidID(username:string) : Boolean{
-    if((username.startsWith('NXT') || username.startsWith('IMCL')) && username.length>5) return false;
+    if((username.startsWith('NXT') || username.startsWith('IMCL') || username.endsWith('@nxtdigital.in')) && username.length>5) return false;
     else return true;
   }
 
