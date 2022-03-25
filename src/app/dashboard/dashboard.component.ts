@@ -23,6 +23,8 @@ import { MatTableDataSource } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
 import { TicketsService } from '../tickets.service';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
+import { CreateTicketDialogComponent } from '../create-ticket-dialog/create-ticket-dialog.component';
 
 export type LineChartOptions = {
   series: ApexAxisChartSeries;
@@ -80,6 +82,15 @@ export class DashboardComponent implements OnInit {
   currPage:string = 'Dashboard';
   sideNavIconList : string[] = ['severity--v2', 'two-tickets', 'bar-chart'];
   sideNavSectionList: string[] = ['Dashboard', 'Ticket Manager', 'Analytics'];
+
+  createTicket(): void{
+    const dialogConfig = new MatDialogConfig();
+
+    dialogConfig.autoFocus = true;  // automatically sets focus to first text box
+    dialogConfig.width = '35rem';
+
+    const dialogRef = this.dialog.open(CreateTicketDialogComponent, dialogConfig);
+  }
 
   @ViewChild("lineChart") lineChart: ChartComponent | undefined;
   public lineChartOptions: Partial<LineChartOptions>;
@@ -144,7 +155,7 @@ export class DashboardComponent implements OnInit {
 
   expandedRow: Ticket|null = null;
 
-  constructor(public datepipe: DatePipe, private ticketService: TicketsService){
+  constructor(public dialog: MatDialog, public datepipe: DatePipe, private ticketService: TicketsService){
     // we also use constructor to initialize charts
     this.lineChartOptions = {
       series: [
