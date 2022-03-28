@@ -1,7 +1,8 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
+import { MatSlideToggle, MatSlideToggleChange } from '@angular/material/slide-toggle';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { isSubscription } from 'rxjs/internal/Subscription';
@@ -92,6 +93,28 @@ export class TicketManagerComponent implements OnInit {
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
+  }
+
+  // very hacky implementation
+  searchBoxValue: string = '';
+  onlyMyTicketsShown = false;
+  @ViewChild('ticketSearch') searchBox!: ElementRef;
+  // @ViewChild('mat-slide-toggle') myTicketToggle!: ElementRef;
+  myTickets(event: MatSlideToggleChange): void{
+    let myTicketToggle: MatSlideToggle = event.source;
+    // this.searchBox.nativeElement.value = 'NXT235';
+    if(this.onlyMyTicketsShown){
+      this.searchBoxValue = 'NXT235';
+      let myTickets = this.allTickets.filter((value: Ticket)=>{
+        if(value.empid == 'NXT235') return value;
+        else return null;
+      })
+      this.dataSource.data = myTickets;
+    }
+    else{
+      this.searchBoxValue = '';
+      this.dataSource.data = this.allTickets;
+    }
   }
 
   createTicket(): void{

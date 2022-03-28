@@ -46,6 +46,22 @@ export class TicketsService {
       newTicket.expectedDate = endDate.toDateString();
       randomTickets.push(newTicket);
     }
+    //manual ticket we're adding for testing
+    let hardCodeTicket: Ticket = {
+      tid: this.randomTID(),
+      // empid: Math.random()>0.5?'NXT1234':'NXT9876',
+      empid: 'NXT235',
+      dept: this.randomDept(),
+      title: 'Hard Coded Ticket',
+      desc: Math.random() > 0.5 ? 'desc' : null,
+      status: ['AAPending', 'BBProduction', 'CCTesting', 'DDApproval', 'ZZClosed'][Math.floor(Math.random() * 5)],
+      issueDate: new Date().toDateString(),
+      duration: String(this.randomIntBelow(3)+1) + 'w',
+      expectedDate: null,
+      priority: (Math.random()<0.333? 'High': (Math.random()<0.667? 'Medium': 'Low')),
+      comments: 'Comment commenting commented',
+    }
+    randomTickets.push(hardCodeTicket);
     return randomTickets
   }
 

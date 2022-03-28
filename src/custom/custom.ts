@@ -18,6 +18,7 @@ import {MatTooltipModule} from '@angular/material/tooltip';
 import {MatPaginatorModule} from '@angular/material/paginator';
 import {MatSelectModule} from "@angular/material/select";
 import {MatDialogModule} from '@angular/material/dialog';
+import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 
 // Charts and BI
 import { NgApexchartsModule } from "ng-apexcharts";
@@ -44,6 +45,7 @@ import { NgApexchartsModule } from "ng-apexcharts";
         MatPaginatorModule,
         MatSelectModule,
         MatDialogModule,
+        MatSlideToggleModule,
     ],
     exports:[
         MatToolbarModule,
@@ -65,6 +67,7 @@ import { NgApexchartsModule } from "ng-apexcharts";
         MatPaginatorModule,
         MatSelectModule,
         MatDialogModule,
+        MatSlideToggleModule,
     ],
 })
 export class CustomMaterialModule{}

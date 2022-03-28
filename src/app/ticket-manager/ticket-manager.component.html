@@ -90,8 +90,8 @@
                 src="https://img.icons8.com/fluency-systems-regular/30/056ADD/two-tickets.png" >
                 <h2 style="display: inline-block; color: rgb(5, 106, 221);" class="fredoka500">Ticket Manager</h2>
             </div>
-            <div class="zoomHoverButton">
-                <button class="complemCustomButton fredoka500"><mat-icon>person</mat-icon>My Tickets</button>
+            <div class="enableButtonHover">
+                <!-- <button class="complemCustomButton fredoka500" (click)="myTickets()"><mat-icon>person</mat-icon>My Tickets</button> -->
                 <button class="customButton fredoka500" (click)="createTicket()"><mat-icon>add</mat-icon>New Ticket</button>
             </div>
         </div>
@@ -99,16 +99,19 @@
             <div>
                 <mat-form-field appearance="outline" id="searchBar">
                     <mat-label>Search</mat-label>
-                    <input matInput (keyup)="applyFilter($event)" placeholder="" #ticketSearch>
+                    <input matInput (keyup)="applyFilter($event)" placeholder="" #ticketSearch [(ngModel)]="searchBoxValue">
                 </mat-form-field>
                 <button class="complemCustomButton complemIconButton"><mat-icon>filter_list</mat-icon></button>
             </div>
-            <h4 class="fredoka500" style="margin-left: 2rem; display: inline-block;">Showing tickets for the </h4>
-            <mat-form-field appearance="fill" style="width: 8rem; height: 3rem;">
-                <mat-select class="fredoka" [(value)]="selectedTimePeriod">
-                    <mat-option class="fredoka" *ngFor="let option of timeOptions" [value]="option.value">{{option.viewValue}}</mat-option>
-                </mat-select>
-            </mat-form-field>
+            <div>
+                <h4 class="fredoka500" style="margin-left: 2rem; display: inline-block;">Showing tickets for the </h4>
+                <mat-form-field appearance="fill" style="width: 8rem; height: 3rem;">
+                    <mat-select class="fredoka" [(value)]="selectedTimePeriod">
+                        <mat-option class="fredoka" *ngFor="let option of timeOptions" [value]="option.value">{{option.viewValue}}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <mat-slide-toggle color="primary" style="margin-left: 27rem;" [(ngModel)]="onlyMyTicketsShown" [checked]="onlyMyTicketsShown" (change)="myTickets($event)">Only My Tickets</mat-slide-toggle>
+            </div>
         </div>
         <div>
             <table mat-table matSort [dataSource]="dataSource" multiTemplateDataRows class="mat-elevation-z4">
