@@ -5,6 +5,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSlideToggle, MatSlideToggleChange } from '@angular/material/slide-toggle';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
+import { map } from 'rxjs';
 import { isSubscription } from 'rxjs/internal/Subscription';
 import { CreateTicketDialogComponent } from '../create-ticket-dialog/create-ticket-dialog.component';
 import { Ticket } from '../ticket';
@@ -28,14 +29,27 @@ export class TicketManagerComponent implements OnInit {
 
   constructor(public dialog: MatDialog, private ticketService: TicketsService) { }
 
-  getTickets(){
+  getTickets(){ // random
     // this.tickets = this.ticketService.getTickets(); synchronous implementation, removed now because we're using asynchronous implem (Observables)
-    this.ticketService.getTickets().subscribe(ticketObserver => this.allTickets = ticketObserver)
+    this.ticketService.getTickets().subscribe(ticketObserver => {this.allTickets = ticketObserver})
+  }
+
+  retrieveTickets(){ // from db
+    this.ticketService.getAllFireList().snapshotChanges().pipe(
+      map(changes =>changes.map( (c: { payload: { key: any; val: () => any; }; })=>
+      ({ key: c.payload.key, ...c.payload.val() }) )
+      )
+    ).subscribe(observer => {
+      this.dataSource.data = observer;
+      this.dataSource.sort = this.sort;
+      this.dataSource.paginator = this.ticketPaginator;
+      this.allTickets = observer;
+    });
   }
   
   ngOnInit(): void {
-    this.getTickets();  // stored in allTickets
-    // alert('called at ngOnInit');
+    // this.getTickets();  // stored in allTickets
+    this.retrieveTickets();
   }
 
   currPage:string = 'Ticket Manager';
@@ -57,8 +71,6 @@ export class TicketManagerComponent implements OnInit {
     },
   ]
   selectedTimePeriod = 'week-0';
-
-  
   
 
   statusIsPending(status: string): boolean{
@@ -75,17 +87,19 @@ export class TicketManagerComponent implements OnInit {
   }
   lastIcon: string = 'tick';
 
-  displayedColumns: string[] = ['tid','title', 'empid', 'dept', 'priority', 'issueDate', 'duration','status'];
-  colNames: string[] = ['TID', 'Title', 'Employee ID', 'Dept.', 'Priority', 'Issued', 'Duration','Status'];
+  displayedColumns: string[] = ['tid','title','company','platform','empid','dept','priority','issueDate','duration','status'];
+  colNames: string[] = ['TID', 'Title', 'Company', 'Platform', 'Employee ID', 'Dept.', 'Priority', 'Issued', 'Duration','Status'];
 
   dataSource = new MatTableDataSource<Ticket>();  // added this.dataSource.data = this.allTickets; below because somehow dataSource doesnt get properly initialized if passed as new MatTableDataSource<Ticket>(this.allTickets);
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild('ticketPaginator') ticketPaginator !: MatPaginator;
 
   ngAfterViewInit() {
-    this.dataSource.data = this.allTickets;   // IMP LINE HERE. needed to add this on getting allTickets from observable, see comment just above this
-    this.dataSource.sort = this.sort;
-    this.dataSource.paginator = this.ticketPaginator;
+    // this.dataSource.data = this.allTickets;   // IMP LINE HERE. needed to add this on getting allTickets from observable, see comment just above this
+    // this.dataSource.sort = this.sort;
+    // this.dataSource.paginator = this.ticketPaginator;
+
+    // see retrieveTickets() function above
   }
 
   expandedRow: Ticket|null = null;

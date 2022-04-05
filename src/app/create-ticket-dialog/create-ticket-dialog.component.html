@@ -13,42 +13,44 @@
 </style>
 
 <mat-dialog-content>
-    <h2 class="fredoka500">Create Ticket</h2>
-    <form>
-        <mat-form-field appearance="outline">
-            <mat-label>Ticket Title</mat-label>
-            <input type="text" matInput placeholder="Eg: Payment History Visibility" #ticketTitle>
-            <mat-hint>3-4 words to describe problem</mat-hint>
-        </mat-form-field>
-        <mat-form-field style="margin-left: 2rem;">
-            <mat-select placeholder="Priority" appearance="fill">
-                <mat-option value="High">High</mat-option>
-                <mat-option value="Medium">Medium</mat-option>
-                <mat-option value="Low">Low</mat-option>
-            </mat-select>
-        </mat-form-field>
-        <mat-form-field appearance="outline" style="display: block !important;">
-            <mat-label>Description</mat-label>
-            <textarea type="text" matInput placeholder="Include feature details, styles and specifics if any" style="height: 5rem;" #ticketDesc></textarea>
-            <mat-hint>Explain it in detail here</mat-hint>
-        </mat-form-field>  
-        <mat-form-field>
-            <mat-select placeholder="Select company" appearance="fill">
-                <mat-option value="NXT-0">NXTDigital</mat-option>
-                <mat-option value="IN-1">InDigital</mat-option>
-            </mat-select>
-        </mat-form-field>
-        <mat-form-field style="margin-left: 3rem;">
-            <mat-select placeholder="Select Platform" appearance="fill">
-                <mat-option *ngFor="let platform of platformConsolidatedList" value="{{platform.code}}">{{platform.name}}</mat-option>
-            </mat-select>
-        </mat-form-field>
-        <!-- expectedDate datepicker or duration picker( As soon as possible, 1w, 2w, 3w, 4w, >4w ) -->
-    </form>
+    <h2 class="fredoka500" (click)="metaData(currentTicket)">Create Ticket</h2>
+    <mat-form-field appearance="outline">
+        <mat-label>Ticket Title</mat-label>
+        <input type="text" matInput [(ngModel)]="this.currentTicket.title" placeholder="Eg: Payment History Visibility" #ticketTitle>
+        <mat-hint>3-4 words to describe problem</mat-hint>
+    </mat-form-field>
+    <mat-form-field style="margin-left: 2rem;">
+        <mat-select placeholder="Select Priority" appearance="fill" [(value)]="this.currentTicket.priority">
+            <mat-option *ngFor="let priority of priorities" value="{{priority}}">{{priority}}</mat-option>
+        </mat-select>
+    </mat-form-field>
+    <mat-form-field appearance="outline" style="display: block !important;">
+        <mat-label>Description</mat-label>
+        <textarea type="text" matInput [(ngModel)]="this.currentTicket.desc" placeholder="Include feature details, styles and specifics if any" style="height: 5rem;" #ticketDesc></textarea>
+        <mat-hint>Explain it in detail here</mat-hint>
+    </mat-form-field>  
+    <mat-form-field>
+        <mat-select placeholder="Select company" appearance="fill"  [(value)]="this.currentTicket.company">
+            <mat-option value="NXTDigital">NXTDigital</mat-option>
+            <mat-option value="InDigital">InDigital</mat-option>
+        </mat-select>
+    </mat-form-field>
+    <mat-form-field style="margin-left: 3rem;">
+        <mat-select placeholder="Select Platform" appearance="fill" [(value)]="this.currentTicket.platform">
+            <mat-option *ngFor="let platform of platformConsolidatedList" value="{{platform.name}}">{{platform.name}}</mat-option>
+        </mat-select>
+    </mat-form-field>
+    <mat-form-field>
+        <mat-select placeholder="Select Status" appearance="fill" [(value)]="this.currentTicket.status">
+            <mat-option *ngFor="let status of statuses" value="{{status}}">{{status}}</mat-option>
+        </mat-select>
+    </mat-form-field>
+    
+    <!-- expectedDate datepicker or duration picker( As soon as possible, 1w, 2w, 3w, 4w, >4w ) -->
 </mat-dialog-content>
 <mat-dialog-actions align="end">
     <button class="fredoka" mat-raised-button [mat-dialog-close]="false">Cancel</button>
-    <button class="fredoka" mat-raised-button [mat-dialog-close]="true" style="background-color: rgb(5, 106, 221); color: white;">Create Ticket</button>
+    <button class="fredoka" mat-raised-button [mat-dialog-close]="true" (click)="createTicket()" style="background-color: rgb(5, 106, 221); color: white;">Create Ticket</button>
 </mat-dialog-actions>
 
 <!-- add data to rows, make csv on ticket creation -->
