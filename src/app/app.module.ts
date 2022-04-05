@@ -13,6 +13,10 @@ import { SideNavComponent } from './side-nav/side-nav.component';
 import { TicketManagerComponent } from './ticket-manager/ticket-manager.component';
 import { CreateTicketDialogComponent } from './create-ticket-dialog/create-ticket-dialog.component';
 
+import { environment } from 'src/environments/environment';
+import { AngularFireModule } from '@angular/fire/compat';
+import { AngularFireDatabaseModule } from '@angular/fire/compat/database';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -26,6 +30,9 @@ import { CreateTicketDialogComponent } from './create-ticket-dialog/create-ticke
     BrowserModule,
     BrowserAnimationsModule,
     CustomMaterialModule,
+
+    AngularFireModule.initializeApp(environment.firebase),
+    AngularFireDatabaseModule
   ],
   providers: [DatePipe],
   bootstrap: [AppComponent]
