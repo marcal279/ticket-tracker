@@ -1,5 +1,7 @@
 import { Component, Inject, OnInit } from '@angular/core';
+import { AngularFireDatabase, AngularFireList } from '@angular/fire/compat/database';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { DialogData } from '../dialog-data';
 import { Ticket } from '../ticket';
 import { TicketsService } from '../tickets.service';
@@ -12,8 +14,13 @@ import { TicketsService } from '../tickets.service';
 })
 export class TicketDialogComponent implements OnInit {
 
+  ticketsRef!: AngularFireList<Ticket>;
   constructor(private ticketService: TicketsService,
-    @Inject(MAT_DIALOG_DATA) public data: DialogData) { }
+    @Inject(MAT_DIALOG_DATA) public data: DialogData,
+    private db: AngularFireDatabase,
+    public matSnack:MatSnackBar) {
+      this.ticketsRef = db.list('Tickets')
+    }
 
   //consider making list of objects that have like [{code: 'lp', name: 'lco', types:  ['app', 'portal']}, ]
   //downside: could risk messing up platform codes
@@ -90,10 +97,24 @@ export class TicketDialogComponent implements OnInit {
       this.currentTicket.tid = this.generateTID(this.currentTicket);
       this.currentTicket.issueDate = new Date();
       this.ticketService.create(this.currentTicket).then(()=>{
-        alert(`Created TicketID ${this.currentTicket.tid} successfully!`);
-        // this.openSnackBar('Created Ticket Successfully!!');
+        // alert(`Created TicketID ${this.currentTicket.tid} successfully!`);
+        this.openSnackBar(`Created TicketID ${this.currentTicket.tid} successfully!`);
+        this.ticketService.update(newlyAddedKey, this.currentTicket)
+        .then( () => { 
+          // alert('Added dates') 
+        }).catch(err => alert(err));
       }).catch(err =>{alert('Error: '+err)});
+      
+      let newlyAddedKey :any; 
+      
+      this.ticketsRef.snapshotChanges(['child_added']).subscribe(
+        actions=> {actions.slice(-1).forEach(action =>{
+          newlyAddedKey = action.key;
+          // alert(`Newest key = ${newlyAddedKey}`);
+        })
+      })
 
+      
       // this.resetTicketDialogBox();
     }
   }
@@ -103,11 +124,15 @@ export class TicketDialogComponent implements OnInit {
       if(this.data.ticket.key){
         this.ticketService.update(this.data.ticket.key, this.currentTicket)
         .then( () => {
-          alert('Updated record '+ticket.key+' successfully!')
-          // this.openSnackBar(`Updated record ${key} successfully!`);
+          // alert('Updated record '+ticket.key+' successfully!')
+          this.openSnackBar(`Updated record ${ticket.key} successfully!`);
         })
         .catch(err => alert(err));
       }
     }
+  }
+
+  openSnackBar(message: string, action: string = 'Close') {
+    this.matSnack.open(message, action);
   }
 }
