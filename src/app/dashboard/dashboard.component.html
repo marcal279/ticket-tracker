@@ -19,6 +19,10 @@
     #leftContent{
         padding: 0.5rem 1rem 1rem;
     }
+    .nightMode{
+        background-color: black;
+        color: white;
+    }
     #summaries{
         display: inline-block;
         border-radius: 1rem;
@@ -133,16 +137,17 @@
 
 
 
-    <div id="leftContent"> <!-- all content in white -->
+    <div id="leftContent" [class.nightMode]="nightModeActive"> <!-- all content in white -->
         <div style="display: flex; justify-content: space-between; align-items: center;">
             <div>
                 <img class="headingIcon" 
                 src="https://img.icons8.com/fluency-systems-regular/30/056ADD/user-male-circle.png" >
-                <h2 style="display: inline-block; color: rgb(5, 106, 221);" class="fredoka500">Good {{this.timeOfDay}} User</h2>
+                <h2 style="display: inline-block; color: rgb(5, 106, 221);" class="fredoka500">Good {{this.timeOfDay}} Marc</h2>
             </div>
             <div class="enableButtonHover" style="display: flex;">
                 <button class="complemCustomButton" 
-                    style="width: 3rem; padding: 0.4rem 0.3rem 0.6rem 0.5rem; border-radius: 50%;">
+                    style="width: 3rem; padding: 0.4rem 0.3rem 0.6rem 0.5rem; border-radius: 50%;"
+                    (click)="toggleNightMode()">
                     <mat-icon style="font-size: 1.5rem;">bedtime</mat-icon>
                 </button>
                 <button class="fredoka500 customButton" (click)="createTicket()"><mat-icon>add</mat-icon>New Ticket</button>
