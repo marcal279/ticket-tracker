@@ -1,16 +1,19 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
+import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { DialogData } from '../dialog-data';
 import { Ticket } from '../ticket';
 import { TicketsService } from '../tickets.service';
 // import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 
 @Component({
-  selector: 'app-create-ticket-dialog',
-  templateUrl: './create-ticket-dialog.component.html',
-  styleUrls: ['./create-ticket-dialog.component.css']
+  selector: 'app-ticket-dialog',
+  templateUrl: './ticket-dialog.component.html',
+  styleUrls: ['./ticket-dialog.component.css']
 })
-export class CreateTicketDialogComponent implements OnInit {
+export class TicketDialogComponent implements OnInit {
 
-  constructor(private ticketService: TicketsService) { }
+  constructor(private ticketService: TicketsService,
+    @Inject(MAT_DIALOG_DATA) public data: DialogData) { }
 
   //consider making list of objects that have like [{code: 'lp', name: 'lco', types:  ['app', 'portal']}, ]
   //downside: could risk messing up platform codes
@@ -49,7 +52,8 @@ export class CreateTicketDialogComponent implements OnInit {
   currentTicket : Ticket = this.newTicket;
 
   ngOnInit(): void {
-   this.currentTicket = this.newTicket;
+    if(this.data.ticketDialogTitle=='Create') this.currentTicket = this.newTicket;
+    else this.currentTicket = {...this.data.ticket};
   }
 
   allMandatoryFilled(){
@@ -91,6 +95,19 @@ export class CreateTicketDialogComponent implements OnInit {
       }).catch(err =>{alert('Error: '+err)});
 
       // this.resetTicketDialogBox();
+    }
+  }
+
+  updateTicket(ticket: any){
+    if(this.allMandatoryFilled()){
+      if(this.data.ticket.key){
+        this.ticketService.update(this.data.ticket.key, this.currentTicket)
+        .then( () => {
+          alert('Updated record '+ticket.key+' successfully!')
+          // this.openSnackBar(`Updated record ${key} successfully!`);
+        })
+        .catch(err => alert(err));
+      }
     }
   }
 }

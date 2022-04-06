@@ -11,7 +11,7 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { DatePipe } from '@angular/common';
 import { SideNavComponent } from './side-nav/side-nav.component';
 import { TicketManagerComponent } from './ticket-manager/ticket-manager.component';
-import { CreateTicketDialogComponent } from './create-ticket-dialog/create-ticket-dialog.component';
+import { TicketDialogComponent } from './ticket-dialog/ticket-dialog.component';
 
 import { environment } from 'src/environments/environment';
 import { AngularFireModule } from '@angular/fire/compat';
@@ -24,7 +24,7 @@ import { AngularFireDatabaseModule } from '@angular/fire/compat/database';
     DashboardComponent,
     SideNavComponent,
     TicketManagerComponent,
-    CreateTicketDialogComponent
+    TicketDialogComponent
   ],
   imports: [
     BrowserModule,
