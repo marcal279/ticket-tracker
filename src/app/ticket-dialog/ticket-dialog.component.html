@@ -24,11 +24,12 @@
             <mat-option *ngFor="let priority of priorities" value="{{priority}}">{{priority}}</mat-option>
         </mat-select>
     </mat-form-field>
-    <mat-form-field appearance="outline" style="display: block !important;">
-        <mat-label>Description</mat-label>
-        <textarea type="text" matInput [(ngModel)]="this.currentTicket.desc" placeholder="Include feature details, styles and specifics if any" style="height: 5rem;" #ticketDesc></textarea>
-        <mat-hint>Explain it in detail here</mat-hint>
-    </mat-form-field>  
+    <mat-form-field style="margin-left: 1rem;" appearance="outline">
+        <mat-label>Expected (mm/dd/yyyy)</mat-label>
+        <input matInput [matDatepicker]="pickerExpected" [(ngModel)]="currentTicket.expectedDate">
+        <mat-datepicker-toggle matSuffix [for]="pickerExpected"></mat-datepicker-toggle>
+        <mat-datepicker #pickerExpected></mat-datepicker>
+    </mat-form-field>
     <mat-form-field>
         <mat-select placeholder="Select company" appearance="fill"  [(value)]="this.currentTicket.company" required>
             <mat-option value="NXTDigital">NXTDigital</mat-option>
@@ -40,11 +41,16 @@
             <mat-option *ngFor="let platform of platformConsolidatedList" value="{{platform.name}}">{{platform.name}}</mat-option>
         </mat-select>
     </mat-form-field>
-    <mat-form-field style="margin-left: 2rem;">
+    <mat-form-field style="margin-left: 1.5rem;">
         <mat-select placeholder="Select Status" appearance="fill" [(value)]="this.currentTicket.status" required>
             <mat-option *ngFor="let status of statuses" value="{{status}}">{{status}}</mat-option>
         </mat-select>
     </mat-form-field>
+    <mat-form-field appearance="outline" style="display: block !important;">
+        <mat-label>Description</mat-label>
+        <textarea type="text" matInput [(ngModel)]="this.currentTicket.desc" placeholder="Include feature details, styles and specifics if any" style="height: 5rem;" #ticketDesc></textarea>
+        <mat-hint>Explain it in detail here</mat-hint>
+    </mat-form-field>  
     
     <!-- expectedDate datepicker or duration picker( As soon as possible, 1w, 2w, 3w, 4w, >4w ) -->
 </mat-dialog-content>
