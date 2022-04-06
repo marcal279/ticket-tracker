@@ -21,14 +21,14 @@
         width: 6rem;
     }
     .mat-column-title{
-        width: 10rem;
+        width: 7.5rem;
         /* margin-right: 7rem; */
     }
     .mat-column-company{
         width: 7rem;
     }
     .mat-column-platform{
-        width: 7rem;
+        width: 10rem;
     }
     .mat-column-empid{
         width: 7rem;
@@ -40,7 +40,7 @@
         width: 5rem;  
     }
     .mat-column-issueDate{
-        width: 9rem;  
+        width: 5rem;  
     }
     .mat-column-duration{
         width: 5rem;  
@@ -173,21 +173,23 @@
                     <td mat-cell *matCellDef="let element" [attr.colspan]="displayedColumns.length">
                         <div class="rowDetail"
                             [@detailExpand] = "element == expandedRow? 'expanded': 'collapsed'">
-                            <div style="padding-bottom: 0.75rem;">
+                            <div style="padding: 0rem 2rem 0.75rem 0.5rem;">
                                 <h2>{{element.title}} ({{element.tid}})</h2>
-                                <p *ngIf="element.desc">{{element.desc}}</p>
+                                <p *ngIf="element.desc" style="font-size: larger;">{{element.desc}}</p>
+                                <p><strong>Platform: </strong>{{element.company}} {{element.platform}}</p>
                                 <p><strong>Issued By: </strong>{{element.empid}}
                                 <strong style="margin-left: 2rem;">Dept: </strong>{{element.dept}}</p>
                                 <p><strong>Issue Date: </strong>{{element.issueDate | date}}
-                                    <strong style="margin-left: 2rem;" *ngIf="element.expectedDate">Expected By: </strong>{{element.expectedDate}}
+                                    <strong style="margin-left: 2rem;" *ngIf="element.expectedDate">Expected: </strong>In {{element.duration}} on {{element.expectedDate}}
                                 </p>
                                 <p *ngIf="element.comments" style="margin-bottom: 8px;"><strong>Comments: </strong>{{element.comments}}</p>
                                 <button class="fredoka actionButton updateButton"
-                                    style="font-size: 1rem; padding: 0.25rem 0.5rem;">
+                                    style="font-size: 1rem; padding: 0.25rem 0.5rem;" (click)="updateTicket(element)">
                                     Update
                                 </button>
                                 <button class="fredoka actionButton deleteButton"
-                                    style="font-size: 1rem; padding: 0.25rem 0.5rem; margin-left: 0.5rem;">
+                                    style="font-size: 1rem; padding: 0.25rem 0.5rem; margin-left: 0.5rem;"
+                                    (click)="deleteTicket(element)">
                                     Delete
                                 </button>
                             </div>
