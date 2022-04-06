@@ -7,7 +7,7 @@ import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { map } from 'rxjs';
 import { isSubscription } from 'rxjs/internal/Subscription';
-import { CreateTicketDialogComponent } from '../create-ticket-dialog/create-ticket-dialog.component';
+import { TicketDialogComponent } from '../ticket-dialog/ticket-dialog.component';
 import { Ticket } from '../ticket';
 import { TicketsService } from '../tickets.service';
 
@@ -74,11 +74,11 @@ export class TicketManagerComponent implements OnInit {
   
 
   statusIsPending(status: string): boolean{
-    if(status == 'AAPending') return true;
+    if(status == 'AAPending' || status == 'Pending') return true;
     return false;
   }
   statusIsClosed(status: string){
-    if(status == 'ZZClosed') return true;
+    if(status == 'ZZClosed' || status == 'Closed') return true;
     return false;
   }
   statusIsProcessing(status: string){
@@ -135,9 +135,33 @@ export class TicketManagerComponent implements OnInit {
     const dialogConfig = new MatDialogConfig();
 
     dialogConfig.autoFocus = true;  // automatically sets focus to first text box
-    dialogConfig.width = '35rem';
+    dialogConfig.width = '50%';
+    dialogConfig.data = {
+      ticketDialogTitle: 'Create',
+    }
 
-    const dialogRef = this.dialog.open(CreateTicketDialogComponent, dialogConfig);
+    const dialogRef = this.dialog.open(TicketDialogComponent, dialogConfig);
+  }
+
+  updateTicket(ticket: any){
+    const dialogConfig = new MatDialogConfig();
+
+    dialogConfig.autoFocus = true;  // automatically sets focus to first text box
+    dialogConfig.width = '35rem';
+    dialogConfig.data = {
+      ticketDialogTitle: 'Update',
+      ticket: ticket,
+    };
+
+    const dialogRef = this.dialog.open(TicketDialogComponent, dialogConfig);
+  }
+
+  deleteTicket(ticket: any){
+    if( confirm(`Are you sure you want to delete Report ${ticket.tid}?`) ){
+      this.ticketService.delete(ticket.key).then(()=>{
+        alert("Successfully deleted ticket "+ticket.key)
+      }).catch(err=>alert("ERROR: "+err))
+    }
   }
 
 }
