@@ -87,8 +87,8 @@ export class TicketManagerComponent implements OnInit {
   }
   lastIcon: string = 'tick';
 
-  displayedColumns: string[] = ['tid','title','company','platform','empid','dept','priority','issueDate','duration','status'];
-  colNames: string[] = ['TID', 'Title', 'Company', 'Platform', 'Employee ID', 'Dept.', 'Priority', 'Issued', 'Duration','Status'];
+  displayedColumns: string[] = ['tid','title','company','platform','empid','dept','priority','duration','expectedDate','status'];
+  colNames: string[] = ['TID', 'Title', 'Company', 'Platform', 'Employee ID', 'Dept.', 'Priority', 'Duration', 'Expected', 'Status'];
 
   dataSource = new MatTableDataSource<Ticket>();  // added this.dataSource.data = this.allTickets; below because somehow dataSource doesnt get properly initialized if passed as new MatTableDataSource<Ticket>(this.allTickets);
   @ViewChild(MatSort) sort!: MatSort;
@@ -135,7 +135,7 @@ export class TicketManagerComponent implements OnInit {
     const dialogConfig = new MatDialogConfig();
 
     dialogConfig.autoFocus = true;  // automatically sets focus to first text box
-    dialogConfig.width = '50%';
+    dialogConfig.width = '52.5%';
     dialogConfig.data = {
       ticketDialogTitle: 'Create',
     }
@@ -147,7 +147,7 @@ export class TicketManagerComponent implements OnInit {
     const dialogConfig = new MatDialogConfig();
 
     dialogConfig.autoFocus = true;  // automatically sets focus to first text box
-    dialogConfig.width = '35rem';
+    dialogConfig.width = '52.5%';
     dialogConfig.data = {
       ticketDialogTitle: 'Update',
       ticket: ticket,
