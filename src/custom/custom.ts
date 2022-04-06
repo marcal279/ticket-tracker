@@ -19,6 +19,9 @@ import {MatPaginatorModule} from '@angular/material/paginator';
 import {MatSelectModule} from "@angular/material/select";
 import {MatDialogModule} from '@angular/material/dialog';
 import {MatSlideToggleModule} from '@angular/material/slide-toggle';
+import {MatDatepickerModule} from '@angular/material/datepicker';
+import {MatNativeDateModule} from "@angular/material/core";
+import {MatSnackBarModule} from '@angular/material/snack-bar';
 
 // Charts and BI
 import { NgApexchartsModule } from "ng-apexcharts";
@@ -46,6 +49,9 @@ import { NgApexchartsModule } from "ng-apexcharts";
         MatSelectModule,
         MatDialogModule,
         MatSlideToggleModule,
+        MatDatepickerModule,
+        MatNativeDateModule,
+        MatSnackBarModule,
     ],
     exports:[
         MatToolbarModule,
@@ -68,6 +74,9 @@ import { NgApexchartsModule } from "ng-apexcharts";
         MatSelectModule,
         MatDialogModule,
         MatSlideToggleModule,
+        MatDatepickerModule,
+        MatNativeDateModule,
+        MatSnackBarModule,
     ],
 })
 export class CustomMaterialModule{}
