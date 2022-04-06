@@ -24,7 +24,8 @@ import { MatSort } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
 import { TicketsService } from '../tickets.service';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
-import { CreateTicketDialogComponent } from '../create-ticket-dialog/create-ticket-dialog.component';
+import { TicketDialogComponent } from '../ticket-dialog/ticket-dialog.component';
+import { map } from 'rxjs';
 
 export type LineChartOptions = {
   series: ApexAxisChartSeries;
@@ -79,17 +80,25 @@ export type PolarChartOptions = {
   ]
 })
 export class DashboardComponent implements OnInit {
+  nightModeActive: boolean = false;
   currPage:string = 'Dashboard';
   sideNavIconList : string[] = ['severity--v2', 'two-tickets', 'bar-chart'];
   sideNavSectionList: string[] = ['Dashboard', 'Ticket Manager', 'Analytics'];
+
+  toggleNightMode(){
+    this.nightModeActive = !this.nightModeActive;
+  }
 
   createTicket(): void{
     const dialogConfig = new MatDialogConfig();
 
     dialogConfig.autoFocus = true;  // automatically sets focus to first text box
-    dialogConfig.width = '35rem';
+    dialogConfig.width = '50%';
+    dialogConfig.data = {
+      ticketDialogTitle: 'Create',
+    }
 
-    const dialogRef = this.dialog.open(CreateTicketDialogComponent, dialogConfig);
+    const dialogRef = this.dialog.open(TicketDialogComponent, dialogConfig);
   }
 
   @ViewChild("lineChart") lineChart: ChartComponent | undefined;
@@ -126,6 +135,17 @@ export class DashboardComponent implements OnInit {
     this.ticketService.getTickets().subscribe(ticketObserver => this.allTickets = ticketObserver)
   }
 
+  retrieveTickets(){ // from db
+    this.ticketService.getAllFireList().snapshotChanges().pipe(
+      map(changes =>changes.map( (c: { payload: { key: any; val: () => any; }; })=>
+      ({ key: c.payload.key, ...c.payload.val() }) )
+      )
+    ).subscribe(observer => {
+      this.dataSource.data = observer.slice(-3);
+      this.dataSource.sort = this.sort;
+      this.allTickets = observer;
+    });
+  }
   
   statusIsPending(status: string): boolean{
     if(status == 'AAPending') return true;
@@ -320,7 +340,8 @@ export class DashboardComponent implements OnInit {
 
   ngOnInit(): void {
     this.getTimeOfDay();
-    this.getTickets();
+    // this.getTickets();
+    this.retrieveTickets();
   }
 
 }
