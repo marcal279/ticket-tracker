@@ -91,8 +91,11 @@
     .mat-column-duration{
         width: 5rem;  
     }
+    .mat-column-expectedDate{
+        width: 7rem; 
+    }
     .mat-column-status{
-        width: 5rem; 
+        width: 3rem; 
     }
 
     :host ::ng-deep .mat-paginator-container {
@@ -142,7 +145,7 @@
             <div>
                 <img class="headingIcon" 
                 src="https://img.icons8.com/fluency-systems-regular/30/056ADD/user-male-circle.png" >
-                <h2 style="display: inline-block; color: rgb(5, 106, 221);" class="fredoka500">Good {{this.timeOfDay}} Marc</h2>
+                <h2 style="display: inline-block; color: rgb(5, 106, 221);" class="fredoka500">Good {{this.timeOfDay}}, Marc</h2>
             </div>
             <div class="enableButtonHover" style="display: flex;">
                 <button class="complemCustomButton" 
@@ -197,9 +200,16 @@
                 <table mat-table matSort [dataSource]="dataSource" multiTemplateDataRows class="mat-elevation-z2">
                         
                     <!-- generate all columns except status -->
-                    <ng-container *ngFor="let column of displayedColumns.slice(0,-1); index as i" matColumnDef="{{column}}">
+                    <ng-container *ngFor="let column of displayedColumns.slice(0,-2); index as i" matColumnDef="{{column}}">
                         <th mat-header-cell *matHeaderCellDef mat-sort-header>{{colNames[i]}}</th>
                         <td mat-cell *matCellDef="let element">{{element[column]}}</td>
+                    </ng-container>
+                    <!-- Expected date -->
+                    <ng-container matColumnDef="expectedDate">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header>Expected</th>
+                        <td mat-cell *matCellDef="let element">
+                            {{ element.expectedDate | date }}
+                        </td>
                     </ng-container>
                     <!-- status -->
                     <ng-container matColumnDef="status">

@@ -39,7 +39,7 @@
 :host ::ng-deep .divHeading{
     font-weight: 500;
     font-size: 1rem;
-    /* margin-left: 1.5rem; */
+    margin-left: 1.5rem;
     margin-bottom: 0rem;
     color:rgb(5, 106, 221);
 }

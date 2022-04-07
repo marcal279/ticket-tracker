@@ -163,8 +163,8 @@ export class DashboardComponent implements OnInit {
   }
   lastIcon: string = 'tick';
 
-  displayedColumns: string[] = ['tid','title', 'empid', 'dept', 'priority', 'duration','status'];
-  colNames: string[] = ['TID', 'Title', 'Employee ID', 'Dept.', 'Priority', 'Duration','Status'];
+  displayedColumns: string[] = ['tid','title', 'empid', 'dept', 'priority', 'duration', 'expectedDate','status'];
+  colNames: string[] = ['TID', 'Title', 'Employee ID', 'Dept.', 'Priority', 'Duration','Expected','Status'];
 
   dataSource = new MatTableDataSource<Ticket>();
   @ViewChild(MatSort) sort!: MatSort;
@@ -204,7 +204,8 @@ export class DashboardComponent implements OnInit {
         text: "Tickets Raised per Month 2021",
         align: "left",
         style: {
-          fontFamily: 'Fredoka, san-serif'
+          // fontFamily: 'Fredoka, san-serif'
+          fontFamily: 'Roboto, san-serif'
         }
       },
       grid: {
@@ -231,7 +232,8 @@ export class DashboardComponent implements OnInit {
           "Nov",
           "Dec"
         ]
-      }
+      },
+      // 0053FF
     };
 
     this.pieChartOptions = {
@@ -247,7 +249,7 @@ export class DashboardComponent implements OnInit {
         text:"Aggregated Tickets Status",
         align:"left",
         style: {
-          fontFamily: 'Fredoka, san-serif'
+          fontFamily: 'Roboto, sans-serif'
         }
       },
       plotOptions:{
@@ -281,8 +283,11 @@ export class DashboardComponent implements OnInit {
         // palette: 'palette10', 
         monochrome: {
           enabled: true,
-          color: '#0443ff',
+          // shadeTo: 'dark',
+          // color: '#2780ff',
           shadeTo: 'light',
+          // color: '#005ee3',
+          color: '#005ee3',
           shadeIntensity: 0.8
         },
       }

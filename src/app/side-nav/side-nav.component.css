@@ -24,5 +24,5 @@
     transition-duration: 0.2s;
 }
 .active{
-    border-right: 3px rgb(5, 106, 221) solid;
+    border-right: 3px #0053FF solid;
 }
