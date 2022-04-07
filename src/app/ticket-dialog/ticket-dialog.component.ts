@@ -51,8 +51,8 @@ export class TicketDialogComponent implements OnInit {
     dept: 'Tech',
     status: '', // 'AAPending'|'Production'|'Testing'|'Approval'|'ZZClosed',
     issueDate: new Date(),
-    duration: Math.ceil(Math.random()*6)+'w',
-    expectedDate: null,
+    duration: '',
+    expectedDate: new Date( new Date().setDate(new Date().getDate() + 7) ),
     priority: '',// 'High'|'Medium'|'Low'
     comments: '',
   }
@@ -92,10 +92,21 @@ export class TicketDialogComponent implements OnInit {
     alert(JSON.stringify(ticket));
   }
 
+  calcDuration(issueDate: Date, expectedDate: Date){
+    let diff = Math.abs(new Date(this.currentTicket.expectedDate).getTime() - new Date(this.currentTicket.issueDate).getTime());
+    let duration = '';
+    if(Math.round(diff/1000/60/60/24/7) < 1) duration = Math.round(diff/1000/60/60/24)+'d';
+    else duration = Math.round(diff/1000/60/60/24/7) +'w';
+    return duration;
+  }
+
   createTicket(){
     if( this.allMandatoryFilled() ){  // double check
       this.currentTicket.tid = this.generateTID(this.currentTicket);
       this.currentTicket.issueDate = new Date();
+      if(this.currentTicket.expectedDate && this.currentTicket.issueDate){
+        this.currentTicket.duration = this.calcDuration(this.currentTicket.issueDate, this.currentTicket.expectedDate);
+      }
       this.ticketService.create(this.currentTicket).then(()=>{
         // alert(`Created TicketID ${this.currentTicket.tid} successfully!`);
         this.openSnackBar(`Created TicketID ${this.currentTicket.tid} successfully!`);
@@ -121,6 +132,12 @@ export class TicketDialogComponent implements OnInit {
 
   updateTicket(ticket: any){
     if(this.allMandatoryFilled()){
+      if(this.currentTicket.expectedDate && this.currentTicket.issueDate){
+        // alert( `Issue Date ${this.currentTicket.issueDate} expected Date ${this.currentTicket.expectedDate} 
+        // diff ${this.calcDuration(this.currentTicket.issueDate, this.currentTicket.expectedDate)}` );
+        this.currentTicket.duration = this.calcDuration(this.currentTicket.issueDate, this.currentTicket.expectedDate);
+      }
+      else alert('Nope')
       if(this.data.ticket.key){
         this.ticketService.update(this.data.ticket.key, this.currentTicket)
         .then( () => {
