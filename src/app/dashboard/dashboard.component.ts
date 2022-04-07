@@ -38,7 +38,7 @@ export type LineChartOptions = {
   theme: ApexTheme;
 };
 
-export type DonutChartOptions = {
+export type PieChartOptions = {
   series: ApexNonAxisChartSeries;
   chart: ApexChart;
   responsive: ApexResponsive[];
@@ -106,8 +106,8 @@ export class DashboardComponent implements OnInit {
   @ViewChild("lineChart") lineChart: ChartComponent | undefined;
   public lineChartOptions: Partial<LineChartOptions>;
 
-  @ViewChild("donutChart") donutChart: ChartComponent | undefined;
-  public donutChartOptions!: Partial<DonutChartOptions>;
+  @ViewChild("pieChart") pieChart: ChartComponent | undefined;
+  public pieChartOptions!: Partial<PieChartOptions>;
   
   @ViewChild("grBarChart") grBarChart: ChartComponent | undefined;
   public grBarChartOptions!: Partial<GroupedBarChartOptions>;
@@ -234,7 +234,7 @@ export class DashboardComponent implements OnInit {
       }
     };
 
-    this.donutChartOptions = {
+    this.pieChartOptions = {
       series: [20, 25, 13, 43, 45],
       chart: {
         // type: "donut",
@@ -276,16 +276,16 @@ export class DashboardComponent implements OnInit {
           }
         }
       ],
-      // theme: {
-      //   mode: 'light', 
-      //   palette: 'palette10', 
-      //   monochrome: {
-      //     enabled: false,
-      //     color: '#0027a7',
-      //     shadeTo: 'dark',
-      //     shadeIntensity: 0.6
-      //   },
-      // }
+      theme: {
+        // mode: 'light', 
+        // palette: 'palette10', 
+        monochrome: {
+          enabled: true,
+          color: '#0443ff',
+          shadeTo: 'light',
+          shadeIntensity: 0.8
+        },
+      }
     };
 
     this.grBarChartOptions = {

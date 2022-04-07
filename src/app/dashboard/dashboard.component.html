@@ -173,18 +173,18 @@
                     [stroke]="lineChartOptions.stroke"
                     [title]="lineChartOptions.title"></apx-chart>
                 </div>
-                <div class="BIchart" id="donutChart" *ngIf="donutChartOptions.series && 
-                donutChartOptions.chart && donutChartOptions.responsive &&
-                donutChartOptions.title && 
-                donutChartOptions.dataLabels">
-                <!-- donutChartOptions.theme &&  -->
+                <div class="BIchart" id="pieChart" *ngIf="pieChartOptions.series && 
+                pieChartOptions.chart && pieChartOptions.responsive &&
+                pieChartOptions.title && 
+                pieChartOptions.dataLabels && pieChartOptions.theme">
                     <apx-chart
-                        [series]="donutChartOptions.series"
-                        [chart]="donutChartOptions.chart"
-                        [labels]="donutChartOptions.labels"
-                        [responsive]="donutChartOptions.responsive"
-                        [dataLabels]="donutChartOptions.dataLabels"
-                        [title]="donutChartOptions.title"></apx-chart>
+                        [series]="pieChartOptions.series"
+                        [chart]="pieChartOptions.chart"
+                        [labels]="pieChartOptions.labels"
+                        [responsive]="pieChartOptions.responsive"
+                        [dataLabels]="pieChartOptions.dataLabels"
+                        [title]="pieChartOptions.title"
+                        [theme]="pieChartOptions.theme"></apx-chart>
                 </div>
             </div>
             <h3 class="divHeading fredoka500">
@@ -229,9 +229,9 @@
                                     <mat-icon *ngIf="statusIsClosed(element.status)" style="color: green; font-size: 5rem;">done</mat-icon>
                                     <mat-icon *ngIf="statusIsPending(element.status)" style="color: red; font-size: 5rem;">schedule</mat-icon>
                                     <mat-icon *ngIf="statusIsProcessing(element.status)" style="color: rgb(255, 174, 0); font-size: 5rem;">construction</mat-icon>
-                                    <h2 *ngIf="statusIsClosed(element.status)" style="color: green;" class="alignStatusHeading">{{element.status.slice(2)}}</h2>
-                                    <h2 *ngIf="statusIsPending(element.status)" style="color: red;" class="alignStatusHeading">{{element.status.slice(2)}}</h2>
-                                    <h2 *ngIf="statusIsProcessing(element.status)" style="color: rgb(255, 174, 0);" class="alignStatusHeading">{{element.status.slice(2)}}</h2>
+                                    <h2 *ngIf="statusIsClosed(element.status)" style="color: green;" class="alignStatusHeading">{{element.status}}</h2>
+                                    <h2 *ngIf="statusIsPending(element.status)" style="color: red;" class="alignStatusHeading">{{element.status}}</h2>
+                                    <h2 *ngIf="statusIsProcessing(element.status)" style="color: rgb(255, 174, 0);" class="alignStatusHeading">{{element.status}}</h2>
                                 </div>
                             </div>
                         </td>
