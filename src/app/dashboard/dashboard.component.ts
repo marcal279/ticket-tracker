@@ -45,6 +45,8 @@ export type DonutChartOptions = {
   labels: any;
   dataLabels: ApexDataLabels;
   title: ApexTitleSubtitle;
+  theme: ApexTheme;
+  plotOptions: ApexPlotOptions;
 };
 
 export type GroupedBarChartOptions = {
@@ -235,7 +237,8 @@ export class DashboardComponent implements OnInit {
     this.donutChartOptions = {
       series: [20, 25, 13, 43, 45],
       chart: {
-        type: "donut",
+        // type: "donut",
+        type: "pie",
         height: 200,
         fontFamily: "Roboto, sans-serif",
         // background: "rgb(236, 239, 241)",
@@ -245,6 +248,11 @@ export class DashboardComponent implements OnInit {
         align:"left",
         style: {
           fontFamily: 'Fredoka, san-serif'
+        }
+      },
+      plotOptions:{
+        pie: {
+          customScale: 0.7,
         }
       },
       labels: ["Pending", "Production", "Testing", "Approval", "Closed"],
@@ -270,12 +278,12 @@ export class DashboardComponent implements OnInit {
       ],
       // theme: {
       //   mode: 'light', 
-      //   palette: 'palette1', 
+      //   palette: 'palette10', 
       //   monochrome: {
-      //       enabled: false,
-      //       color: '#0027a7',
-      //       shadeTo: 'light',
-      //       shadeIntensity: 0.6
+      //     enabled: false,
+      //     color: '#0027a7',
+      //     shadeTo: 'dark',
+      //     shadeIntensity: 0.6
       //   },
       // }
     };
