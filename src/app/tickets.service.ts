@@ -45,7 +45,7 @@ export class TicketsService {
         status: ['AAPending', 'BBProduction', 'CCTesting', 'DDApproval', 'ZZClosed'][Math.floor(Math.random() * 5)],
         issueDate: new Date(),
         duration: String(this.randomIntBelow(3)+1) + 'w',
-        expectedDate: null,
+        expectedDate: new Date(),
         priority: (Math.random()<0.333? 'High': (Math.random()<0.667? 'Medium': 'Low')),
         comments: 'Comment commenting commented',
       }
@@ -66,7 +66,7 @@ export class TicketsService {
       status: ['AAPending', 'BBProduction', 'CCTesting', 'DDApproval', 'ZZClosed'][Math.floor(Math.random() * 5)],
       issueDate: new Date(),
       duration: String(this.randomIntBelow(3)+1) + 'w',
-      expectedDate: null,
+      expectedDate: new Date(),
       priority: (Math.random()<0.333? 'High': (Math.random()<0.667? 'Medium': 'Low')),
       comments: 'Comment commenting commented',
     }

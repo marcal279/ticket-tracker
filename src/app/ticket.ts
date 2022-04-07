@@ -9,7 +9,7 @@ export interface Ticket{
     status: string, // 'AAPending'|'Production'|'Testing'|'Approval'|'ZZClosed',
     issueDate: Date,
     duration: string|null,
-    expectedDate: Date|null,
+    expectedDate: Date,
     priority: string,// 'High'|'Medium'|'Low'
     comments: string,
 };
