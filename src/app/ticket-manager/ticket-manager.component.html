@@ -112,7 +112,6 @@
     .updateButton:hover{
         background-color: green;
     }
-
     
 </style>
 
@@ -123,8 +122,8 @@
         <div style="margin-left: 1.75rem;">
             <div>
                 <img class="headingIcon" 
-                src="https://img.icons8.com/fluency-systems-regular/30/056ADD/two-tickets.png" >
-                <h2 style="display: inline-block; color: rgb(5, 106, 221);" class="fredoka500">Ticket Manager</h2>
+                src="https://img.icons8.com/fluency-systems-regular/30/0551DD/two-tickets.png" >
+                <h2 style="display: inline-block; color: rgb(5, 81, 221);" class="fredoka500">Ticket Manager</h2>
             </div>
         </div>
         <div class="enableButtonHover" style=" display: flex; width: 99.5%;
@@ -136,20 +135,22 @@
                         <input matInput (keyup)="applyFilter($event)" placeholder="" #ticketSearch [(ngModel)]="searchBoxValue">
                     </mat-form-field>
                     <button class="complemCustomButton complemIconButton"><mat-icon>filter_list</mat-icon></button>
+                    <div class="enableButtonHover" style="display: inline-block; margin-left: 16rem;">
+                        <button class="customButton complemIconButton fredoka500" style="border-radius: 49%; position: relative; top: 4px;" (click)="downloadCSV()"><mat-icon>download</mat-icon></button>
+                        <button class="customButton fredoka500" (click)="createTicket()"><mat-icon>add</mat-icon>New Ticket</button>
+                    </div>
                 </div>
-                <div>
-                    <h4 class="fredoka500" style="margin-left: 2rem; display: inline-block;">Showing tickets for the </h4>
-                    <mat-form-field appearance="fill" style="width: 8rem; height: 3rem;">
-                        <mat-select class="fredoka" [(value)]="selectedTimePeriod">
-                            <mat-option class="fredoka" *ngFor="let option of timeOptions" [value]="option.value">{{option.viewValue}}</mat-option>
-                        </mat-select>
-                    </mat-form-field>
-                    <mat-slide-toggle color="primary" style="margin-left: 27rem;" [(ngModel)]="onlyMyTicketsShown" [checked]="onlyMyTicketsShown" (change)="myTickets($event)">Only My Tickets</mat-slide-toggle>
+                <div style="display: flex; width: 98.5%; justify-content: space-between; align-items: center;">
+                    <div>
+                        <h4 class="fredoka500" style="margin-left: 2rem; display: inline-block;">Showing tickets for</h4>
+                        <mat-form-field appearance="fill" style="width: 8rem; height: 3rem;">
+                            <mat-select class="fredoka" [(value)]="selectedTimePeriod" (selectionChange)="timeFilter()">
+                                <mat-option class="fredoka" *ngFor="let option of timeOptions" [value]="option.value">{{option.viewValue}}</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                    <mat-slide-toggle color="primary" [(ngModel)]="onlyMyTicketsShown" [checked]="onlyMyTicketsShown" (change)="myTickets($event)">Only My Tickets</mat-slide-toggle>
                 </div>
-            </div>
-            <div class="enableButtonHover">
-                <!-- <button class="complemCustomButton fredoka500" (click)="myTickets()"><mat-icon>person</mat-icon>My Tickets</button> -->
-                <button class="customButton fredoka500" (click)="createTicket()"><mat-icon>add</mat-icon>New Ticket</button>
             </div>
         </div>
         <div>
