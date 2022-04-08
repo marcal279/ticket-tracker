@@ -69,9 +69,14 @@ export class TicketManagerComponent implements OnInit {
       value: 'year-2',
       viewValue: 'Last Year',
     },
+    {
+      value: 'all-3',
+      viewValue: 'All Time',
+    },
   ]
-  selectedTimePeriod = 'week-0';
-  
+  selectedTimePeriod = 'all-3';
+
+  // timeFilter() function is below retrieve tickets so matTableData is declared already
 
   statusIsPending(status: string): boolean{
     if(status == 'AAPending' || status == 'Pending') return true;
@@ -131,6 +136,25 @@ export class TicketManagerComponent implements OnInit {
     }
   }
 
+  timeFilter(){
+    // alert('change detected')
+    let oneWeekBack = new Date(), oneMonthBack = new Date(), oneYearBack = new Date();
+    oneWeekBack.setDate(oneWeekBack.getDate()-7);
+    oneMonthBack.setDate(oneMonthBack.getDate()-31);
+    oneYearBack.setDate(oneYearBack.getDate()-365);
+    // alert(`1w back: ${oneWeekBack} 1m back: ${oneMonthBack} 1y back: ${oneYearBack}`)
+    let limitDate: Date;
+    if(this.selectedTimePeriod=='week-0') limitDate = oneWeekBack;
+    else if(this.selectedTimePeriod=='month-1') limitDate = oneMonthBack;
+    else if(this.selectedTimePeriod=='year-2') limitDate = oneYearBack;
+    else limitDate = new Date(2000,0,1);
+    let count =0;
+    this.allTickets.forEach((ticket: Ticket)=>{
+      if(ticket.expectedDate < new Date(2022,5,20)) count++;
+    })
+    alert(count+' '+this.allTickets.length)
+  }
+
   createTicket(): void{
     const dialogConfig = new MatDialogConfig();
 
@@ -162,6 +186,27 @@ export class TicketManagerComponent implements OnInit {
         alert("Successfully deleted ticket "+ticket.key)
       }).catch(err=>alert("ERROR: "+err))
     }
+  }
+
+  downloadCSV(){
+    let ticketsCSV = [];
+    ticketsCSV.push(Object.keys(this.allTickets[0]).join(","));
+    this.allTickets.forEach((report, index)=>{
+      let row = '"' + Object.values(report).join('","') + '"';
+      ticketsCSV.push(row);
+    })
+    let finalCSVcontent = ticketsCSV.join("\r\n");
+    // alert(finalCSVcontent);
+
+    // Source: https://code-boxx.com/javascript-export-array-csv/
+    let cb = new Blob([finalCSVcontent],{type: "text/csv"});
+    var url = window.URL.createObjectURL(cb);
+    var anchor = document.createElement("a");
+    anchor.href = url;
+    anchor.download = "tickets.csv";
+    anchor.click();
+    window.URL.revokeObjectURL(url);
+    anchor.remove()
   }
 
 }
