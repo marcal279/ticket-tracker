@@ -17,6 +17,7 @@
     }
 
     #leftContent{
+        margin-left: 3rem;
         padding: 0.5rem 1rem 1rem;
     }
     .nightMode{
@@ -79,8 +80,8 @@
     .mat-column-desc{
         width: 8rem;
     }
-    .mat-column-empid{
-        width: 6rem;
+    .mat-column-empEid{
+        width: 12rem;
     }
     .mat-column-dept{
         width: 6rem;
@@ -229,7 +230,7 @@
                                 <div>
                                     <h2>{{element.title}} ({{element.tid}})</h2>
                                     <p *ngIf="element.desc">{{element.desc}}</p>
-                                    <p><strong>Issued By: </strong>{{element.empid}}
+                                    <p><strong>Issued By: </strong>{{element.empEid}}
                                     <strong style="margin-left: 2rem;">Dept: </strong>{{element.dept}}</p>
                                     <p><strong>Issue Date: </strong>{{element.issueDate}}</p>
                                     <p><strong>Expected By: </strong>{{element.expectedDate}}</p>
@@ -277,7 +278,8 @@
     <div id="yourInsights">
         <h3 class="fredoka500 divHeading" style="margin-bottom: 0.75rem;">
             <img class="headingIcon" 
-            src="https://img.icons8.com/fluency-systems-regular/30/0551DD/statistic-document.png">
+            src="https://img.icons8.com/fluency-systems-regular/30/0551DD/statistic-document.png"
+            (click)="getMyCounts()">
             Your Insights
         </h3>
         <div style="
@@ -290,7 +292,7 @@
         height: 5rem;"
         class="fredoka">
             <p style="font-size: 0.8rem;">My Tickets</p>
-            <span style="font-size: 2rem; margin: 0.5rem 0.5rem 0.5rem 0rem;">4 Pending,</span> 2 production, 8 closed
+            <span style="font-size: 2rem; margin: 0.5rem 0.5rem 0.5rem 0rem;">{{myPending}} Pending,</span> {{myProduction}} production, {{myClosed}} closed
             <button class="customButton fredoka500"><mat-icon>info</mat-icon>Detailed Status</button>
             <button class="customButton fredoka500"><mat-icon>edit</mat-icon>Edit Existing</button>
         </div>

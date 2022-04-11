@@ -95,7 +95,7 @@ export class DashboardComponent implements OnInit {
     const dialogConfig = new MatDialogConfig();
 
     dialogConfig.autoFocus = true;  // automatically sets focus to first text box
-    dialogConfig.width = '50%';
+    dialogConfig.width = '52.5%';
     dialogConfig.data = {
       ticketDialogTitle: 'Create',
     }
@@ -137,6 +137,7 @@ export class DashboardComponent implements OnInit {
     this.ticketService.getTickets().subscribe(ticketObserver => this.allTickets = ticketObserver)
   }
 
+  // retrievedAll: Boolean = false;
   retrieveTickets(){ // from db
     this.ticketService.getAllFireList().snapshotChanges().pipe(
       map(changes =>changes.map( (c: { payload: { key: any; val: () => any; }; })=>
@@ -148,13 +149,13 @@ export class DashboardComponent implements OnInit {
       this.allTickets = observer;
     });
   }
-  
+
   statusIsPending(status: string): boolean{
-    if(status == 'AAPending') return true;
+    if(status.endsWith('Pending')) return true; // handles AAPending and Pending
     return false;
   }
   statusIsClosed(status: string){
-    if(status == 'ZZClosed') return true;
+    if(status.endsWith('Closed')) return true;
     return false;
   }
   statusIsProcessing(status: string){
@@ -163,8 +164,27 @@ export class DashboardComponent implements OnInit {
   }
   lastIcon: string = 'tick';
 
-  displayedColumns: string[] = ['tid','title', 'empid', 'dept', 'priority', 'duration', 'expectedDate','status'];
-  colNames: string[] = ['TID', 'Title', 'Employee ID', 'Dept.', 'Priority', 'Duration','Expected','Status'];
+  myPending = 0; myProduction = 0; myClosed = 0;
+  getMyCounts(){
+    if(this.allTickets.length > 0){
+      // console.log('entered')
+      let myTickets = this.allTickets.filter((value: Ticket)=>{
+        if(value.empEid == 'marc.almeida@gmail.com'){
+          // console.log('marc.almeida@gmail.com found')
+          if(this.statusIsPending(value.status)) this.myPending+=1
+          else if(this.statusIsClosed(value.status)) this.myClosed+=1
+          else this.myProduction+=1
+          return value;
+        }
+        else return null;
+      })
+    }
+    else alert('len 0')
+    // let total = myTickets.length;
+  }
+  
+  displayedColumns: string[] = ['tid','title', 'empEid','priority', 'duration', 'expectedDate','status'];
+  colNames: string[] = ['TID', 'Title', 'Raised By', 'Priority', 'Duration','Expected','Status'];
 
   dataSource = new MatTableDataSource<Ticket>();
   @ViewChild(MatSort) sort!: MatSort;
@@ -355,6 +375,7 @@ export class DashboardComponent implements OnInit {
     this.getTimeOfDay();
     // this.getTickets();
     this.retrieveTickets();
+    setTimeout(()=>{this.getMyCounts()}, 4000)
   }
 
 }
