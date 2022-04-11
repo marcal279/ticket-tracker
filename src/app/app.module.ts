@@ -16,6 +16,7 @@ import { TicketDialogComponent } from './ticket-dialog/ticket-dialog.component';
 import { environment } from 'src/environments/environment';
 import { AngularFireModule } from '@angular/fire/compat';
 import { AngularFireDatabaseModule } from '@angular/fire/compat/database';
+import { ProfilePageComponent } from './profile-page/profile-page.component';
 
 @NgModule({
   declarations: [
@@ -24,7 +25,8 @@ import { AngularFireDatabaseModule } from '@angular/fire/compat/database';
     DashboardComponent,
     SideNavComponent,
     TicketManagerComponent,
-    TicketDialogComponent
+    TicketDialogComponent,
+    ProfilePageComponent
   ],
   imports: [
     BrowserModule,
