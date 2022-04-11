@@ -46,7 +46,7 @@ export class TicketDialogComponent implements OnInit {
     company: '',
     platform: '',
     // empid: '',
-    empid: 'NXT1234',
+    empEid: 'marc.almeida@gmail.com',
     // dept: '',
     dept: 'Tech',
     status: '', // 'AAPending'|'Production'|'Testing'|'Approval'|'ZZClosed',
@@ -64,10 +64,18 @@ export class TicketDialogComponent implements OnInit {
   }
 
   allMandatoryFilled(){
+    if(this.currentTicket.title == '' || this.currentTicket.priority == '' ||
+    this.currentTicket.company == '' || this.currentTicket.platform == '' ||
+    this.currentTicket.status == ''){
+      if(this.currentTicket.title == '') alert('title')
+      if(this.currentTicket.priority == '') alert('priority')
+      if(this.currentTicket.company == '') alert('company')
+      if(this.currentTicket.platform == '') alert('platform')
+      if(this.currentTicket.status == '') alert('status')
+      return false;
+    }
     return true;
   }
-
-
 
   generateTID(ticket: Ticket){
     let tid='';   
@@ -90,6 +98,7 @@ export class TicketDialogComponent implements OnInit {
 
   metaData(ticket: Ticket){
     alert(JSON.stringify(ticket));
+    let mandatoryFilled = this.allMandatoryFilled();
   }
 
   calcDuration(issueDate: Date, expectedDate: Date){
