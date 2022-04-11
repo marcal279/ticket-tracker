@@ -9,8 +9,8 @@ import {TooltipPosition} from '@angular/material/tooltip';
 export class SideNavComponent implements OnInit {
   
   @Input() currPage?:string;
-  sideNavIconList : string[] = ['severity--v2', 'two-tickets', 'bar-chart'];
-  sideNavSectionList: string[] = ['Dashboard', 'Ticket Manager', 'Analytics'];
+  sideNavIconList : string[] = ['severity--v2', 'two-tickets', 'bar-chart', 'user'];
+  sideNavSectionList: string[] = ['Dashboard', 'Ticket Manager', 'Analytics', 'My Profile'];
 
   pageActive(iconName: string) : Boolean{
     if(this.currPage == this.sideNavSectionList[this.sideNavIconList.indexOf(iconName)]) return true;
