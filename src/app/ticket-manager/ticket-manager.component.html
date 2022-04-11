@@ -30,8 +30,8 @@
     .mat-column-platform{
         width: 10rem;
     }
-    .mat-column-empid{
-        width: 7rem;
+    .mat-column-empEid{
+        width: 12rem;
     }
     .mat-column-dept{
         width: 6rem;
@@ -118,13 +118,11 @@
 <div class="allContent" style="justify-content: left;">
     <app-side-nav [currPage] = this.currPage></app-side-nav>
 
-    <div style="padding: 1rem 2rem 1rem 1rem;">
+    <div style="padding: 1rem 2rem 1rem 1rem; margin-left: 3.15rem;">
         <div style="margin-left: 1.75rem;">
-            <div>
-                <img class="headingIcon" 
-                src="https://img.icons8.com/fluency-systems-regular/30/0551DD/two-tickets.png" >
-                <h2 style="display: inline-block; color: rgb(5, 81, 221);" class="fredoka500">Ticket Manager</h2>
-            </div>
+            <img class="headingIcon"
+            src="https://img.icons8.com/fluency-systems-regular/30/0551DD/two-tickets.png" >
+            <h2 style="display: inline-block; color: rgb(5, 81, 221);" class="fredoka500">Ticket Manager</h2>
         </div>
         <div class="enableButtonHover" style=" display: flex; width: 99.5%;
         align-items: baseline; justify-content: space-between;">
@@ -135,7 +133,7 @@
                         <input matInput (keyup)="applyFilter($event)" placeholder="" #ticketSearch [(ngModel)]="searchBoxValue">
                     </mat-form-field>
                     <button class="complemCustomButton complemIconButton"><mat-icon>filter_list</mat-icon></button>
-                    <div class="enableButtonHover" style="display: inline-block; margin-left: 16rem;">
+                    <div class="enableButtonHover" style="display: inline-block; margin-left: 20rem;">
                         <button class="customButton complemIconButton fredoka500" style="border-radius: 49%; position: relative; top: 4px;" (click)="downloadCSV()"><mat-icon>download</mat-icon></button>
                         <button class="customButton fredoka500" (click)="createTicket()"><mat-icon>add</mat-icon>New Ticket</button>
                     </div>
@@ -187,7 +185,7 @@
                                 <h2>{{element.title}} ({{element.tid}})</h2>
                                 <p *ngIf="element.desc" style="font-size: larger;">{{element.desc}}</p>
                                 <p><strong>Platform: </strong>{{element.company}} {{element.platform}}</p>
-                                <p><strong>Issued By: </strong>{{element.empid}}
+                                <p><strong>Issued By: </strong>{{element.empEid}}
                                 <strong style="margin-left: 2rem;">Dept: </strong>{{element.dept}}</p>
                                 <p><strong>Issue Date: </strong>{{element.issueDate | date}}
                                     <strong style="margin-left: 2rem;" *ngIf="element.expectedDate">Expected: </strong>In {{element.duration}} on {{element.expectedDate | date}}

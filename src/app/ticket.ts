@@ -2,7 +2,7 @@ export interface Ticket{
     tid: string,
     company: string,
     platform: string,
-    empid: string,
+    empEid: string,
     dept: string|null,
     title: string,
     desc: string|null,

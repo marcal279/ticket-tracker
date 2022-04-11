@@ -79,11 +79,11 @@ export class TicketManagerComponent implements OnInit {
   // timeFilter() function is below retrieve tickets so matTableData is declared already
 
   statusIsPending(status: string): boolean{
-    if(status == 'AAPending' || status == 'Pending') return true;
+    if(status.endsWith('Pending')) return true; // handles AAPending and Pending
     return false;
   }
   statusIsClosed(status: string){
-    if(status == 'ZZClosed' || status == 'Closed') return true;
+    if(status.endsWith('Closed')) return true;
     return false;
   }
   statusIsProcessing(status: string){
@@ -92,8 +92,8 @@ export class TicketManagerComponent implements OnInit {
   }
   lastIcon: string = 'tick';
 
-  displayedColumns: string[] = ['tid','title','company','platform','empid','dept','priority','duration','expectedDate','status'];
-  colNames: string[] = ['TID', 'Title', 'Company', 'Platform', 'Employee ID', 'Dept.', 'Priority', 'Duration', 'Expected', 'Status'];
+  displayedColumns: string[] = ['tid','title','company','platform','empEid','dept','priority','duration','expectedDate','status'];
+  colNames: string[] = ['TID', 'Title', 'Company', 'Platform', 'Raised By', 'Dept.', 'Priority', 'Duration', 'Expected', 'Status'];
 
   dataSource = new MatTableDataSource<Ticket>();  // added this.dataSource.data = this.allTickets; below because somehow dataSource doesnt get properly initialized if passed as new MatTableDataSource<Ticket>(this.allTickets);
   @ViewChild(MatSort) sort!: MatSort;
@@ -123,9 +123,9 @@ export class TicketManagerComponent implements OnInit {
     let myTicketToggle: MatSlideToggle = event.source;
     // this.searchBox.nativeElement.value = 'NXT235';
     if(this.onlyMyTicketsShown){
-      this.searchBoxValue = 'NXT235';
+      this.searchBoxValue = 'marc.almeida@gmail.com';
       let myTickets = this.allTickets.filter((value: Ticket)=>{
-        if(value.empid == 'NXT235') return value;
+        if(value.empEid == 'marc.almeida@gmail.com') return value;
         else return null;
       })
       this.dataSource.data = myTickets;
@@ -149,10 +149,10 @@ export class TicketManagerComponent implements OnInit {
     else if(this.selectedTimePeriod=='year-2') limitDate = oneYearBack;
     else limitDate = new Date(2000,0,1);
     let count =0;
-    this.allTickets.forEach((ticket: Ticket)=>{
-      if(ticket.expectedDate < new Date(2022,5,20)) count++;
+    let filtered = this.allTickets.filter((ticket: Ticket)=>{
+      ticket.issueDate.getTime() >= limitDate.getTime();
     })
-    alert(count+' '+this.allTickets.length)
+    alert(filtered.length);
   }
 
   createTicket(): void{
