@@ -138,12 +138,18 @@
                         <button class="customButton fredoka500" (click)="createTicket()"><mat-icon>add</mat-icon>New Ticket</button>
                     </div>
                 </div>
-                <div style="display: flex; width: 98.5%; justify-content: space-between; align-items: center;">
-                    <div>
-                        <h4 class="fredoka500" style="margin-left: 2rem; display: inline-block;">Showing tickets for</h4>
-                        <mat-form-field appearance="fill" style="width: 8rem; height: 3rem;">
-                            <mat-select class="fredoka" [(value)]="selectedTimePeriod" (selectionChange)="timeFilter()">
-                                <mat-option class="fredoka" *ngFor="let option of timeOptions" [value]="option.value">{{option.viewValue}}</mat-option>
+                <div style="display: flex; width: 98.5%; justify-content: space-between; align-items: baseline;">
+                    <div style="height: 4rem;">
+                        <h4 class="fredoka500" style="margin-left: 2rem; display: inline-block;">Showing tickets created</h4>
+                        <mat-form-field appearance="outline" style="width: 8rem; margin-left: 0.5rem;">
+                            <mat-select class="fredoka" [(value)]="selectedIssueTimePeriod" (selectionChange)="issueTimeFilter()">
+                                <mat-option class="fredoka" *ngFor="let option of issueTimeOptions" [value]="option.value">{{option.viewValue}}</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                        <h4 class="fredoka500" style="margin-left: 0.5rem; display: inline-block;">that are due</h4>
+                        <mat-form-field appearance="outline" style="width: 8rem; margin: 0rem 0.5rem;">
+                            <mat-select class="fredoka" [(value)]="selectedExpectedTimePeriod" (selectionChange)="issueTimeFilter()">
+                                <mat-option class="fredoka" *ngFor="let option of expectedTimeOptions" [value]="option.value">{{option.viewValue}}</mat-option>
                             </mat-select>
                         </mat-form-field>
                     </div>

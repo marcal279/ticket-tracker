@@ -56,7 +56,7 @@ export class TicketManagerComponent implements OnInit {
   sideNavIconList : string[] = ['severity--v2', 'two-tickets', 'bar-chart'];
   sideNavSectionList: string[] = ['Dashboard', 'Ticket Manager', 'Analytics'];
 
-  timeOptions = [
+  issueTimeOptions = [
     {
       value: 'week-0',
       viewValue: 'Last Week',
@@ -71,12 +71,32 @@ export class TicketManagerComponent implements OnInit {
     },
     {
       value: 'all-3',
-      viewValue: 'All Time',
+      viewValue: 'Any Time',
     },
   ]
-  selectedTimePeriod = 'all-3';
+  selectedIssueTimePeriod = 'all-3';
+  
+  expectedTimeOptions = [
+    {
+      value: 'nweek-0',
+      viewValue: 'In A Week',
+    },
+    {
+      value: 'nmonth-1',
+      viewValue: 'In A Month',
+    },
+    {
+      value: 'nyear-2',
+      viewValue: 'In A Year',
+    },
+    {
+      value: 'nall-3',
+      viewValue: 'Any Time',
+    },
+  ]
+  selectedExpectedTimePeriod = 'nall-3';
 
-  // timeFilter() function is below retrieve tickets so matTableData is declared already
+  // issueTimeFilter() function is below retrieve tickets so matTableData is declared already
 
   statusIsPending(status: string): boolean{
     if(status.endsWith('Pending')) return true; // handles AAPending and Pending
@@ -121,38 +141,58 @@ export class TicketManagerComponent implements OnInit {
   // @ViewChild('mat-slide-toggle') myTicketToggle!: ElementRef;
   myTickets(event: MatSlideToggleChange): void{
     let myTicketToggle: MatSlideToggle = event.source;
-    // this.searchBox.nativeElement.value = 'NXT235';
+    
+    let oldData = [...this.dataSource.data];
+
     if(this.onlyMyTicketsShown){
       this.searchBoxValue = 'marc.almeida@gmail.com';
-      let myTickets = this.allTickets.filter((value: Ticket)=>{
+      let myTickets = oldData.filter((value: Ticket)=>{
         if(value.empEid == 'marc.almeida@gmail.com') return value;
         else return null;
       })
       this.dataSource.data = myTickets;
+      this.onlyMyTicketsShown = true;
     }
     else{
       this.searchBoxValue = '';
-      this.dataSource.data = this.allTickets;
+      this.dataSource.data = oldData;
+      this.onlyMyTicketsShown = false;
     }
   }
 
-  timeFilter(){
-    // alert('change detected')
+  issueTimeFilter(){
+    alert('change detected')
     let oneWeekBack = new Date(), oneMonthBack = new Date(), oneYearBack = new Date();
+    let oneWeekLater = new Date(), oneMonthLater = new Date(), oneYearLater = new Date();
     oneWeekBack.setDate(oneWeekBack.getDate()-7);
     oneMonthBack.setDate(oneMonthBack.getDate()-31);
     oneYearBack.setDate(oneYearBack.getDate()-365);
+
+    oneWeekLater.setDate(oneWeekLater.getDate()+7);
+    oneMonthLater.setDate(oneMonthLater.getDate()+31);
+    oneYearLater.setDate(oneYearLater.getDate()+365);
     // alert(`1w back: ${oneWeekBack} 1m back: ${oneMonthBack} 1y back: ${oneYearBack}`)
-    let limitDate: Date;
-    if(this.selectedTimePeriod=='week-0') limitDate = oneWeekBack;
-    else if(this.selectedTimePeriod=='month-1') limitDate = oneMonthBack;
-    else if(this.selectedTimePeriod=='year-2') limitDate = oneYearBack;
-    else limitDate = new Date(2000,0,1);
-    let count =0;
+
+    let issueLimitDate: Date;
+    if(this.selectedIssueTimePeriod=='week-0') issueLimitDate = oneWeekBack;
+    else if(this.selectedIssueTimePeriod=='month-1') issueLimitDate = oneMonthBack;
+    else if(this.selectedIssueTimePeriod=='year-2') issueLimitDate = oneYearBack;
+    else issueLimitDate = new Date(1980,0,1);
+    
+    let expectedLimitDate: Date;
+    if(this.selectedExpectedTimePeriod=='nweek-0') expectedLimitDate = oneWeekLater;
+    else if(this.selectedExpectedTimePeriod=='nmonth-1') expectedLimitDate = oneMonthLater;
+    else if(this.selectedExpectedTimePeriod=='nyear-2') expectedLimitDate = oneYearLater;
+    else expectedLimitDate = new Date(2050,0,1);
+
+    let count = 0;
     let filtered = this.allTickets.filter((ticket: Ticket)=>{
-      ticket.issueDate.getTime() >= limitDate.getTime();
+      let tickIssue = new Date(ticket.issueDate).getTime();
+      let tickExpected = new Date(ticket.expectedDate).getTime();
+      if(issueLimitDate.getTime() <= tickIssue && tickExpected <= expectedLimitDate.getTime() ) return ticket;
+      else return null;
     })
-    alert(filtered.length);
+    this.dataSource.data = filtered;
   }
 
   createTicket(): void{
