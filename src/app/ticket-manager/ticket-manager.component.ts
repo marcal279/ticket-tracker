@@ -181,7 +181,7 @@ export class TicketManagerComponent implements OnInit {
   }
 
   deleteTicket(ticket: any){
-    if( confirm(`Are you sure you want to delete Report ${ticket.tid}?`) ){
+    if( confirm(`Are you sure you want to delete Ticket ${ticket.tid}?`) ){
       this.ticketService.delete(ticket.key).then(()=>{
         alert("Successfully deleted ticket "+ticket.key)
       }).catch(err=>alert("ERROR: "+err))
