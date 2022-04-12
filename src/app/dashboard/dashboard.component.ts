@@ -139,7 +139,7 @@ export class DashboardComponent implements OnInit {
 
   // retrievedAll: Boolean = false;
   retrieveTickets(){ // from db
-    this.ticketService.getAllFireList().snapshotChanges().pipe(
+    this.ticketService.readDBTicket().snapshotChanges().pipe(
       map(changes =>changes.map( (c: { payload: { key: any; val: () => any; }; })=>
       ({ key: c.payload.key, ...c.payload.val() }) )
       )
