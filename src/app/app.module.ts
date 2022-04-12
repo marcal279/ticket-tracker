@@ -2,21 +2,26 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { AppComponent } from './app.component';
-import { LoginComponent } from './login/login.component';
+
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CustomMaterialModule } from 'src/custom/custom';
-import { DashboardComponent } from './dashboard/dashboard.component';
 
 // DateTime
 import { DatePipe } from '@angular/common';
+
+// Components
+import { LoginComponent } from './login/login.component';
+import { DashboardComponent } from './dashboard/dashboard.component';
 import { SideNavComponent } from './side-nav/side-nav.component';
 import { TicketManagerComponent } from './ticket-manager/ticket-manager.component';
 import { TicketDialogComponent } from './ticket-dialog/ticket-dialog.component';
+import { ProfilePageComponent } from './profile-page/profile-page.component';
 
+// Firebase
 import { environment } from 'src/environments/environment';
 import { AngularFireModule } from '@angular/fire/compat';
-import { AngularFireDatabaseModule } from '@angular/fire/compat/database';
-import { ProfilePageComponent } from './profile-page/profile-page.component';
+import { AngularFireDatabaseModule } from '@angular/fire/compat/database'; // for tickets
+import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
 
 @NgModule({
   declarations: [
@@ -34,7 +39,8 @@ import { ProfilePageComponent } from './profile-page/profile-page.component';
     CustomMaterialModule,
 
     AngularFireModule.initializeApp(environment.firebase),
-    AngularFireDatabaseModule
+    AngularFireDatabaseModule,
+    AngularFirestoreModule
   ],
   providers: [DatePipe],
   bootstrap: [AppComponent]
