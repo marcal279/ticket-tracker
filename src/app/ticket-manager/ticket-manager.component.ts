@@ -35,7 +35,7 @@ export class TicketManagerComponent implements OnInit {
   }
 
   retrieveTickets(){ // from db
-    this.ticketService.getAllFireList().snapshotChanges().pipe(
+    this.ticketService.readDBTicket().snapshotChanges().pipe(
       map(changes =>changes.map( (c: { payload: { key: any; val: () => any; }; })=>
       ({ key: c.payload.key, ...c.payload.val() }) )
       )
@@ -222,7 +222,7 @@ export class TicketManagerComponent implements OnInit {
 
   deleteTicket(ticket: any){
     if( confirm(`Are you sure you want to delete Ticket ${ticket.tid}?`) ){
-      this.ticketService.delete(ticket.key).then(()=>{
+      this.ticketService.deleteDBTicket(ticket.key).then(()=>{
         alert("Successfully deleted ticket "+ticket.key)
       }).catch(err=>alert("ERROR: "+err))
     }

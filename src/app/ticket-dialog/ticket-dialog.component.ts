@@ -39,23 +39,7 @@ export class TicketDialogComponent implements OnInit {
   statuses: String[] = ['Pending', 'Production', 'Testing', 'Approval', 'Closed']
   priorities: String[] = ['High','Medium','Low']
   
-  newTicket: Ticket ={
-    title: '',
-    desc: '',
-    tid: '',
-    company: '',
-    platform: '',
-    // empid: '',
-    empEid: 'marc.almeida@gmail.com',
-    // dept: '',
-    dept: 'Tech',
-    status: '', // 'AAPending'|'Production'|'Testing'|'Approval'|'ZZClosed',
-    issueDate: new Date(),
-    duration: '',
-    expectedDate: new Date( new Date().setDate(new Date().getDate() + 7) ),
-    priority: '',// 'High'|'Medium'|'Low'
-    comments: '',
-  }
+  newTicket: Ticket = this.ticketService.newTicketObject();
   currentTicket : Ticket = this.newTicket;
 
   ngOnInit(): void {
@@ -111,10 +95,10 @@ export class TicketDialogComponent implements OnInit {
     if(this.currentTicket.expectedDate && this.currentTicket.issueDate){
       this.currentTicket.duration = this.calcDuration(this.currentTicket.issueDate, this.currentTicket.expectedDate);
     }
-    this.ticketService.create(this.currentTicket).then(()=>{
+    this.ticketService.createDBTicket(this.currentTicket).then(()=>{
       // alert(`Created TicketID ${this.currentTicket.tid} successfully!`);
       this.openSnackBar(`Created TicketID ${this.currentTicket.tid} successfully!`);
-      this.ticketService.update(newlyAddedKey, this.currentTicket)
+      this.ticketService.updateDBTicket(newlyAddedKey, this.currentTicket)
       .then( () => { 
         // alert('Added dates') 
       }).catch(err => alert(err));
@@ -138,7 +122,7 @@ export class TicketDialogComponent implements OnInit {
     }
     else alert('Nope')
     if(this.data.ticket.key){
-      this.ticketService.update(this.data.ticket.key, this.currentTicket)
+      this.ticketService.updateDBTicket(this.data.ticket.key, this.currentTicket)
       .then( () => {
         // alert('Updated record '+ticket.key+' successfully!')
         this.openSnackBar(`Updated record ${ticket.key} successfully!`);

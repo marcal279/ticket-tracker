@@ -41,7 +41,7 @@ export class TicketsService {
         empEid: 'marc.almeida@gmail.com',
         dept: this.randomDept(),
         title: 'Ticket No. ' + String(50 + i),
-        desc: Math.random() > 0.5 ? 'desc' : null,
+        desc: Math.random() > 0.5 ? 'desc': '',
         status: ['AAPending', 'BBProduction', 'CCTesting', 'DDApproval', 'ZZClosed'][Math.floor(Math.random() * 5)],
         issueDate: new Date(),
         duration: String(this.randomIntBelow(3)+1) + 'w',
@@ -62,7 +62,7 @@ export class TicketsService {
       empEid: 'marc.almeida@gmail.com',
       dept: this.randomDept(),
       title: 'Hard Coded Ticket',
-      desc: Math.random() > 0.5 ? 'desc' : null,
+      desc: Math.random() > 0.5 ? 'desc' : '',
       status: ['AAPending', 'BBProduction', 'CCTesting', 'DDApproval', 'ZZClosed'][Math.floor(Math.random() * 5)],
       issueDate: new Date(),
       duration: String(this.randomIntBelow(3)+1) + 'w',
@@ -82,6 +82,26 @@ export class TicketsService {
     return ticketObservable;
   }
 
+  // Imp function
+  newTicketObject(): Ticket{
+    return {
+      title: '',
+      desc: '',
+      tid: '',
+      company: '',
+      platform: '',
+      empEid: 'marc.almeida@gmail.com',
+      dept: 'Tech',
+      status: '', // 'AAPending'|'Production'|'Testing'|'Approval'|'ZZClosed',
+      issueDate: new Date(),
+      duration: '',
+      expectedDate: new Date( new Date().setDate(new Date().getDate() + 7) ),
+      priority: '',// 'High'|'Medium'|'Low'
+      comments: '',
+    }
+  }
+
+
   //Firebase starting here
   ticketsRef!: AngularFireList<Ticket>;
 
@@ -90,25 +110,25 @@ export class TicketsService {
   }
 
   // C
-  create(newTicket: Ticket){
+  createDBTicket(newTicket: Ticket){
     return this.ticketsRef.push(newTicket);
   }
 
   // R
-  getAllFireList(): AngularFireList<Ticket>{
+  readDBTicket(): AngularFireList<Ticket>{
     return this.ticketsRef
   }
 
   // U
-  update(key: string, value: any): Promise<void> {
+  updateDBTicket(key: string, value: any): Promise<void> {
     return this.ticketsRef.update(key, value);
   }
 
   // D
-  delete(key: string): Promise<void> {
+  deleteDBTicket(key: string): Promise<void> {
     return this.ticketsRef.remove(key);
   }
-  deleteAll(): Promise<void> {
+  deleteAllDBTickets(): Promise<void> {
     return this.ticketsRef.remove();
   }
 
