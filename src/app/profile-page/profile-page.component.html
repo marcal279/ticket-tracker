@@ -17,7 +17,7 @@
         <div>
             <img class="headingIcon" 
             src="https://img.icons8.com/fluency-systems-regular/30/0551DD/user.png" >
-            <h2 style="display: inline-block; color: rgb(5, 81, 221);" class="fredoka500">My Profile</h2>
+            <h2 style="display: inline-block; color: rgb(5, 81, 221);" class="fredoka500" (click)="metadata()">My Profile</h2>
         </div>
         <div style="margin: 1rem 0rem 1rem 2rem;">
             <img src="https://media-exp1.licdn.com/dms/image/C4E03AQEqis2UyP-_Ow/profile-displayphoto-shrink_200_200/0/1633333854582?e=1655337600&v=beta&t=HYYY9o3JfCHhrb4tUsipDonQ6gaD34Dn5HWQuPTmXJQ"
@@ -32,19 +32,19 @@
                 <h4 class="fredoka500">Basic Info</h4>
                 <mat-form-field appearance="outline" class="width65" style="margin: 0rem 2rem 0rem 0rem;">
                     <mat-label>Name</mat-label>
-                    <input type="text" matInput placeholder="" #name required>
+                    <input type="text" matInput placeholder="" #name [(ngModel)]="currUser.name" required>
                 </mat-form-field>
                 <mat-form-field appearance="outline">
                     <mat-label>Employee ID</mat-label>
-                    <input type="text" matInput placeholder="" value="NXT1234" #empID disabled>
+                    <input type="text" matInput placeholder="" value="NXT123" #empID disabled>
                 </mat-form-field>
                 <mat-form-field appearance="outline" class="width65" style="margin: 0rem 2rem 0.5rem 0rem;">
                     <mat-label>Email</mat-label>
-                    <input type="email" matInput placeholder="" #email required>
+                    <input type="email" matInput placeholder="" #email [(ngModel)]="currUser.empEid" required>
                 </mat-form-field>   
                 <mat-form-field appearance="outline">
                     <mat-label>Role</mat-label>
-                    <input type="text" matInput placeholder="" value="Admin" #role disabled>
+                    <input type="text" matInput placeholder="" value="Admin" value="{{currUser.role}}" #role disabled>
                     <mat-hint>Provided by admin</mat-hint>
                     <!-- <mat-select value="Admin">
                         <mat-option></mat-option>
@@ -59,32 +59,43 @@
                 </mat-form-field>  -->
                 <mat-form-field appearance="outline">
                     <mat-label>Mobile No.</mat-label>
-                    <input type="text" matInput placeholder="" #mob>
-                </mat-form-field>               
+                    <input type="text" matInput placeholder="" [(ngModel)]="currUser.mob" #mob>
+                </mat-form-field>
+                <mat-form-field appearance="outline">
+                    <mat-label>Office No./Extension</mat-label>
+                    <input type="text" matInput placeholder="" [(ngModel)]="currUser.offExt" #mob>
+                </mat-form-field>          
             </div>
             <div id="employee-info">
                 <h4 class="fredoka500">Employee Information</h4>
                 <mat-form-field appearance="outline">
-                    <mat-select placeholder="Company" required>
+                    <mat-select placeholder="Company" required  [(value)]="currUser.company">
                         <mat-option value="NXTDigital">NXTDigital</mat-option>
                         <mat-option value="InDigital">InDigital</mat-option>
                     </mat-select>
                 </mat-form-field>
                 <mat-form-field appearance="outline">
                     <mat-label>Designation</mat-label>
-                    <input type="text" matInput placeholder="" #mob>
+                    <input type="text" matInput placeholder="" [(ngModel)]="currUser.designation" #mob>
                 </mat-form-field>
                 <mat-form-field appearance="outline" style="margin: 0rem 2rem 0rem 0rem;">
                     <mat-label>Supervisor</mat-label>
-                    <input type="text" matInput placeholder="The guy/gal you don't want to disappoint" #supervisor>
+                    <input type="text" matInput placeholder="The guy/gal you don't want to disappoint" [(ngModel)]="currUser.supervisor" #supervisor>
                 </mat-form-field>
                 <mat-form-field appearance="outline">
-                    <mat-label>Office No./Extension</mat-label>
-                    <input type="text" matInput placeholder="" #mob>
+                    <mat-label>Dept.</mat-label>
+                    <input type="text" matInput placeholder="" [(ngModel)]="currUser.dept" #mob>
                 </mat-form-field>
             </div>
+            <button (click)="addUser()">Add User(Remove later)</button>
             <div id="settings">
                 what settings should i put here yaar
+            </div>
+            <div>
+                Users:
+                <ul>
+                    <li *ngFor="let user of USERS"><strong>{{user.key}}:</strong> {{user.empEid}}</li>
+                </ul>
             </div>
         </div>
     </div>
