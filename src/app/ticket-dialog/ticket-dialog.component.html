@@ -56,8 +56,8 @@
 </mat-dialog-content>
 <mat-dialog-actions align="end">
     <button class="fredoka" mat-raised-button [mat-dialog-close]="false">Cancel</button>
-    <button *ngIf="data.ticketDialogTitle=='Create'" disabled="false" class="fredoka" mat-raised-button [mat-dialog-close]="true" (click)="createTicket()" style="background-color: rgb(5, 106, 221); color: white;">Create Ticket</button>
-    <button *ngIf="data.ticketDialogTitle=='Update'" disabled="false" class="fredoka" mat-raised-button [mat-dialog-close]="true" (click)="updateTicket(currentTicket)" style="background-color: rgb(5, 106, 221); color: white;">Update Ticket</button>
+    <button *ngIf="data.ticketDialogTitle=='Create'" [disabled]="!allMandatoryFilled()" class="fredoka" mat-raised-button [mat-dialog-close]="true" (click)="createTicket()" style="background-color: rgb(5, 106, 221); color: white;">Create Ticket</button>
+    <button *ngIf="data.ticketDialogTitle=='Update'" [disabled]="!allMandatoryFilled()" class="fredoka" mat-raised-button [mat-dialog-close]="true" (click)="updateTicket(currentTicket)" style="background-color: rgb(5, 106, 221); color: white;">Update Ticket</button>
 </mat-dialog-actions>
 
 <!-- add data to rows, make csv on ticket creation -->

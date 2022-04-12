@@ -67,11 +67,6 @@ export class TicketDialogComponent implements OnInit {
     if(this.currentTicket.title == '' || this.currentTicket.priority == '' ||
     this.currentTicket.company == '' || this.currentTicket.platform == '' ||
     this.currentTicket.status == ''){
-      if(this.currentTicket.title == '') alert('title')
-      if(this.currentTicket.priority == '') alert('priority')
-      if(this.currentTicket.company == '') alert('company')
-      if(this.currentTicket.platform == '') alert('platform')
-      if(this.currentTicket.status == '') alert('status')
       return false;
     }
     return true;
@@ -110,51 +105,44 @@ export class TicketDialogComponent implements OnInit {
   }
 
   createTicket(){
-    if( this.allMandatoryFilled() ){  // double check
-      this.currentTicket.tid = this.generateTID(this.currentTicket);
-      this.currentTicket.issueDate = new Date();
-      if(this.currentTicket.expectedDate && this.currentTicket.issueDate){
-        this.currentTicket.duration = this.calcDuration(this.currentTicket.issueDate, this.currentTicket.expectedDate);
-      }
-      this.ticketService.create(this.currentTicket).then(()=>{
-        // alert(`Created TicketID ${this.currentTicket.tid} successfully!`);
-        this.openSnackBar(`Created TicketID ${this.currentTicket.tid} successfully!`);
-        this.ticketService.update(newlyAddedKey, this.currentTicket)
-        .then( () => { 
-          // alert('Added dates') 
-        }).catch(err => alert(err));
-      }).catch(err =>{alert('Error: '+err)});
-      
-      let newlyAddedKey :any; 
-      
-      this.ticketsRef.snapshotChanges(['child_added']).subscribe(
-        actions=> {actions.slice(-1).forEach(action =>{
-          newlyAddedKey = action.key;
-          // alert(`Newest key = ${newlyAddedKey}`);
-        })
-      })
-
-      
-      // this.resetTicketDialogBox();
+    this.currentTicket.tid = this.generateTID(this.currentTicket);
+    this.currentTicket.issueDate = new Date();
+    if(this.currentTicket.expectedDate && this.currentTicket.issueDate){
+      this.currentTicket.duration = this.calcDuration(this.currentTicket.issueDate, this.currentTicket.expectedDate);
     }
+    this.ticketService.create(this.currentTicket).then(()=>{
+      // alert(`Created TicketID ${this.currentTicket.tid} successfully!`);
+      this.openSnackBar(`Created TicketID ${this.currentTicket.tid} successfully!`);
+      this.ticketService.update(newlyAddedKey, this.currentTicket)
+      .then( () => { 
+        // alert('Added dates') 
+      }).catch(err => alert(err));
+    }).catch(err =>{alert('Error: '+err)});
+    
+    let newlyAddedKey :any; 
+    
+    this.ticketsRef.snapshotChanges(['child_added']).subscribe(
+      actions=> {actions.slice(-1).forEach(action =>{
+        newlyAddedKey = action.key;
+        // alert(`Newest key = ${newlyAddedKey}`);
+      })
+    })
   }
 
   updateTicket(ticket: any){
-    if(this.allMandatoryFilled()){
-      if(this.currentTicket.expectedDate && this.currentTicket.issueDate){
-        // alert( `Issue Date ${this.currentTicket.issueDate} expected Date ${this.currentTicket.expectedDate} 
-        // diff ${this.calcDuration(this.currentTicket.issueDate, this.currentTicket.expectedDate)}` );
-        this.currentTicket.duration = this.calcDuration(this.currentTicket.issueDate, this.currentTicket.expectedDate);
-      }
-      else alert('Nope')
-      if(this.data.ticket.key){
-        this.ticketService.update(this.data.ticket.key, this.currentTicket)
-        .then( () => {
-          // alert('Updated record '+ticket.key+' successfully!')
-          this.openSnackBar(`Updated record ${ticket.key} successfully!`);
-        })
-        .catch(err => alert(err));
-      }
+    if(this.currentTicket.expectedDate && this.currentTicket.issueDate){
+      // alert( `Issue Date ${this.currentTicket.issueDate} expected Date ${this.currentTicket.expectedDate} 
+      // diff ${this.calcDuration(this.currentTicket.issueDate, this.currentTicket.expectedDate)}` );
+      this.currentTicket.duration = this.calcDuration(this.currentTicket.issueDate, this.currentTicket.expectedDate);
+    }
+    else alert('Nope')
+    if(this.data.ticket.key){
+      this.ticketService.update(this.data.ticket.key, this.currentTicket)
+      .then( () => {
+        // alert('Updated record '+ticket.key+' successfully!')
+        this.openSnackBar(`Updated record ${ticket.key} successfully!`);
+      })
+      .catch(err => alert(err));
     }
   }
 
