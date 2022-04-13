@@ -1,0 +1,100 @@
+<style>
+    body{
+        display: flex;
+        height: 100%;
+    }
+    .width50{
+        width: 50%;
+    }
+    .centerAll{
+        display: flex;
+        flex-flow: row nowrap;
+        align-items: center;
+        justify-content: center;
+    }
+
+    mat-stepper button{
+        margin-right: 0.5rem;
+    }
+</style>
+
+<body>
+    <div class="width50 centerAll" style="background-color: rgb(5,106,221);">
+        <mat-card style="width: 75%; padding: 2rem; border-radius: 1rem;">
+            <mat-card-title class="fredoka500" style="color: rgb(5, 106, 221);">We're so glad you're registering</mat-card-title>
+            <mat-card-subtitle>Just a few steps away from creating your account</mat-card-subtitle>
+            <mat-card-content>
+                <mat-stepper linear #signUpStepper>
+                    <mat-step>
+                        <h3 class="fredoka500">Basic Information</h3>
+                        <mat-form-field appearance="fill" style="width: 65%">
+                            <mat-label>Full Name</mat-label>
+                            <input type="text" matInput placeholder="" #name required>
+                        </mat-form-field>
+                        <mat-form-field appearance="fill" style="margin: 0rem 1rem; width: 7.5rem;">
+                            <mat-label>Employee ID</mat-label>
+                            <input type="text" matInput placeholder="On your ID Card" value="" #empID required>
+                        </mat-form-field>
+                        <mat-form-field appearance="fill" style="width: 65%;">
+                            <mat-label>Company Email ID</mat-label>
+                            <input type="email" matInput placeholder="" #email required>
+                        </mat-form-field>
+                        <button mat-raised-button matStepperNext style="display: block;">Next</button>
+                    </mat-step>
+                    <mat-step>
+                        <h3 class="fredoka500">Contact Information</h3>
+                        <mat-form-field appearance="fill">
+                            <mat-label>Mobile No.</mat-label>
+                            <input type="text" matInput placeholder="" #mob>
+                        </mat-form-field>
+                        <mat-form-field appearance="fill" style="margin-left: 1rem;">
+                            <mat-label>Office No./Extension</mat-label>
+                            <input type="text" matInput placeholder="" #offExt>
+                        </mat-form-field>  
+                        <button mat-raised-button matStepperPrevious>Previous</button>
+                        <button mat-raised-button matStepperNext>Next</button>
+                    </mat-step>
+                    <mat-step>
+                        <h3 class="fredoka500">Employee Information</h3>
+                        <mat-form-field appearance="outline">
+                            <mat-select placeholder="Company" required>
+                                <mat-option value="NXTDigital">NXTDigital</mat-option>
+                                <mat-option value="InDigital">InDigital</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                        <mat-form-field appearance="fill" style="margin-left: 1rem;">
+                            <mat-label>Designation</mat-label>
+                            <input type="text" matInput placeholder="" #designation>
+                        </mat-form-field>
+                        <mat-form-field appearance="fill">
+                            <mat-label>Supervisor</mat-label>
+                            <input type="text" matInput placeholder="The guy/gal you don't want to disappoint" #supervisor>
+                        </mat-form-field>
+                        <mat-form-field appearance="fill" style="margin-left: 1rem;">
+                            <mat-label>Dept.</mat-label>
+                            <input type="text" matInput placeholder="" #dept>
+                        </mat-form-field>
+                        <button mat-raised-button matStepperPrevious>Previous</button>
+                        <button mat-raised-button matStepperNext>Next</button>
+                    </mat-step>
+                    <mat-step>
+                        <h3 class="fredoka500">Set a Password</h3>
+                        <mat-form-field appearance="fill" style="margin-right: 2rem; width: 70%;">
+                            <mat-label>Password</mat-label>
+                            <input type="password" matInput placeholder="Something you'll remember" #password>
+                        </mat-form-field>
+                        <mat-form-field appearance="fill" style=" width: 70%; margin-right: 3rem;">
+                            <mat-label>Confirm Password</mat-label>
+                            <input type="password" matInput placeholder="Check it again" #passwordConfirm>
+                        </mat-form-field>
+                        <button mat-raised-button matStepperPrevious>Previous</button>
+                        <button mat-raised-button style="background-color: rgb(5, 106, 221); color: white;">Sign Up</button>
+                    </mat-step>
+                </mat-stepper>
+            </mat-card-content>
+        </mat-card>
+    </div>
+    <div class="width50" style="overflow: hidden;"><img src="../../assets/images/signup.jpg" style="height: 40rem;"></div>
+</body>
+
+<!-- <a href="https://www.freepik.com/vectors/citizen">Citizen vector created by storyset - www.freepik.com</a> -->

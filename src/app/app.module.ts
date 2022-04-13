@@ -22,6 +22,7 @@ import { environment } from 'src/environments/environment';
 import { AngularFireModule } from '@angular/fire/compat';
 import { AngularFireDatabaseModule } from '@angular/fire/compat/database'; // for tickets
 import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
+import { SignupComponent } from './signup/signup.component';
 
 @NgModule({
   declarations: [
@@ -31,7 +32,8 @@ import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
     SideNavComponent,
     TicketManagerComponent,
     TicketDialogComponent,
-    ProfilePageComponent
+    ProfilePageComponent,
+    SignupComponent
   ],
   imports: [
     BrowserModule,
