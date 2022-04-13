@@ -22,6 +22,7 @@ import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import {MatNativeDateModule} from "@angular/material/core";
 import {MatSnackBarModule} from '@angular/material/snack-bar';
+import {MatStepperModule} from '@angular/material/stepper';
 
 // Charts and BI
 import { NgApexchartsModule } from "ng-apexcharts";
@@ -52,6 +53,7 @@ import { NgApexchartsModule } from "ng-apexcharts";
         MatDatepickerModule,
         MatNativeDateModule,
         MatSnackBarModule,
+        MatStepperModule,
     ],
     exports:[
         MatToolbarModule,
@@ -77,6 +79,7 @@ import { NgApexchartsModule } from "ng-apexcharts";
         MatDatepickerModule,
         MatNativeDateModule,
         MatSnackBarModule,
+        MatStepperModule,
     ],
 })
 export class CustomMaterialModule{}
