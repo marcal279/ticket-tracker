@@ -1,16 +1,24 @@
 <style>
-    /* see .css file */
+    body{
+        display: flex;
+        height: 100%;
+    }
+    .width50{
+        width: 50%;
+    }
+    .centerAll{
+        display: flex;
+        flex-flow: row wrap;
+        align-items: center;
+        justify-content: center;
+    }
 </style>
 
-<div class="centerAll" id="fullBody">
-    <!-- <app-navbar></app-navbar> -->
-    <mat-card>
-        <div class="loginHalf centerAll" id="imgContainer">
-            <img id="loginImg" src="../../assets/images/final-teamwork-img.png">
-        </div>
-        <div class="loginHalf">
-            <div id="loginForm">
-                <mat-card-title style="margin-bottom: 0.75rem;">Welcome Back!</mat-card-title>
+<body>
+    <div class="width50" style="overflow: hidden; width: 52.5%;"><img src="../../assets/images/login.jpg" alt="" style="height: 40rem;"></div>
+    <div class="width50 centerAll" style="background-color: rgb(5, 106, 221); width: 47.5%;">
+        <mat-card style="width: 75%; border-radius: 1rem; padding: 1.5rem;">
+            <mat-card-title class="fredoka" style="color: rgb(5, 106, 221); margin-bottom: 0.75rem;">Welcome Back!</mat-card-title>
                 <mat-card-subtitle>Track the changes you need, collaborate, and co-operate seamlessly</mat-card-subtitle>
                 <mat-card-content>
                     <form class="login-form">
@@ -40,9 +48,11 @@
                             <span id="forgotPassword">Forgot Password?</span>
                         </div>
                     </form>
-                    <button mat-raised-button class="login-button" (click)="signIn(emailid.value, password.value)">Sign In</button>
+                    <div class="enableButtonHover">
+                        <button class="login-button fredoka500" (click)="signIn(emailid.value, password.value)">Sign In</button>
+                        <button class="login-button fredoka500 signup-button" style="margin-left: 0.5rem;">Sign Up</button>
+                    </div>
                 </mat-card-content>
-            </div>
-        </div>
-    </mat-card>
-</div>
+        </mat-card>
+    </div>
+</body>
