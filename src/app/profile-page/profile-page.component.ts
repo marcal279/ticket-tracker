@@ -11,6 +11,8 @@ export class ProfilePageComponent implements OnInit {
   currPage = 'My Profile';
   USERS: any[] = [];
 
+  tempUserKey = 'Xr9rFqEdAykJbcN1FiwH';
+
   constructor( public userService: UserService ) { }
 
   createNewUser():User{
@@ -18,14 +20,22 @@ export class ProfilePageComponent implements OnInit {
   }
 
   newUser!:User // = this.createNewUser();
-  currUser!: User // = this.newUser;
+  currUser!: any;
 
   metadata(){
-    alert(JSON.stringify(this.currUser))
+    alert(JSON.stringify(this.currUser));
+    // alert(this.currUser.key)
   }
 
   addUser(){
     this.userService.createDBUser(this.currUser);
+  }
+
+  updateUser(){
+    this.userService.updateDBUser(this.tempUserKey, this.currUser).then( () => {
+      alert('Updated profile for '+this.currUser.name+' successfully!')
+    })
+    .catch(err => alert(err));
   }
 
   retrieveUsers(){
@@ -41,7 +51,7 @@ export class ProfilePageComponent implements OnInit {
 
   ngOnInit(): void {
     this.newUser = this.createNewUser();
-    this.currUser = this.newUser;
+    this.userService.readDBsingleUser(this.tempUserKey).subscribe(observer => {this.currUser = observer as User});
     this.retrieveUsers();
   }
 }
