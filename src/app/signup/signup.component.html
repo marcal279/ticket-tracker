@@ -16,6 +16,13 @@
     mat-stepper button{
         margin-right: 0.5rem;
     }
+
+    .imageDiv{
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
 </style>
 
 <body>
@@ -87,14 +94,16 @@
                             <mat-label>Confirm Password</mat-label>
                             <input type="password" matInput placeholder="Check it again" #passwordConfirm>
                         </mat-form-field>
-                        <button mat-raised-button matStepperPrevious>Previous</button>
-                        <button mat-raised-button style="background-color: rgb(5, 106, 221); color: white;">Sign Up</button>
+                        <div style="display: block;">
+                            <button mat-raised-button matStepperPrevious>Previous</button>
+                            <button mat-raised-button style="background-color: rgb(5, 106, 221); color: white;">Sign Up</button>
+                        </div>
                     </mat-step>
                 </mat-stepper>
             </mat-card-content>
         </mat-card>
     </div>
-    <div class="width50" style="overflow: hidden;"><img src="../../assets/images/signup.jpg" style="height: 40rem;"></div>
+    <div class="imageDiv width50"><img src="../../assets/images/signup.jpg" style="height: 40rem;"></div>
 </body>
 
 <!-- <a href="https://www.freepik.com/vectors/citizen">Citizen vector created by storyset - www.freepik.com</a> -->
