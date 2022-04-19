@@ -375,7 +375,7 @@ export class DashboardComponent implements OnInit {
     this.getTimeOfDay();
     // this.getTickets();
     this.retrieveTickets();
-    setTimeout(()=>{this.getMyCounts()}, 4000)
+    setTimeout(()=>{this.getMyCounts()}, 7000)
   }
 
 }
