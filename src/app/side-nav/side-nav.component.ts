@@ -24,4 +24,7 @@ export class SideNavComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  canClick(){
+    alert('clickable')
+  }
 }
