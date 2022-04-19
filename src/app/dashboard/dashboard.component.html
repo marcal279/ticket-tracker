@@ -241,8 +241,10 @@
                                         <p *ngIf="element.desc">{{element.desc}}</p>
                                         <p><strong>Issued By: </strong>{{element.empEid}}
                                         <strong style="margin-left: 2rem;">Dept: </strong>{{element.dept}}</p>
-                                        <p><strong>Issue Date: </strong>{{element.issueDate}}</p>
-                                        <p><strong>Expected By: </strong>{{element.expectedDate}}</p>
+                                        <p><strong>Company: </strong>{{element.company}}
+                                        <strong style="margin-left: 2rem;">Platform: </strong>{{element.platform}}</p>
+                                        <p><strong>Issue Date: </strong>{{element.issueDate | date}}</p>
+                                        <p><strong>Expected By: </strong>{{element.expectedDate | date}}</p>
                                         <p *ngIf="element.comments"><strong>Comments: </strong>{{element.comments}}</p>
                                     </div>
                                     <div style="display: flex; justify-content: center; padding: 2rem 2rem 0rem 0rem;">
