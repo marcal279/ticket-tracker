@@ -17,7 +17,8 @@
     }
 
     #leftContent{
-        margin-left: 3rem;
+        /* margin-left: 3rem; */
+        width: 65%;
         padding: 0.5rem 1rem 1rem;
     }
     .nightMode{
@@ -130,9 +131,16 @@
         left: -1rem;
     }
     
+    .allContentMod{
+        display: flex;
+        flex-flow: row wrap;
+        /* justify-content: space-between; */
+        height: 100%;
+    }
 </style>
 
-<div class="allContent">
+<!-- <div class="allContent"> -->
+<div class="allContentMod">
 
 
 
@@ -141,132 +149,133 @@
 
 
 <!-- 0551DD -->
-    <div id="leftContent" [class.nightMode]="nightModeActive"> <!-- all content in white -->
-        <div style="display: flex; justify-content: space-between; align-items: center;">
-            <div>
-                <img class="headingIcon" 
-                src="https://img.icons8.com/fluency-systems-regular/30/0551DD/user-male-circle.png" >
-                <h2 style="display: inline-block; color: rgb(5, 81, 221);" class="fredoka500">Good {{this.timeOfDay}}, Marc</h2>
-            </div>
-            <div class="enableButtonHover" style="display: flex;">
-                <button class="complemCustomButton" 
-                    style="width: 3rem; padding: 0.4rem 0.3rem 0.6rem 0.5rem; border-radius: 50%;"
-                    (click)="toggleNightMode()">
-                    <mat-icon style="font-size: 1.5rem;">bedtime</mat-icon>
-                </button>
-                <button class="fredoka500 customButton" (click)="createTicket()"><mat-icon>add</mat-icon>New Ticket</button>
-            </div>
-        </div>
-        <div id="summaries"> <!-- grid Title + gridContent -->
-            <h3 class="divHeading fredoka500">
-                <img class="headingIcon" 
-                src="https://img.icons8.com/fluency-systems-regular/30/0551DD/brief.png" >
-                Summaries
-            </h3>
-            <div id="gridContent">
-                <div class="BIchart" id="lineChart" *ngIf="lineChartOptions.series && 
-                lineChartOptions.chart && lineChartOptions.xaxis  && 
-                lineChartOptions.dataLabels && lineChartOptions.grid && 
-                lineChartOptions.stroke && lineChartOptions.title">
-                    <apx-chart
-                    [series]="lineChartOptions.series"
-                    [chart]="lineChartOptions.chart"
-                    [xaxis]="lineChartOptions.xaxis"
-                    [dataLabels]="lineChartOptions.dataLabels"
-                    [grid]="lineChartOptions.grid"
-                    [stroke]="lineChartOptions.stroke"
-                    [title]="lineChartOptions.title"></apx-chart>
+    <div style="display: flex; width: 97%; justify-content: space-between; margin-left: 3rem; flex-flow: row wrap;">
+        <div id="leftContent" [class.nightMode]="nightModeActive"> <!-- all content in white -->
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                    <img class="headingIcon" 
+                    src="https://img.icons8.com/fluency-systems-regular/30/0551DD/user-male-circle.png" >
+                    <h2 style="display: inline-block; color: rgb(5, 81, 221);" class="fredoka500">Good {{this.timeOfDay}}, Marc</h2>
                 </div>
-                <div class="BIchart" id="pieChart" *ngIf="pieChartOptions.series && 
-                pieChartOptions.chart && pieChartOptions.responsive &&
-                pieChartOptions.title && 
-                pieChartOptions.dataLabels && pieChartOptions.theme">
-                    <apx-chart
-                        [series]="pieChartOptions.series"
-                        [chart]="pieChartOptions.chart"
-                        [labels]="pieChartOptions.labels"
-                        [responsive]="pieChartOptions.responsive"
-                        [dataLabels]="pieChartOptions.dataLabels"
-                        [title]="pieChartOptions.title"
-                        [theme]="pieChartOptions.theme"></apx-chart>
+                <div class="enableButtonHover" style="display: flex;">
+                    <button class="complemCustomButton" 
+                        style="width: 3rem; padding: 0.4rem 0.3rem 0.6rem 0.5rem; border-radius: 50%;"
+                        (click)="toggleNightMode()">
+                        <mat-icon style="font-size: 1.5rem;">bedtime</mat-icon>
+                    </button>
+                    <button class="fredoka500 customButton" (click)="createTicket()"><mat-icon>add</mat-icon>New Ticket</button>
                 </div>
             </div>
-            <h3 class="divHeading fredoka500">
-                <img class="headingIcon" 
-                src="https://img.icons8.com/fluency-systems-regular/30/0551DD/time-machine.png" >
-                Recently Raised Tickets
-            </h3>
-            <!-- table -->
-            <div>
-                <table mat-table matSort [dataSource]="dataSource" multiTemplateDataRows class="mat-elevation-z2">
+            <div id="summaries"> <!-- grid Title + gridContent -->
+                <h3 class="divHeading fredoka500">
+                    <img class="headingIcon" 
+                    src="https://img.icons8.com/fluency-systems-regular/30/0551DD/brief.png" >
+                    Summaries
+                </h3>
+                <div id="gridContent">
+                    <div class="BIchart" id="lineChart" *ngIf="lineChartOptions.series && 
+                    lineChartOptions.chart && lineChartOptions.xaxis  && 
+                    lineChartOptions.dataLabels && lineChartOptions.grid && 
+                    lineChartOptions.stroke && lineChartOptions.title">
+                        <apx-chart
+                        [series]="lineChartOptions.series"
+                        [chart]="lineChartOptions.chart"
+                        [xaxis]="lineChartOptions.xaxis"
+                        [dataLabels]="lineChartOptions.dataLabels"
+                        [grid]="lineChartOptions.grid"
+                        [stroke]="lineChartOptions.stroke"
+                        [title]="lineChartOptions.title"></apx-chart>
+                    </div>
+                    <div class="BIchart" id="pieChart" *ngIf="pieChartOptions.series && 
+                    pieChartOptions.chart && pieChartOptions.responsive &&
+                    pieChartOptions.title && 
+                    pieChartOptions.dataLabels && pieChartOptions.theme">
+                        <apx-chart
+                            [series]="pieChartOptions.series"
+                            [chart]="pieChartOptions.chart"
+                            [labels]="pieChartOptions.labels"
+                            [responsive]="pieChartOptions.responsive"
+                            [dataLabels]="pieChartOptions.dataLabels"
+                            [title]="pieChartOptions.title"
+                            [theme]="pieChartOptions.theme"></apx-chart>
+                    </div>
+                </div>
+                <h3 class="divHeading fredoka500">
+                    <img class="headingIcon" 
+                    src="https://img.icons8.com/fluency-systems-regular/30/0551DD/time-machine.png" >
+                    Recently Raised Tickets
+                </h3>
+                <!-- table -->
+                <div>
+                    <table mat-table matSort [dataSource]="dataSource" multiTemplateDataRows class="mat-elevation-z2">
+                            
+                        <!-- generate all columns except status -->
+                        <ng-container *ngFor="let column of displayedColumns.slice(0,-2); index as i" matColumnDef="{{column}}">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header>{{colNames[i]}}</th>
+                            <td mat-cell *matCellDef="let element">{{element[column]}}</td>
+                        </ng-container>
+                        <!-- Expected date -->
+                        <ng-container matColumnDef="expectedDate">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header>Expected</th>
+                            <td mat-cell *matCellDef="let element">
+                                {{ element.expectedDate | date }}
+                            </td>
+                        </ng-container>
+                        <!-- status -->
+                        <ng-container matColumnDef="status">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header>Status</th>
+                            <td mat-cell *matCellDef="let element">
+                                <mat-icon *ngIf="statusIsClosed(element.status)" style="color: green;">done</mat-icon>
+                                <mat-icon *ngIf="statusIsPending(element.status)" style="color: red;">schedule</mat-icon>
+                                <mat-icon *ngIf="statusIsProcessing(element.status)" style="color: rgb(255, 174, 0);">construction</mat-icon>
+                            </td>
+                        </ng-container>
+        
+                        <!-- expandable row content. one row that spans all columns -->
+                        <ng-container matColumnDef="expandedDetail">
+                            <td mat-cell *matCellDef="let element" [attr.colspan]="displayedColumns.length">
+                                <div class="rowDetail"
+                                    [@detailExpand] = "element == expandedRow? 'expanded': 'collapsed'">
+                                    <div>
+                                        <h2>{{element.title}} ({{element.tid}})</h2>
+                                        <p *ngIf="element.desc">{{element.desc}}</p>
+                                        <p><strong>Issued By: </strong>{{element.empEid}}
+                                        <strong style="margin-left: 2rem;">Dept: </strong>{{element.dept}}</p>
+                                        <p><strong>Issue Date: </strong>{{element.issueDate}}</p>
+                                        <p><strong>Expected By: </strong>{{element.expectedDate}}</p>
+                                        <p *ngIf="element.comments"><strong>Comments: </strong>{{element.comments}}</p>
+                                    </div>
+                                    <div style="display: flex; justify-content: center; padding: 2rem 2rem 0rem 0rem;">
+                                        <mat-icon *ngIf="statusIsClosed(element.status)" style="color: green; font-size: 5rem;">done</mat-icon>
+                                        <mat-icon *ngIf="statusIsPending(element.status)" style="color: red; font-size: 5rem;">schedule</mat-icon>
+                                        <mat-icon *ngIf="statusIsProcessing(element.status)" style="color: rgb(255, 174, 0); font-size: 5rem;">construction</mat-icon>
+                                        <h2 *ngIf="statusIsClosed(element.status)" style="color: green;" class="alignStatusHeading">{{element.status}}</h2>
+                                        <h2 *ngIf="statusIsPending(element.status)" style="color: red;" class="alignStatusHeading">{{element.status}}</h2>
+                                        <h2 *ngIf="statusIsProcessing(element.status)" style="color: rgb(255, 174, 0);" class="alignStatusHeading">{{element.status}}</h2>
+                                    </div>
+                                </div>
+                            </td>
+                        </ng-container>
+            
+                        <!-- 
+                            ticket-row = example-element-row
+                            ticket-expanded-row = example-expanded-row
+                        -->
                         
-                    <!-- generate all columns except status -->
-                    <ng-container *ngFor="let column of displayedColumns.slice(0,-2); index as i" matColumnDef="{{column}}">
-                        <th mat-header-cell *matHeaderCellDef mat-sort-header>{{colNames[i]}}</th>
-                        <td mat-cell *matCellDef="let element">{{element[column]}}</td>
-                    </ng-container>
-                    <!-- Expected date -->
-                    <ng-container matColumnDef="expectedDate">
-                        <th mat-header-cell *matHeaderCellDef mat-sort-header>Expected</th>
-                        <td mat-cell *matCellDef="let element">
-                            {{ element.expectedDate | date }}
-                        </td>
-                    </ng-container>
-                    <!-- status -->
-                    <ng-container matColumnDef="status">
-                        <th mat-header-cell *matHeaderCellDef mat-sort-header>Status</th>
-                        <td mat-cell *matCellDef="let element">
-                            <mat-icon *ngIf="statusIsClosed(element.status)" style="color: green;">done</mat-icon>
-                            <mat-icon *ngIf="statusIsPending(element.status)" style="color: red;">schedule</mat-icon>
-                            <mat-icon *ngIf="statusIsProcessing(element.status)" style="color: rgb(255, 174, 0);">construction</mat-icon>
-                        </td>
-                    </ng-container>
-    
-                    <!-- expandable row content. one row that spans all columns -->
-                    <ng-container matColumnDef="expandedDetail">
-                        <td mat-cell *matCellDef="let element" [attr.colspan]="displayedColumns.length">
-                            <div class="rowDetail"
-                                [@detailExpand] = "element == expandedRow? 'expanded': 'collapsed'">
-                                <div>
-                                    <h2>{{element.title}} ({{element.tid}})</h2>
-                                    <p *ngIf="element.desc">{{element.desc}}</p>
-                                    <p><strong>Issued By: </strong>{{element.empEid}}
-                                    <strong style="margin-left: 2rem;">Dept: </strong>{{element.dept}}</p>
-                                    <p><strong>Issue Date: </strong>{{element.issueDate}}</p>
-                                    <p><strong>Expected By: </strong>{{element.expectedDate}}</p>
-                                    <p *ngIf="element.comments"><strong>Comments: </strong>{{element.comments}}</p>
-                                </div>
-                                <div style="display: flex; justify-content: center; padding: 2rem 2rem 0rem 0rem;">
-                                    <mat-icon *ngIf="statusIsClosed(element.status)" style="color: green; font-size: 5rem;">done</mat-icon>
-                                    <mat-icon *ngIf="statusIsPending(element.status)" style="color: red; font-size: 5rem;">schedule</mat-icon>
-                                    <mat-icon *ngIf="statusIsProcessing(element.status)" style="color: rgb(255, 174, 0); font-size: 5rem;">construction</mat-icon>
-                                    <h2 *ngIf="statusIsClosed(element.status)" style="color: green;" class="alignStatusHeading">{{element.status}}</h2>
-                                    <h2 *ngIf="statusIsPending(element.status)" style="color: red;" class="alignStatusHeading">{{element.status}}</h2>
-                                    <h2 *ngIf="statusIsProcessing(element.status)" style="color: rgb(255, 174, 0);" class="alignStatusHeading">{{element.status}}</h2>
-                                </div>
-                            </div>
-                        </td>
-                    </ng-container>
-        
-                    <!-- 
-                        ticket-row = example-element-row
-                        ticket-expanded-row = example-expanded-row
-                     -->
-                    
-                    <!-- generate rows -->
-                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                    <tr mat-row *matRowDef="let element; columns: displayedColumns;"
-                    class="ticket-row" [class.ticket-expanded-row]="expandedRow === element"
-                    (click)="expandedRow = (expandedRow === element ? null : element)"></tr>
-                    <tr mat-row *matRowDef="let row; columns: ['expandedDetail'];" class="expandedDetailRow"></tr>
-                </table>
-                <!-- <mat-paginator #ticketPaginator [length]="sampleTickets.length" 
-                [pageSize]="5" [pageSizeOptions]="[5, 10, 15, 20]"
-                showFirstLastButtons aria-label="Select page">
-                </mat-paginator> -->
+                        <!-- generate rows -->
+                        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                        <tr mat-row *matRowDef="let element; columns: displayedColumns;"
+                        class="ticket-row" [class.ticket-expanded-row]="expandedRow === element"
+                        (click)="expandedRow = (expandedRow === element ? null : element)"></tr>
+                        <tr mat-row *matRowDef="let row; columns: ['expandedDetail'];" class="expandedDetailRow"></tr>
+                    </table>
+                    <!-- <mat-paginator #ticketPaginator [length]="sampleTickets.length" 
+                    [pageSize]="5" [pageSizeOptions]="[5, 10, 15, 20]"
+                    showFirstLastButtons aria-label="Select page">
+                    </mat-paginator> -->
+                </div>
             </div>
         </div>
-    </div>
 
 
 
@@ -275,49 +284,50 @@
 
 
 
-    <div id="yourInsights">
-        <h3 class="fredoka500 divHeading" style="margin-bottom: 0.75rem;">
-            <img class="headingIcon" 
-            src="https://img.icons8.com/fluency-systems-regular/30/0551DD/statistic-document.png"
-            (click)="getMyCounts()">
-            Your Insights
-        </h3>
-        <div style="
-        margin: 0.5rem 1rem 1rem;
-        padding: 1rem;
-        border-radius: 1rem;
-        background-color: rgb(5, 81, 221);
-        color: white;
-        width: 85%;
-        height: 5rem;"
-        class="fredoka">
-            <p style="font-size: 0.8rem;">My Tickets</p>
-            <span style="font-size: 2rem; margin: 0.5rem 0.5rem 0.5rem 0rem;">{{myPending}} Pending,</span> {{myProduction}} production, {{myClosed}} closed
-            <button class="customButton fredoka500"><mat-icon>info</mat-icon>Detailed Status</button>
-            <button class="customButton fredoka500"><mat-icon>edit</mat-icon>Edit Existing</button>
-        </div>
-        
-        <h3 class="fredoka500 divHeading" style="margin-top: 2rem; margin-bottom: 0rem;">
-            <img class="headingIcon" 
-            src="https://img.icons8.com/fluency-systems-regular/30/0551DD/total-sales-1.png">
-            Total Tickets 2021 NXT vs IMCL
-        </h3>
+        <div id="yourInsights">
+            <h3 class="fredoka500 divHeading" style="margin-bottom: 0.75rem;">
+                <img class="headingIcon" 
+                src="https://img.icons8.com/fluency-systems-regular/30/0551DD/statistic-document.png"
+                (click)="getMyCounts()">
+                Your Insights
+            </h3>
+            <div style="
+            margin: 0.5rem 1rem 1rem;
+            padding: 1rem;
+            border-radius: 1rem;
+            background-color: rgb(5, 81, 221);
+            color: white;
+            width: 85%;
+            height: 5rem;"
+            class="fredoka">
+                <p style="font-size: 0.8rem;">My Tickets</p>
+                <span style="font-size: 2rem; margin: 0.5rem 0.5rem 0.5rem 0rem;">{{myPending}} Pending,</span> {{myProduction}} production, {{myClosed}} closed
+                <button class="customButton fredoka500"><mat-icon>info</mat-icon>Detailed Status</button>
+                <button class="customButton fredoka500"><mat-icon>edit</mat-icon>Edit Existing</button>
+            </div>
+            
+            <h3 class="fredoka500 divHeading" style="margin-top: 2rem; margin-bottom: 0rem;">
+                <img class="headingIcon" 
+                src="https://img.icons8.com/fluency-systems-regular/30/0551DD/total-sales-1.png">
+                Total Tickets 2021 NXT vs IMCL
+            </h3>
 
-        <div class="BIchart" id="NXTvIMCL" 
-        *ngIf="grBarChartOptions.series && 
-        grBarChartOptions.chart && grBarChartOptions.dataLabels && 
-        grBarChartOptions.plotOptions && grBarChartOptions.xaxis &&
-        grBarChartOptions.stroke && grBarChartOptions.title"
-        style="margin-left: 0.3rem; padding: 0rem;">
-            <apx-chart
-                [series]="grBarChartOptions.series"
-                [chart]="grBarChartOptions.chart"
-                [dataLabels]="grBarChartOptions.dataLabels"
-                [plotOptions]="grBarChartOptions.plotOptions"
-                [xaxis]="grBarChartOptions.xaxis"
-                [stroke]="grBarChartOptions.stroke"
-                [title]="grBarChartOptions.title">
-            </apx-chart>
+            <div class="BIchart" id="NXTvIMCL" 
+            *ngIf="grBarChartOptions.series && 
+            grBarChartOptions.chart && grBarChartOptions.dataLabels && 
+            grBarChartOptions.plotOptions && grBarChartOptions.xaxis &&
+            grBarChartOptions.stroke && grBarChartOptions.title"
+            style="margin-left: 0.3rem; padding: 0rem;">
+                <apx-chart
+                    [series]="grBarChartOptions.series"
+                    [chart]="grBarChartOptions.chart"
+                    [dataLabels]="grBarChartOptions.dataLabels"
+                    [plotOptions]="grBarChartOptions.plotOptions"
+                    [xaxis]="grBarChartOptions.xaxis"
+                    [stroke]="grBarChartOptions.stroke"
+                    [title]="grBarChartOptions.title">
+                </apx-chart>
+            </div>
         </div>
     </div>
 </div>
