@@ -95,7 +95,7 @@ export class DashboardComponent implements OnInit {
     const dialogConfig = new MatDialogConfig();
 
     dialogConfig.autoFocus = true;  // automatically sets focus to first text box
-    dialogConfig.width = '52.5%';
+    dialogConfig.width = '45rem';
     dialogConfig.data = {
       ticketDialogTitle: 'Create',
     }
