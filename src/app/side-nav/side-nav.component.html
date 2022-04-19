@@ -17,10 +17,10 @@
                 src="https://img.icons8.com/fluency-systems-regular/25/61A6F5/{{icon}}.png" #{{icon}}>    
         </li>
 
-        <li class="pagesIcons" [ngClass]="{'active': pageActive('user')}" style="margin: 17.5rem 0rem 0rem"
+        <li class="pagesIcons" [ngClass]="{'active': pageActive('user')}" style="position: absolute; bottom: 1rem; padding-right: 1.05rem;"
         matTooltip="{{ this.sideNavSectionList[this.sideNavIconList.indexOf('user')] }}"
         [matTooltipPosition]="toolTipPosition" 
-        [matTooltipShowDelay]="500">
+        [matTooltipShowDelay]="500" (click)="canClick()">
             <img *ngIf="pageActive('user')" 
                 src="https://img.icons8.com/fluency-systems-regular/25/0551DD/user.png" #user>
             
