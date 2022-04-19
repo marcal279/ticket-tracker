@@ -101,6 +101,10 @@ export class DashboardComponent implements OnInit {
     }
 
     const dialogRef = this.dialog.open(TicketDialogComponent, dialogConfig);
+
+    // dialogRef.afterClosed().subscribe(resultObserver => {
+    //   if(resultObserver) this.getStatistics() done in retrieve ticket itself
+    // })
   }
 
   @ViewChild("lineChart") lineChart: ChartComponent | undefined;
@@ -147,6 +151,7 @@ export class DashboardComponent implements OnInit {
       this.dataSource.data = observer.slice(-3);
       this.dataSource.sort = this.sort;
       this.allTickets = observer;
+      this.getStatistics()
     });
   }
 
@@ -168,16 +173,20 @@ export class DashboardComponent implements OnInit {
   getMyCounts(){
     if(this.allTickets.length > 0){
       // console.log('entered')
+      let pending=0, prod=0, closed=0;
       let myTickets = this.allTickets.filter((value: Ticket)=>{
         if(value.empEid == 'marc.almeida@gmail.com'){
           // console.log('marc.almeida@gmail.com found')
-          if(this.statusIsPending(value.status)) this.myPending+=1
-          else if(this.statusIsClosed(value.status)) this.myClosed+=1
-          else this.myProduction+=1
+          if(this.statusIsPending(value.status)) pending+=1
+          else if(this.statusIsClosed(value.status)) closed+=1
+          else prod+=1
           return value;
         }
         else return null;
-      })
+      });
+      this.myPending = pending;
+      this.myClosed = closed;
+      this.myProduction = prod;
     }
     else alert('len 0')
     // let total = myTickets.length;
@@ -197,13 +206,166 @@ export class DashboardComponent implements OnInit {
 
   expandedRow: Ticket|null = null;
 
+  pieChartNoData = {
+    pending: 0,
+    production: 0,
+    testing: 0,
+    approval: 0,
+    closed: 0
+  }
+  doubleBarChartNoData = {
+    nxt: {
+      lcoP: 0, //lco portal
+      lcoA: 0, //lco app
+      lcoAdmin: 0,
+      scP: 0, // selfcare portal
+      scA: 0,// selfcare app
+      dpP: 0,// dp portal
+      dpA: 0,// dp app
+      dpAdmin: 0,// dp admin portal
+      web: 0,// website
+    },
+    imcl: {
+      lcoP: 0, //lco portal
+      lcoA: 0, //lco app
+      lcoAdmin: 0,
+      scP: 0, // selfcare portal
+      scA: 0,// selfcare app
+      dpP: 0,// dp portal
+      dpA: 0,// dp app
+      dpAdmin: 0,// dp admin portal
+      web: 0,// website
+    }
+  }
+
+  getPieData(){
+    let pieDataCopy = {...this.pieChartNoData};
+    if(this.allTickets.length > 0){
+      let myTickets = this.allTickets.filter((value: Ticket)=>{
+        if(value.status){
+          if(this.statusIsPending(value.status)) pieDataCopy.pending+=1
+          else if(this.statusIsClosed(value.status)) pieDataCopy.closed+=1
+          else if(value.status == 'Production') pieDataCopy.production+=1
+          else if(value.status == 'Testing') pieDataCopy.testing+=1
+          else if(value.status == 'Approval') pieDataCopy.approval+=1
+          return value;
+        }
+        else return null;
+      });
+    }
+    else alert('len 0 pieChart')
+
+    this.pieChartOptions.series = Object.values(pieDataCopy)
+  }
+  getDoubleBarData(){
+    let doubleBarDataCopy = {...this.doubleBarChartNoData};
+    if(this.allTickets.length > 0){
+      let myTickets = this.allTickets.filter((value: Ticket)=>{
+        if(value.platform){
+          if(value.company == 'NXTDigital'){
+            switch(value.platform){
+              case 'LCO Portal':
+                doubleBarDataCopy.nxt.lcoP +=1;
+                break;
+              case 'LCO App':
+                doubleBarDataCopy.nxt.lcoA +=1;
+                break;
+              case 'LCO Admin':
+                doubleBarDataCopy.nxt.lcoAdmin +=1;
+                break;
+              case 'Selfcare Portal':
+                doubleBarDataCopy.nxt.scP +=1;
+                break;
+              case 'Selfcare App':
+                doubleBarDataCopy.nxt.scA +=1;
+                break;
+              case 'DP Collection Portal':
+                doubleBarDataCopy.nxt.dpP +=1;
+                break;
+              case 'DP Collection App':
+                doubleBarDataCopy.nxt.dpA +=1;
+                break;
+              case 'DP Collection Admin':
+                doubleBarDataCopy.nxt.dpAdmin +=1;
+                break;
+              case 'Website':
+                doubleBarDataCopy.nxt.web +=1;
+                break;
+              default:
+                alert('none for '+value.title+' with '+value.platform);
+                break;
+            }
+          }
+          else if(value.company == 'InDigital'){
+            switch(value.platform){
+              case 'LCO Portal':
+                doubleBarDataCopy.imcl.lcoP +=1;
+                break;
+              case 'LCO App':
+                doubleBarDataCopy.imcl.lcoA +=1;
+                break;
+              case 'LCO Admin':
+                doubleBarDataCopy.imcl.lcoAdmin +=1;
+                break;
+              case 'Selfcare Portal':
+                doubleBarDataCopy.imcl.scP +=1;
+                break;
+              case 'Selfcare App':
+                doubleBarDataCopy.imcl.scA +=1;
+                break;
+              case 'DP Collection Portal':
+                doubleBarDataCopy.imcl.dpP +=1;
+                break;
+              case 'DP Collection App':
+                doubleBarDataCopy.imcl.dpA +=1;
+                break;
+              case 'DP Collection Admin':
+                doubleBarDataCopy.imcl.dpAdmin +=1;
+                break;
+              case 'Website':
+                doubleBarDataCopy.imcl.web +=1;
+                break;
+              default:
+                alert('none for '+value.title+' with '+value.platform);
+                break;
+            }
+          }
+          return value;
+        }
+        else return null;
+      });
+    }
+    else alert('len 0 pieChart')
+
+    if(this.grBarChartOptions.series){
+      alert(this.grBarChartOptions.series[0].data)
+      alert(this.grBarChartOptions.series[1].data)
+      this.grBarChartOptions.series[0].data = Object.values(doubleBarDataCopy.nxt)
+      this.grBarChartOptions.series[1].data = Object.values(doubleBarDataCopy.imcl)
+      alert(this.grBarChartOptions.series[0].data)
+      alert(this.grBarChartOptions.series[1].data)
+      // alert('nxt: '+Object.values(doubleBarDataCopy.nxt))
+      // alert('imcl: '+Object.values(doubleBarDataCopy.imcl))
+    }
+  }
+  
+  getStatistics(){
+    this.getMyCounts();
+    
+    // get Pie Chart
+    this.getPieData();
+    
+    // get Double Bar data
+    // this.getDoubleBarData();
+  }
+
   constructor(public dialog: MatDialog, public datepipe: DatePipe, private ticketService: TicketsService){
     // we also use constructor to initialize charts
     this.lineChartOptions = {
       series: [
         {
           name: "Tickets",
-          data: [10, 41, 35, 51, 40, 62, 14, 74, 102, 22, 10, 34]
+          data: [10, 41, 35, 51, 40, 62, 14, 74, 102, 22, 10, 34],
         }
       ],
       chart: {
@@ -257,7 +419,7 @@ export class DashboardComponent implements OnInit {
     };
 
     this.pieChartOptions = {
-      series: [20, 25, 13, 43, 45],
+      series: [20, 0, 0, 0, 0],
       chart: {
         // type: "donut",
         type: "pie",
@@ -375,7 +537,7 @@ export class DashboardComponent implements OnInit {
     this.getTimeOfDay();
     // this.getTickets();
     this.retrieveTickets();
-    setTimeout(()=>{this.getMyCounts()}, 7000)
+    // setTimeout(()=>{this.getStatistics()}, 5500) this is now fetched in retrieveTickets itself
   }
 
 }
