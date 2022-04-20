@@ -24,6 +24,8 @@ import { AngularFireDatabaseModule } from '@angular/fire/compat/database'; // fo
 import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
 import { SignupComponent } from './signup/signup.component';
 
+import { AppRoutingModule } from './app-routing.module';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -42,7 +44,9 @@ import { SignupComponent } from './signup/signup.component';
 
     AngularFireModule.initializeApp(environment.firebase),
     AngularFireDatabaseModule,
-    AngularFirestoreModule
+    AngularFirestoreModule,
+
+    AppRoutingModule
   ],
   providers: [DatePipe],
   bootstrap: [AppComponent]
