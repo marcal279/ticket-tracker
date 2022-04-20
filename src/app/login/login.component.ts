@@ -23,6 +23,11 @@ export class LoginComponent implements OnInit {
 
   hide:boolean=true;
 
+  checkPasswordValid(){
+    if(this.passwordFormControl.value.length>=4 && this.passwordFormControl.value.match(/[a-zA-Z]+[!@#$%^&-_.a-zA-Z]*[0-9]+[a-zA-Z]*$/)) return true;
+    return false;
+  }
+
   signIn(username: string, password:string){
     alert('Logged in!!');
   }
