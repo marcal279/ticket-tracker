@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import {TooltipPosition} from '@angular/material/tooltip';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-side-nav',
@@ -19,12 +20,33 @@ export class SideNavComponent implements OnInit {
 
   toolTipPosition: TooltipPosition = "right";
   
-  constructor() { }
+  constructor(private router: Router) { }
 
   ngOnInit(): void {
   }
 
   canClick(){
     alert('clickable')
+  }
+
+  goToPage(icon: string){
+    let navigateTo = ''
+    switch(icon){
+      case 'severity--v2':
+        navigateTo = 'dash';
+        break;
+      case 'two-tickets':
+        navigateTo = 'manage';
+        break;
+      case 'bar-chart':
+        navigateTo = '';
+        break;
+      case 'user':
+        navigateTo = 'user';
+        break;
+      default:
+        break;  
+    }
+    this.router.navigate([navigateTo])
   }
 }
