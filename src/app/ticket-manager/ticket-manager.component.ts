@@ -10,6 +10,7 @@ import { isSubscription } from 'rxjs/internal/Subscription';
 import { TicketDialogComponent } from '../ticket-dialog/ticket-dialog.component';
 import { Ticket } from '../ticket';
 import { TicketsService } from '../tickets.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-ticket-manager',
@@ -27,7 +28,11 @@ export class TicketManagerComponent implements OnInit {
   
   allTickets: Ticket[] = [];  // will store Tickets generated from service that were passed here by Observable
 
-  constructor(public dialog: MatDialog, private ticketService: TicketsService) { }
+  constructor(public dialog: MatDialog, private ticketService: TicketsService, public matSnack: MatSnackBar) { }
+
+  openSnackBar(message: string, action: string = 'Close') {
+    this.matSnack.open(message, action);
+  }
 
   getTickets(){ // random
     // this.tickets = this.ticketService.getTickets(); synchronous implementation, removed now because we're using asynchronous implem (Observables)
@@ -224,7 +229,7 @@ export class TicketManagerComponent implements OnInit {
   deleteTicket(ticket: any){
     if( confirm(`Are you sure you want to delete Ticket ${ticket.tid}?`) ){
       this.ticketService.deleteDBTicket(ticket.key).then(()=>{
-        alert("Successfully deleted ticket "+ticket.key)
+        this.openSnackBar("Successfully deleted ticket "+ticket.key)
       }).catch(err=>alert("ERROR: "+err))
     }
   }
