@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { User } from '../user';
+import { UserAuthService } from '../user-auth.service';
 import { UserService } from '../user.service';
 
 @Component({
@@ -13,7 +14,7 @@ export class ProfilePageComponent implements OnInit {
 
   tempUserKey = 'Xr9rFqEdAykJbcN1FiwH';
 
-  constructor( public userService: UserService ) { }
+  constructor( public userService: UserService, private authService: UserAuthService ) { }
 
   createNewUser():User{
     return this.userService.newUserObject();
@@ -47,6 +48,10 @@ export class ProfilePageComponent implements OnInit {
         }
       })
     })
+  }
+
+  logout(){
+    this.authService.logout();
   }
 
   ngOnInit(): void {
