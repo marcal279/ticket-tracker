@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { User } from '../user';
+import { UserAuthService } from '../user-auth.service';
 import { UserService } from '../user.service';
 
 @Component({
@@ -14,35 +15,41 @@ export class SignupComponent implements OnInit {
     this.matSnack.open(message, action);
   }
 
-  constructor(public userService: UserService, public matSnack: MatSnackBar) { }
+  constructor(public userService: UserService, public matSnack: MatSnackBar, private authService: UserAuthService) { }
 
   newUser !: User;
 
-  passwordVal = '';
+  passwordVal = ''; passwHide = true;
   passwordMatchVal = '';
 
+  tempValidCheck(){
+    alert(this.checkPasswordValid())
+  }
+
   checkPasswordValid(){
-    if(this.passwordVal.length>=4 && !this.passwordVal.includes(' ') && this.passwordVal.match(/^[a-zA-Z]\w$/)) return true;
+    if(this.passwordVal.length>=4 && this.passwordVal.match(/[a-zA-Z]+[!@#$%^&-_.a-zA-Z]*[0-9]+[a-zA-Z]*$/)) return true;
     return false;
   }
 
   checkPasswordMatch(){
-    // add password valid ticks pls
-    if(this.passwordVal === this.passwordMatchVal) return true;
+    if(this.passwordVal === this.passwordMatchVal && this.passwordMatchVal != '') return true;
     return false;
   }
 
   signUp(){
-    if(this.checkPasswordMatch()){ 
+    if(this.checkPasswordValid() && this.checkPasswordMatch()){ 
+      // this.newUser.empEid += '@nxtdigital.in';
       this.newUser.password = this.passwordVal;
-      this.userService.createDBUser(this.newUser); 
+      // this.userService.createDBUser(this.newUser);
+      this.authService.emailSignUp(this.newUser.empEid, this.newUser.password);
       this.openSnackBar(`Created user ${this.newUser.name}`)
     }
-    else this.openSnackBar("Passwords don't match, please try again")
+    else this.openSnackBar("Please check password field values")
   }
 
   ngOnInit(): void {
     this.newUser = this.userService.newUserObject();
   }
+
 
 }
