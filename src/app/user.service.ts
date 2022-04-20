@@ -60,20 +60,18 @@ export class UserService {
   constructor(private firestoreDB: AngularFirestore) { 
   }
 
-  userNum = 0;
   newUserObject(): User{
-    this.userNum+=1;
     return {
-      empEid: `newGuy${this.userNum}@gmail.com`,
-      name: `New Guy ${this.userNum}`,
-      password: `Pass_ ${this.userNum}`,
-      dept: 'Tech',
-      role: 'Employee Dev',
-      mob: '98765463210',
-      company: 'NXT',
+      empEid: '',
+      name: '',
+      password: '',
+      dept: '',
+      role: '',
+      mob: '',
+      company: '',
       designation: '',
       supervisor: '',
-      offExt: ''+this.userNum,
+      offExt: '',
     }
   }
 
