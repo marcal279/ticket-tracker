@@ -26,6 +26,9 @@ import { TicketsService } from '../tickets.service';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { TicketDialogComponent } from '../ticket-dialog/ticket-dialog.component';
 import { map } from 'rxjs';
+import { UserService } from '../user.service';
+import { UserAuthService } from '../user-auth.service';
+import { User } from '../user';
 
 export type LineChartOptions = {
   series: ApexAxisChartSeries;
@@ -82,7 +85,11 @@ export type PolarChartOptions = {
   ]
 })
 export class DashboardComponent implements OnInit {
+  
   nightModeActive: boolean = false;
+  currUID !: string;
+  currUser !: User; // remove later by using ngrx
+
   currPage:string = 'Dashboard';
   sideNavIconList : string[] = ['severity--v2', 'two-tickets', 'bar-chart'];
   sideNavSectionList: string[] = ['Dashboard', 'Ticket Manager', 'Analytics'];
@@ -98,6 +105,7 @@ export class DashboardComponent implements OnInit {
     dialogConfig.width = '45rem';
     dialogConfig.data = {
       ticketDialogTitle: 'Create',
+      currEmail: this.currUser.empEid,
     }
 
     const dialogRef = this.dialog.open(TicketDialogComponent, dialogConfig);
@@ -148,10 +156,14 @@ export class DashboardComponent implements OnInit {
       ({ key: c.payload.key, ...c.payload.val() }) )
       )
     ).subscribe(observer => {
-      this.dataSource.data = observer.slice(-3);
+      this.dataSource.data = observer.slice(-3);  // only last 3 records
       this.dataSource.sort = this.sort;
       this.allTickets = observer;
-      this.getStatistics()
+
+      this.currUID = this.authService.currentUserUID(); // it just works here idk why
+      this.userService.readDBsingleUser(this.currUID).subscribe(observer => {this.currUser = observer as User});
+
+      this.getStatistics();
     });
   }
 
@@ -176,7 +188,6 @@ export class DashboardComponent implements OnInit {
       let pending=0, prod=0, closed=0;
       let myTickets = this.allTickets.filter((value: Ticket)=>{
         if(value.empEid == 'marc.almeida@gmail.com'){
-          // console.log('marc.almeida@gmail.com found')
           if(this.statusIsPending(value.status)) pending+=1
           else if(this.statusIsClosed(value.status)) closed+=1
           else prod+=1
@@ -359,7 +370,10 @@ export class DashboardComponent implements OnInit {
     // this.getDoubleBarData();
   }
 
-  constructor(public dialog: MatDialog, public datepipe: DatePipe, private ticketService: TicketsService){
+  constructor(
+    public dialog: MatDialog, public datepipe: DatePipe, private ticketService: TicketsService,
+    private userService: UserService, private authService: UserAuthService
+    ){
     // we also use constructor to initialize charts
     this.lineChartOptions = {
       series: [
@@ -535,9 +549,13 @@ export class DashboardComponent implements OnInit {
 
   ngOnInit(): void {
     this.getTimeOfDay();
-    // this.getTickets();
+
     this.retrieveTickets();
     // setTimeout(()=>{this.getStatistics()}, 5500) this is now fetched in retrieveTickets itself
+  }
+
+  showCurrUser(){
+    alert(this.currUID+' '+JSON.stringify(this.currUser))
   }
 
 }

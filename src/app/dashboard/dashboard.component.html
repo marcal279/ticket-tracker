@@ -207,7 +207,7 @@
                 </h3>
                 <!-- table -->
                 <div>
-                    <table mat-table matSort [dataSource]="dataSource" multiTemplateDataRows class="mat-elevation-z2">
+                    <table mat-table matSort="desc" [dataSource]="dataSource" multiTemplateDataRows class="mat-elevation-z2">
                             
                         <!-- generate all columns except status -->
                         <ng-container *ngFor="let column of displayedColumns.slice(0,-2); index as i" matColumnDef="{{column}}">
@@ -330,6 +330,7 @@
                     [title]="grBarChartOptions.title">
                 </apx-chart>
             </div>
+            <button (click)="showCurrUser()">Current User</button>
         </div>
     </div>
 </div>
