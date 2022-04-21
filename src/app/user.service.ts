@@ -78,7 +78,7 @@ export class UserService {
   // C
   createDBUser(newUser: User){
     return new Promise<any>((resolve, reject) => {
-      this.firestoreDB.collection('Users').add(newUser).then(
+      this.firestoreDB.collection('Users').doc(newUser.uid).set(newUser).then(
         (response) => {console.log(response)},
         (error) => {reject(error)},
       )
