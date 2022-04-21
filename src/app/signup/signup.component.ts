@@ -38,10 +38,8 @@ export class SignupComponent implements OnInit {
 
   signUp(){
     if(this.checkPasswordValid() && this.checkPasswordMatch()){ 
-      // this.newUser.empEid += '@nxtdigital.in';
       this.newUser.password = this.passwordVal;
-      // this.userService.createDBUser(this.newUser);
-      this.authService.emailSignUp(this.newUser.empEid, this.newUser.password);
+      this.authService.emailSignUp(this.newUser);
       this.openSnackBar(`Created user ${this.newUser.name}`)
     }
     else this.openSnackBar("Please check password field values")
