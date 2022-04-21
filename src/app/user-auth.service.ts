@@ -1,8 +1,10 @@
 import { Injectable } from '@angular/core';
 import { Route, Router } from '@angular/router';
 import { Observable } from 'rxjs';
-// import 'rxjs/add/operator/switchMap';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
+
+import { User } from './user';
+import { UserService } from './user.service';
 
 
 @Injectable({
@@ -10,7 +12,22 @@ import { AngularFireAuth } from '@angular/fire/compat/auth';
 })
 export class UserAuthService {
 
-  constructor(private fireAuth: AngularFireAuth, private router: Router) { }
+  authState: any = null;
+
+  constructor(private fireAuth: AngularFireAuth, private router: Router, private userService: UserService) {
+    this.fireAuth.authState.subscribe( authState => {
+      this.authState = authState;
+    });
+  }
+
+  get isAuthenticated(): boolean {
+    return this.authState !== null;
+  }
+
+  currentUserUID(): any{
+    // alert(this.isAuthenticated ? this.authState.uid : null)
+    return this.isAuthenticated ? this.authState.uid : null
+  }
 
   login(email: string, password: string){
     this.fireAuth.signInWithEmailAndPassword(email, password).then(value => {
@@ -22,9 +39,12 @@ export class UserAuthService {
     })
   }
 
-  emailSignUp(email: string, password: string){
-    this.fireAuth.createUserWithEmailAndPassword(email, password).then(value=>{
-      alert('Created user '+email+' via AuthService');
+  emailSignUp(newUser:User){
+    this.fireAuth.createUserWithEmailAndPassword(newUser.empEid, newUser.password).then(userCredential=>{
+      newUser.uid = userCredential.user?.uid;
+      alert('Created user '+newUser.empEid+' via AuthService, of details '+userCredential.user?.uid);
+      // insert user into db here
+      this.userService.createDBUser(newUser);
       this.router.navigate(['dash']);
     }).catch(err=>{
       alert('Error');
