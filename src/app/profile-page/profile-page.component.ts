@@ -12,15 +12,10 @@ export class ProfilePageComponent implements OnInit {
   currPage = 'My Profile';
   USERS: any[] = [];
 
-  tempUserKey = 'Xr9rFqEdAykJbcN1FiwH';
+  userUID = '';
 
   constructor( public userService: UserService, private authService: UserAuthService ) { }
 
-  createNewUser():User{
-    return this.userService.newUserObject();
-  }
-
-  newUser!:User // = this.createNewUser();
   currUser!: any;
 
   metadata(){
@@ -28,12 +23,17 @@ export class ProfilePageComponent implements OnInit {
     // alert(this.currUser.key)
   }
 
+  currUserDetails(){
+    alert(this.userUID)
+  }
+
   addUser(){
-    this.userService.createDBUser(this.currUser);
+    // this.userService.createDBUser(this.currUser);
+    alert('no')
   }
 
   updateUser(){
-    this.userService.updateDBUser(this.tempUserKey, this.currUser).then( () => {
+    this.userService.updateDBUser(this.userUID, this.currUser).then( () => {
       alert('Updated profile for '+this.currUser.name+' successfully!')
     })
     .catch(err => alert(err));
@@ -55,8 +55,8 @@ export class ProfilePageComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.newUser = this.createNewUser();
-    this.userService.readDBsingleUser(this.tempUserKey).subscribe(observer => {this.currUser = observer as User});
+    this.userUID = this.authService.currentUserUID();
+    this.userService.readDBsingleUser(this.userUID).subscribe(observer => {this.currUser = observer as User});
     this.retrieveUsers();
   }
 }

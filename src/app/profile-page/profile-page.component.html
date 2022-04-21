@@ -41,7 +41,7 @@
             <img src="https://media-exp1.licdn.com/dms/image/C4E03AQEqis2UyP-_Ow/profile-displayphoto-shrink_200_200/0/1633333854582?e=1655337600&v=beta&t=HYYY9o3JfCHhrb4tUsipDonQ6gaD34Dn5HWQuPTmXJQ"
                 style="float: left; border-radius: 50%; height: 6rem;
                 margin-right: 1.25rem;">
-            <h2 style="display: inline-block;" class="fredoka500">{{currUser.name}}</h2>
+            <h2 style="display: inline-block;" class="fredoka500">{{currUser?.name}}</h2>
             <p class="fredoka" style="font-style: italic; color: rgb(107, 107, 107);">Review and edit your profile information and settings</p>
         </div>
 
@@ -116,6 +116,7 @@
                     <li *ngFor="let user of USERS"><strong>{{user.key}}:</strong> {{user.empEid}}</li>
                 </ul>
             </div>
+            <button (click)="currUserDetails()">Current User</button>
             <button (click)="logout()">Log Out</button>
         </div>
     </div>
@@ -141,6 +142,8 @@
                 </li>
 
             </ul>
+            <button (click)="currUserDetails()">Current User</button>
+            <button (click)="logout()">Log Out</button>
         </div>
     </div>
 </div>
