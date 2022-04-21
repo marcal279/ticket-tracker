@@ -19,7 +19,7 @@ export class LoginComponent implements OnInit {
   }
 
   invalidID(username:string) : Boolean{
-    if((username.startsWith('NXT') || username.startsWith('IMCL') || username.endsWith('@nxtdigital.in')) && username.length>5) return false;
+    if((username.match(/^(NXT|IMCL)[0-9]+/) || username.match(/\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}\b/)) && username.length>=5) return false;
     else return true;
   }
 
