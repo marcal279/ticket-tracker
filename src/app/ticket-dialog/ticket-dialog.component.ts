@@ -91,10 +91,11 @@ export class TicketDialogComponent implements OnInit {
   createTicket(){
     this.currentTicket.tid = this.generateTID(this.currentTicket);
     this.currentTicket.issueDate = new Date();
-    // this.currentTicket.issueDate = new Date(2003,10,5);
     if(this.currentTicket.expectedDate && this.currentTicket.issueDate){
       this.currentTicket.duration = this.calcDuration(this.currentTicket.issueDate, this.currentTicket.expectedDate);
     }
+    this.currentTicket.empEid = this.data.currEmail;
+
     this.ticketService.createDBTicket(this.currentTicket).then(()=>{
       // alert(`Created TicketID ${this.currentTicket.tid} successfully!`);
       this.openSnackBar(`Created TicketID ${this.currentTicket.tid} successfully!`);
