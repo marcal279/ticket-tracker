@@ -124,6 +124,12 @@ export class TicketManagerComponent implements OnInit {
     return this.statusIsClosed(status)? 'done' : ( this.statusIsPending(status) ? 'schedule' : ( this.statusIsHold(status) ? 'pause_circle' : 'construction' ) )
   }
 
+  isOverdue(element: Ticket){
+    let expected = new Date(element.expectedDate).getTime();
+    let today = new Date().getTime();
+    if(expected < today) return true;
+    return false;
+  }
 
   displayedColumns: string[] = ['tid','title','company','platform','empEid','dept','priority','duration','expectedDate','status'];
   colNames: string[] = ['TID', 'Title', 'Company', 'Platform', 'Raised By', 'Dept.', 'Priority', 'Duration', 'Expected', 'Status'];
