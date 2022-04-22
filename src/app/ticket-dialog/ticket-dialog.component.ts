@@ -34,9 +34,10 @@ export class TicketDialogComponent implements OnInit {
     { 'code': 'WBS', 'name': 'Website' },
     { 'code': 'LAA', 'name': 'LCO Admin App' },
     { 'code': 'DCAA', 'name': 'DP Collection Admin' },
+    { 'code': 'OTH', 'name': 'Other' },
   ]
   departments: String[] = ['Finance','Ops','Legal','Logistics'];
-  statuses: String[] = ['Pending', 'Production', 'Testing', 'Approval', 'Closed']
+  statuses: String[] = ['Pending', 'Production', 'Testing','Hold', 'Approval', 'Closed']
   priorities: String[] = ['High','Medium','Low']
   
   newTicket: Ticket = this.ticketService.newTicketObject();
@@ -94,7 +95,7 @@ export class TicketDialogComponent implements OnInit {
     if(this.currentTicket.expectedDate && this.currentTicket.issueDate){
       this.currentTicket.duration = this.calcDuration(this.currentTicket.issueDate, this.currentTicket.expectedDate);
     }
-    this.currentTicket.empEid = this.data.currEmail;
+    if(this.data.currEmail) this.currentTicket.empEid = this.data.currEmail;
 
     this.ticketService.createDBTicket(this.currentTicket).then(()=>{
       // alert(`Created TicketID ${this.currentTicket.tid} successfully!`);
