@@ -151,25 +151,23 @@ export class TicketManagerComponent implements OnInit {
   searchBoxValue: string = '';
   onlyMyTicketsShown = false;
   @ViewChild('ticketSearch') searchBox!: ElementRef;
-  // @ViewChild('mat-slide-toggle') myTicketToggle!: ElementRef;
+  
+  oldData: Ticket[] = [];
   myTickets(event: MatSlideToggleChange): void{
-    let myTicketToggle: MatSlideToggle = event.source;
-    
-    let oldData = [...this.dataSource.data];
+    console.log('Mine '+this.onlyMyTicketsShown);
 
     if(this.onlyMyTicketsShown){
+      this.oldData = [...this.dataSource.data];
       this.searchBoxValue = 'marc.almeida@gmail.com';
-      let myTickets = oldData.filter((value: Ticket)=>{
+      let myTickets = this.oldData.filter((value: Ticket)=>{
         if(value.empEid == 'marc.almeida@gmail.com') return value;
         else return null;
       })
       this.dataSource.data = myTickets;
-      this.onlyMyTicketsShown = true;
     }
     else{
       this.searchBoxValue = '';
-      this.dataSource.data = oldData;
-      this.onlyMyTicketsShown = false;
+      this.dataSource.data = this.oldData;
     }
   }
 
