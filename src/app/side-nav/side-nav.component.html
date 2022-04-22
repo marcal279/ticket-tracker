@@ -9,23 +9,23 @@
         [ngClass]="{'active': pageActive(icon)}" style="margin: 1rem 0rem 2rem 0rem;"
         matTooltip="{{ this.sideNavSectionList[this.sideNavIconList.indexOf(icon)] }}"
         [matTooltipPosition]="toolTipPosition" 
-        [matTooltipShowDelay]="500">
+        [matTooltipShowDelay]="500"  (click)="goToPage(icon)">
             <img *ngIf="pageActive(icon)" 
-                src="https://img.icons8.com/fluency-systems-regular/25/0551DD/{{icon}}.png" #{{icon}} (click)="goToPage(icon)">
+                src="https://img.icons8.com/fluency-systems-regular/25/0551DD/{{icon}}.png" #{{icon}}>
             
             <img *ngIf="!pageActive(icon)" 
-                src="https://img.icons8.com/fluency-systems-regular/25/61A6F5/{{icon}}.png" #{{icon}} (click)="goToPage(icon)">    
+                src="https://img.icons8.com/fluency-systems-regular/25/61A6F5/{{icon}}.png" #{{icon}}>    
         </li>
 
         <li class="pagesIcons" [ngClass]="{'active': pageActive('user')}" style="position: absolute; bottom: 1rem; padding-right: 0.9rem;"
         matTooltip="{{ this.sideNavSectionList[this.sideNavIconList.indexOf('user')] }}"
         [matTooltipPosition]="toolTipPosition" 
-        [matTooltipShowDelay]="500" (click)="canClick()">
+        [matTooltipShowDelay]="500" (click)="goToPage('user')">
             <img *ngIf="pageActive('user')" 
-                src="https://img.icons8.com/fluency-systems-regular/25/0551DD/user.png" #user (click)="goToPage('user')">
+                src="https://img.icons8.com/fluency-systems-regular/25/0551DD/user.png" #user>
             
             <img *ngIf="!pageActive('user')" 
-                src="https://img.icons8.com/fluency-systems-regular/25/61A6F5/user.png" #user (click)="goToPage('user')">
+                src="https://img.icons8.com/fluency-systems-regular/25/61A6F5/user.png" #user>
             <!-- <img style="height: 40px; border-radius: 50%; margin-left: -10px;" src="../../assets/images/profile-marc.jpg" #user> -->
         </li>
     </ul>
