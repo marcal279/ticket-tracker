@@ -105,6 +105,10 @@
         justify-content: left;
     }
 
+    .overdue{
+        background-color: rgb(255, 185, 185);
+    }
+
     .rowDetail{
         overflow: hidden;
         display: flex;
@@ -137,6 +141,12 @@
         /* justify-content: space-between; */
         height: 100%;
     }
+
+    .red{color: red;}
+    .yellow{color: rgb(255, 174, 0);}
+    .green{color: green;}
+    .purple{color: rgb(119, 0, 255);}
+
 </style>
 
 <!-- <div class="allContent"> -->
@@ -155,7 +165,7 @@
                 <div>
                     <img class="headingIcon" 
                     src="https://img.icons8.com/fluency-systems-regular/30/0551DD/user-male-circle.png" >
-                    <h2 style="display: inline-block; color: rgb(5, 81, 221);" class="fredoka500">Good {{this.timeOfDay}}, Marc</h2>
+                    <h2 style="display: inline-block; color: rgb(5, 81, 221);" class="fredoka500">Good {{this.timeOfDay}}, {{currUser?.name||'User'}}</h2>
                 </div>
                 <div class="enableButtonHover" style="display: flex;">
                     <button class="complemCustomButton" 
@@ -225,9 +235,11 @@
                         <ng-container matColumnDef="status">
                             <th mat-header-cell *matHeaderCellDef mat-sort-header>Status</th>
                             <td mat-cell *matCellDef="let element">
-                                <mat-icon *ngIf="statusIsClosed(element.status)" style="color: green;">done</mat-icon>
-                                <mat-icon *ngIf="statusIsPending(element.status)" style="color: red;">schedule</mat-icon>
-                                <mat-icon *ngIf="statusIsProcessing(element.status)" style="color: rgb(255, 174, 0);">construction</mat-icon>
+                                <mat-icon [ngClass]="{'green':statusIsClosed(element.status),'red': statusIsPending(element.status),
+                                'purple': statusIsHold(element.status),
+                                'yellow': statusIsProcessing(element.status)}">
+                                    {{ giveIcon(element.status) }}
+                                </mat-icon>
                             </td>
                         </ng-container>
         
@@ -248,12 +260,18 @@
                                         <p *ngIf="element.comments"><strong>Comments: </strong>{{element.comments}}</p>
                                     </div>
                                     <div style="display: flex; justify-content: center; padding: 2rem 2rem 0rem 0rem;">
-                                        <mat-icon *ngIf="statusIsClosed(element.status)" style="color: green; font-size: 5rem;">done</mat-icon>
-                                        <mat-icon *ngIf="statusIsPending(element.status)" style="color: red; font-size: 5rem;">schedule</mat-icon>
-                                        <mat-icon *ngIf="statusIsProcessing(element.status)" style="color: rgb(255, 174, 0); font-size: 5rem;">construction</mat-icon>
-                                        <h2 *ngIf="statusIsClosed(element.status)" style="color: green;" class="alignStatusHeading">{{element.status}}</h2>
-                                        <h2 *ngIf="statusIsPending(element.status)" style="color: red;" class="alignStatusHeading">{{element.status}}</h2>
-                                        <h2 *ngIf="statusIsProcessing(element.status)" style="color: rgb(255, 174, 0);" class="alignStatusHeading">{{element.status}}</h2>
+                                        <mat-icon [ngClass]="{'green':statusIsClosed(element.status),'red': statusIsPending(element.status),
+                                        'purple': statusIsHold(element.status),'yellow': statusIsProcessing(element.status)}" 
+                                        style="font-size: 5rem;">
+                                            {{ giveIcon(element.status) }}
+                                        </mat-icon>
+                                        
+
+                                        <h2 [ngClass]="{'green':statusIsClosed(element.status),'red': statusIsPending(element.status),
+                                        'purple': statusIsHold(element.status),'yellow': statusIsProcessing(element.status),
+                                        'alignStatusHeading': true}" (click)="statusIsHold(element.status)">
+                                            {{ element.status }}
+                                        </h2>
                                     </div>
                                 </div>
                             </td>
@@ -267,7 +285,8 @@
                         <!-- generate rows -->
                         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
                         <tr mat-row *matRowDef="let element; columns: displayedColumns;"
-                        class="ticket-row" [class.ticket-expanded-row]="expandedRow === element"
+                        class="ticket-row" [class.overdue]="isOverdue(element)"
+                        [class.ticket-expanded-row]="expandedRow === element"
                         (click)="expandedRow = (expandedRow === element ? null : element)"></tr>
                         <tr mat-row *matRowDef="let row; columns: ['expandedDetail'];" class="expandedDetailRow"></tr>
                     </table>

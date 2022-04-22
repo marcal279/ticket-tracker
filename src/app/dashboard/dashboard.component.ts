@@ -159,10 +159,7 @@ export class DashboardComponent implements OnInit {
       this.dataSource.data = observer.slice(-3);  // only last 3 records
       this.dataSource.sort = this.sort;
       this.allTickets = observer;
-
-      this.currUID = this.authService.currentUserUID(); // it just works here idk why
-      this.userService.readDBsingleUser(this.currUID).subscribe(observer => {this.currUser = observer as User});
-
+      
       this.getStatistics();
     });
   }
@@ -175,19 +172,29 @@ export class DashboardComponent implements OnInit {
     if(status.endsWith('Closed')) return true;
     return false;
   }
+  statusIsHold(status: string){
+    if(status.endsWith('Hold')) return true;
+    return false;
+  }
   statusIsProcessing(status: string){
-    if(!this.statusIsClosed(status) && !this.statusIsPending(status)) return true;
+    if(!this.statusIsClosed(status) && !this.statusIsPending(status)&& !this.statusIsHold(status)) return true;
     return false;
   }
   lastIcon: string = 'tick';
 
+  giveIcon(status: string){
+    return this.statusIsClosed(status)? 'done' : ( this.statusIsPending(status) ? 'schedule' : ( this.statusIsHold(status) ? 'pause_circle' : 'construction' ) )
+  }
+
   myPending = 0; myProduction = 0; myClosed = 0;
   getMyCounts(){
+    let currEid = this.currUser? this.currUser.empEid : 'marc.almeida@gmail.com';
+    // alert('currEid = '+currEid)
     if(this.allTickets.length > 0){
       // console.log('entered')
       let pending=0, prod=0, closed=0;
       let myTickets = this.allTickets.filter((value: Ticket)=>{
-        if(value.empEid == 'marc.almeida@gmail.com'){
+        if(value.empEid == currEid){
           if(this.statusIsPending(value.status)) pending+=1
           else if(this.statusIsClosed(value.status)) closed+=1
           else prod+=1
@@ -201,6 +208,13 @@ export class DashboardComponent implements OnInit {
     }
     else alert('len 0')
     // let total = myTickets.length;
+  }
+
+  isOverdue(element: Ticket){
+    let expected = new Date(element.expectedDate).getTime();
+    let today = new Date().getTime();
+    if(expected < today) return true;
+    return false;
   }
   
   displayedColumns: string[] = ['tid','title', 'empEid','priority', 'duration', 'expectedDate','status'];
@@ -220,6 +234,7 @@ export class DashboardComponent implements OnInit {
   pieChartNoData = {
     pending: 0,
     production: 0,
+    hold: 0,
     testing: 0,
     approval: 0,
     closed: 0
@@ -257,6 +272,7 @@ export class DashboardComponent implements OnInit {
           if(this.statusIsPending(value.status)) pieDataCopy.pending+=1
           else if(this.statusIsClosed(value.status)) pieDataCopy.closed+=1
           else if(value.status == 'Production') pieDataCopy.production+=1
+          else if(value.status == 'Hold') pieDataCopy.hold+=1
           else if(value.status == 'Testing') pieDataCopy.testing+=1
           else if(value.status == 'Approval') pieDataCopy.approval+=1
           return value;
@@ -433,7 +449,7 @@ export class DashboardComponent implements OnInit {
     };
 
     this.pieChartOptions = {
-      series: [20, 0, 0, 0, 0],
+      series: [20, 0, 0, 0, 0, 0],
       chart: {
         // type: "donut",
         type: "pie",
@@ -453,7 +469,7 @@ export class DashboardComponent implements OnInit {
           customScale: 0.7,
         }
       },
-      labels: ["Pending", "Production", "Testing", "Approval", "Closed"],
+      labels: ["Pending", "Production", "Hold", "Testing", "Approval", "Closed"],
       dataLabels: {
         style: {
           fontSize: "9px",
@@ -551,11 +567,17 @@ export class DashboardComponent implements OnInit {
     this.getTimeOfDay();
 
     this.retrieveTickets();
-    // setTimeout(()=>{this.getStatistics()}, 5500) this is now fetched in retrieveTickets itself
+    // setTimeout(()=>{this.showCurrUser()}, 4000);
+    setTimeout(()=>{this.showCurrUser()}, 2000);
   }
 
   showCurrUser(){
-    alert(this.currUID+' '+JSON.stringify(this.currUser))
+    if(!this.currUID && !this.currUser){
+      this.currUID = this.authService.currentUserUID(); // it just works here idk why
+      this.userService.readDBsingleUser(this.currUID).subscribe(observer => {this.currUser = observer as User});
+    }
+    // alert(this.currUID+' '+JSON.stringify(this.currUser))
+    this.getMyCounts();
   }
 
 }
