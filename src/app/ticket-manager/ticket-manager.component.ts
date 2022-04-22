@@ -120,6 +120,10 @@ export class TicketManagerComponent implements OnInit {
     return false;
   }
   lastIcon: string = 'tick';
+  giveIcon(status: string){
+    return this.statusIsClosed(status)? 'done' : ( this.statusIsPending(status) ? 'schedule' : ( this.statusIsHold(status) ? 'pause_circle' : 'construction' ) )
+  }
+
 
   displayedColumns: string[] = ['tid','title','company','platform','empEid','dept','priority','duration','expectedDate','status'];
   colNames: string[] = ['TID', 'Title', 'Company', 'Platform', 'Raised By', 'Dept.', 'Priority', 'Duration', 'Expected', 'Status'];
