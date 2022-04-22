@@ -111,6 +111,10 @@ export class TicketManagerComponent implements OnInit {
     if(status.endsWith('Closed')) return true;
     return false;
   }
+  statusIsHold(status: string){
+    if(status.endsWith('Hold')) return true;
+    return false;
+  }
   statusIsProcessing(status: string){
     if(!this.statusIsClosed(status) && !this.statusIsPending(status)) return true;
     return false;
