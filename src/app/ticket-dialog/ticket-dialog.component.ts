@@ -14,6 +14,7 @@ import { User } from '../interfaces/user';
 import { filter, map, Observable, of } from 'rxjs';
 import { IncrementIndexAction, StoreIndexAction } from '../ngrx-state/app.actions';
 import { Router } from '@angular/router';
+import * as TicketParameters from '../parameters/tickets.parameters';
 
 import { MAT_DATE_FORMATS } from '@angular/material/core';
 
@@ -39,23 +40,12 @@ export class TicketDialogComponent implements OnInit {
 
   ticketsRef!: AngularFireList<Ticket>;
 
-  ticketTypes = ['New Requirement', 'Enhancements', 'Bugs', 'Others'];
-  platformConsolidatedList = [
-    { 'code': 'LP', 'name': 'LCO Portal' },
-    { 'code': 'LA', 'name': 'LCO App' },
-    { 'code': 'SCP', 'name': 'Selfcare Portal' },
-    { 'code': 'SCA', 'name': 'Selfcare App' },
-    { 'code': 'DCP', 'name': 'DP Collection Portal' },
-    { 'code': 'DCA', 'name': 'DP Collection App' },
-    { 'code': 'WBS', 'name': 'Website' },
-    { 'code': 'LAA', 'name': 'LCO Admin App' },
-    { 'code': 'DCAA', 'name': 'DP Collection Admin' },
-    { 'code': 'OTH', 'name': 'Other' },
-  ]
-  departments = ['Finance','Ops','Tech','Strategy','Customer Care','Legal','Logistics'];
-  statuses = ['New', 'Approved', 'Hold', 'In Progress', 'Dev Complete', 'QA', 'UAT Ready', 'Production Ready', 'Closed', 'Reopened']
-  priorities = ['High','Medium','Low']
-  knownVendors = ['Mobiotics','Mobiezy','Designride','Paymytv','Paycable']
+  ticketTypes = TicketParameters.ticketTypes;
+  platformConsolidatedList = TicketParameters.platformConsolidatedList;
+  departments = TicketParameters.departments;
+  statuses = TicketParameters.statuses;
+  priorities = TicketParameters.priorities;
+  knownVendors = TicketParameters.knownVendors
 
   
   newTicket: Ticket = this.ticketService.newTicketObject();

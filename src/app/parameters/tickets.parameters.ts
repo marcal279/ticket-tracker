@@ -1,8 +1,10 @@
 export const ticketTypes = [
-    'Fresh Requirement',
-    'Bug Report',
-    'Other'
+    'New Requirement', 
+    'Enhancements', 
+    'Bugs', 
+    'Others'
 ];
+
 export const companies = [
     'NXTDigital',
     'INDigital',
@@ -19,12 +21,8 @@ export const platformConsolidatedList = [
     { 'code': 'DCAA', 'name': 'DP Collection Admin' },
     { 'code': 'OTH', 'name': 'Other' },
 ]
-export const departments = [
-    'Finance',
-    'Ops',
-    'Legal',
-    'Logistics'
-];
+export const departments = ['Finance','Ops','Tech','Strategy','Customer Care','Legal','Logistics'];
+
 export const statuses = [
     'New',
     'Approved',
@@ -38,3 +36,5 @@ export const statuses = [
     'Reopened'
 ]
 export const priorities = ['High','Medium','Low']
+
+export const knownVendors = ['Mobiotics','Mobiezy','Designride','Paymytv','Paycable']

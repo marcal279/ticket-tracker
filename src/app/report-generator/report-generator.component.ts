@@ -135,6 +135,7 @@ export class ReportGeneratorComponent implements OnInit {
     let endDate = new Date(this.filterForm.get(['timeFilter','endDate']).value).getTime();
     
     let ticketIssued = new Date(ticket.issueDate).getTime()
+    // console.log(`Start Date: ${startDate}, End Date: ${endDate}, Ticket Date: ${ticketIssued}`)
 
     if( filterTicketTypes.includes(ticket.ticketType) && filterPriorities.includes(ticket.priority)
      && filterCompanies.includes(ticket.company) && filterPlatforms.includes(ticket.platform)
