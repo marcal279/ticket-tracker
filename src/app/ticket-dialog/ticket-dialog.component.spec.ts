@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { TicketDialogComponent } from './ticket-dialog.component';
 
-describe('CreateTicketDialogComponent', () => {
+describe('TicketDialogComponent', () => {
   let component: TicketDialogComponent;
   let fixture: ComponentFixture<TicketDialogComponent>;
 

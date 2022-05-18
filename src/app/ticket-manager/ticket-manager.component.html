@@ -31,7 +31,7 @@
         width: 10rem;
     }
     .mat-column-empEid{
-        width: 12rem;
+        width: 14rem;
     }
     .mat-column-dept{
         width: 6rem;
@@ -46,7 +46,7 @@
         width: 4rem;  
     }
     .mat-column-status{
-        width: 5rem; 
+        /* width: 5rem;  */
     }
 
     :host ::ng-deep .mat-paginator-container {
@@ -74,14 +74,34 @@
         margin-bottom: 0.15rem;
     }
 
-    .alignStatusHeading{
+    .holdPadding{
+        position: relative;
+        left: -1rem;
+    }
+
+    .processingPadding{
+        position: relative;
+        left: 1rem;
+    }
+
+    .newPlusHoldStatusPadding{
+        padding-left: 0.5rem;
+    }
+
+    .statusHeading{
         position: relative;
         top: 4.5rem;
-        left: -1rem;
+        left: -0.75rem;
+        width: 5rem;
+        line-height: 1;
+        /* text-align: center; */
     }
 
     .overdue{
         background-color: rgb(255, 185, 185);
+    }
+    tr.mat-row.overdue:hover{
+        background-color: rgb(241, 149, 149);
     }
 
     .actionButton{
@@ -101,12 +121,31 @@
         transition-duration: 0.25s;
     }
 
+    .ticketTID{
+        background-color: rgb(5, 81, 221);
+        color: white;
+        padding: 0rem 0.2rem;
+        margin-right: 0.3rem;
+    }
+    .ticketTitle:hover{
+        text-decoration: underline;
+        cursor: pointer;
+    }
+
     .deleteButton{
         color: red;
         border-color: red;
     }
     .deleteButton:hover{
         background-color: red;
+    }
+    .deleteButton:disabled{
+        color: rgb(240, 100, 100);
+        border-color: rgb(240, 100, 100);
+    }
+    .deleteButton:disabled:hover{
+        cursor: default;
+        background-color: white;
     }
 
     .updateButton{
@@ -117,10 +156,16 @@
         background-color: green;
     }
 
-    .red{color: red;}
-    .yellow{color: rgb(255, 174, 0);}
-    .green{color: green;}
-    .purple{color: rgb(119, 0, 255);}
+    :host ::ng-deep .red{color: red;}
+    :host ::ng-deep .yellow{color: rgb(255, 174, 0);}
+    :host ::ng-deep .green{color: green;}
+    :host ::ng-deep .purple{color: rgb(119, 0, 255);}
+    :host ::ng-deep .blue{color: rgb(5, 81, 221);}
+
+
+    form .mat-form-field{
+        width: 8rem;
+    }
     
 </style>
 
@@ -139,38 +184,158 @@
                 <div>
                     <mat-form-field appearance="outline" id="searchBar">
                         <mat-label>Search</mat-label>
-                        <input matInput (keyup)="applyFilter($event)" placeholder="" #ticketSearch [(ngModel)]="searchBoxValue">
+                        <input matInput (keyup)="search($event)" placeholder="" #ticketSearch [(ngModel)]="searchBoxValue">
                     </mat-form-field>
-                    <button class="complemCustomButton complemIconButton"><mat-icon>filter_list</mat-icon></button>
-                    <div class="enableButtonHover" style="display: inline-block; margin-left: 20rem;">
-                        <button class="customButton complemIconButton fredoka500" style="border-radius: 49%; position: relative; top: 4px;" (click)="downloadCSV()"><mat-icon>download</mat-icon></button>
+                    <button class="complemCustomButton complemIconButton"><mat-icon>search</mat-icon></button>
+                    <div class="enableButtonHover" style="display: inline-block; margin-left: 17.5vw">
+                        <button class="customButton complemIconButton fredoka500" 
+                        style="position: relative; top: 4px;"
+                        matTooltip="Download All" 
+                        matTooltipPosition="above"
+                        matTooltipShowDelay="100" (click)="downloadCSV()">
+                            <mat-icon style="font-size: 1.45rem;">download</mat-icon>
+                        </button>
                         <button class="customButton fredoka500" (click)="createTicket()"><mat-icon>add</mat-icon>New Ticket</button>
                     </div>
                 </div>
-                <div style="display: flex; width: 98.5%; justify-content: space-between; align-items: baseline;">
-                    <div style="height: 4rem;">
-                        <h4 class="fredoka500" style="margin-left: 2rem; display: inline-block;">Showing tickets created</h4>
-                        <mat-form-field appearance="outline" style="width: 8rem; margin-left: 0.5rem;">
-                            <mat-select class="fredoka" [(value)]="selectedIssueTimePeriod" (selectionChange)="issueTimeFilter()">
-                                <mat-option class="fredoka" *ngFor="let option of issueTimeOptions" [value]="option.value">{{option.viewValue}}</mat-option>
-                            </mat-select>
-                        </mat-form-field>
-                        <h4 class="fredoka500" style="margin-left: 0.5rem; display: inline-block;">that are due</h4>
-                        <mat-form-field appearance="outline" style="width: 8rem; margin: 0rem 0.5rem;">
-                            <mat-select class="fredoka" [(value)]="selectedExpectedTimePeriod" (selectionChange)="issueTimeFilter()">
-                                <mat-option class="fredoka" *ngFor="let option of expectedTimeOptions" [value]="option.value">{{option.viewValue}}</mat-option>
-                            </mat-select>
-                        </mat-form-field>
+                <mat-expansion-panel style="margin: 0rem 0rem 1rem 2rem;">
+                    <mat-expansion-panel-header>
+                        <mat-panel-title class="fredoka500" style="color: rgb(5, 81, 221); font-size: 1.1rem;">Filters<mat-icon style="margin-left: 0.5rem;">tune</mat-icon></mat-panel-title>
+                    </mat-expansion-panel-header>
+                    <div>
+                        <div style="margin-left: 0.5rem;">
+                            <form [formGroup]="filterForm">
+
+                                <div class="enableButtonHover" formGroupName="ticketFilter">
+                                    <mat-form-field style="margin-left: 0rem;">
+                                        <mat-select placeholder="Select Ticket Types" formControlName="ticketType" required multiple>
+                                            <mat-select-trigger>
+                                                {{(filterForm.get(['ticketFilter','ticketType'])?.value.length == ticketTypes.length+1) ? 'All': filterForm.get(['ticketFilter','ticketType'])?.value[0]}}
+                                                <span *ngIf="ticketTypes.length+1 > filterForm.get(['ticketFilter','ticketType'])?.value.length && filterForm.get(['ticketFilter','ticketType'])?.value.length > 1">(+ {{filterForm.get(['ticketFilter','ticketType'])?.value.length-1}} other)</span>
+                                            </mat-select-trigger>
+                                            <mat-option (click)="toggleAllSelected('ticketType', allType.selected)" value="All" #allType>All</mat-option>
+                                            <mat-option *ngFor="let type of ticketTypes" (click)="tossleEachOne('ticketType')" value="{{type}}">{{type}}</mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                
+                                    <mat-form-field style="margin-left: 2rem;">
+                                        <mat-select placeholder="Priorities" formControlName="priority" required multiple>
+                                            <mat-select-trigger>
+                                                {{(filterForm.get(['ticketFilter','priority'])?.value.length == priorities.length+1) ? 'All': filterForm.get(['ticketFilter','priority'])?.value[0]}}
+                                                <span *ngIf="priorities.length+1 > filterForm.get(['ticketFilter','priority'])?.value.length && filterForm.get(['ticketFilter','priority'])?.value.length > 1">(+ {{filterForm.get(['ticketFilter','priority'])?.value.length-1}} other)</span>
+                                            </mat-select-trigger>
+                                            <mat-option (click)="toggleAllSelected('priority', allPriority.selected)" value="All" #allPriority>All</mat-option>
+                                            <mat-option *ngFor="let priority of priorities" (click)="tossleEachOne('priority')" value="{{priority}}">{{priority}}</mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                
+                                    <mat-form-field style="margin-left: 2rem;">
+                                        <mat-select placeholder="Companies" formControlName="company" required multiple>
+                                            <mat-select-trigger>
+                                                {{(filterForm.get(['ticketFilter','company'])?.value.length == companies.length+1) ? 'Both': filterForm.get(['ticketFilter','company'])?.value[0]}}
+                                                <span *ngIf="companies.length+1 > filterForm.get(['ticketFilter','company'])?.value.length && filterForm.get(['ticketFilter','company'])?.value.length > 1">(+ {{filterForm.get(['ticketFilter','company'])?.value.length-1}} other)</span>
+                                            </mat-select-trigger>
+                                            <mat-option (click)="toggleAllSelected('company', allCompany.selected)" value="All" #allCompany>Both</mat-option>
+                                            <mat-option *ngFor="let company of companies" (click)="tossleEachOne('company')" value="{{company}}">{{company}}</mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                
+                                    <mat-form-field>
+                                        <mat-select placeholder="Select Platforms" formControlName="platform" required multiple>
+                                            <mat-select-trigger>
+                                                {{(filterForm.get(['ticketFilter','platform'])?.value.length == platforms.length+1) ? 'All': filterForm.get(['ticketFilter','platform'])?.value[0]}}
+                                                <span *ngIf="platforms.length+1 > filterForm.get(['ticketFilter','platform'])?.value.length && filterForm.get(['ticketFilter','platform'])?.value.length > 1">(+ {{filterForm.get(['ticketFilter','platform'])?.value.length-1}} other)</span>
+                                            </mat-select-trigger>
+                                            <mat-option (click)="toggleAllSelected('platform', allPlatform.selected)" value="All" #allPlatform>All</mat-option>
+                                            <mat-option *ngFor="let platform of platforms" (click)="tossleEachOne('platform')" value="{{platform.name}}">{{platform.name}}</mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                    
+                                    <mat-form-field style="margin-left: 2rem;">
+                                        <mat-select placeholder="Select Statuses" formControlName="status" required multiple>
+                                            <mat-select-trigger>
+                                                {{(filterForm.get(['ticketFilter','status'])?.value.length == statuses.length+1) ? 'All': filterForm.get(['ticketFilter','status'])?.value[0]}}
+                                                <span *ngIf="statuses.length+1 > filterForm.get(['ticketFilter','status'])?.value.length && filterForm.get(['ticketFilter','status'])?.value.length > 1">(+ {{filterForm.get(['ticketFilter','status'])?.value.length-1}} other)</span>
+                                            </mat-select-trigger>
+                                            <mat-option (click)="toggleAllSelected('status', allStatus.selected)" value="All" #allStatus>All</mat-option>
+                                            <mat-option *ngFor="let status of statuses" (click)="tossleEachOne('status')" value="{{status}}">{{status}}</mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+                            </form>
+                        </div>
+                        <div style="display: flex; width: 98.5%; justify-content: space-between; align-items: baseline;">
+                            <div style="height: 4rem;">
+                                <h4 class="fredoka500" style="margin-left: 0.5rem; display: inline-block;">Showing tickets created</h4>
+                                <mat-form-field appearance="outline" style="width: 8rem; margin-left: 0.5rem;">
+                                    <mat-select class="fredoka" [(value)]="selectedIssueTimePeriod" (selectionChange)="issueTimeFilter()">
+                                        <mat-option class="fredoka" *ngFor="let option of issueTimeOptions" [value]="option.value">{{option.viewValue}}</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                                <h4 class="fredoka500" style="margin-left: 0.5rem; display: inline-block;">that are due</h4>
+                                <mat-form-field appearance="outline" style="width: 8rem; margin: 0rem 0.5rem;">
+                                    <mat-select class="fredoka" [(value)]="selectedExpectedTimePeriod" (selectionChange)="issueTimeFilter()">
+                                        <mat-option class="fredoka" *ngFor="let option of expectedTimeOptions" [value]="option.value">{{option.viewValue}}</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                            <div>
+                                <mat-slide-toggle color="primary" [(ngModel)]="onlyMyTicketsShown" [checked]="onlyMyTicketsShown" (change)="myTickets($event)">Only My Tickets</mat-slide-toggle>
+                                <mat-slide-toggle color="warn" style="margin-left: 1rem;" [(ngModel)]="onlyOverdue" [checked]="onlyOverdue" (change)="overdueTickets($event)">Only Overdue</mat-slide-toggle>
+                            </div>
+                        </div>
+                        <button class="customButton" style="margin-left: 0.5rem; margin-right: 0rem;" (click)="applyFilters()">Apply</button>
+                        <button class="complemCustomButton" style="margin-left: 1rem;" (click)="clearFilters()">Clear</button>
                     </div>
-                    <mat-slide-toggle color="primary" [(ngModel)]="onlyMyTicketsShown" [checked]="onlyMyTicketsShown" (change)="myTickets($event)">Only My Tickets</mat-slide-toggle>
-                </div>
+                </mat-expansion-panel>
             </div>
         </div>
         <div>
             <table mat-table matSort [dataSource]="dataSource" multiTemplateDataRows class="mat-elevation-z4">
                     
-                <!-- generate all columns EXCEPT STATUS & EXPECTED DATE -->
-                <ng-container *ngFor="let column of displayedColumns.slice(0,-2); index as i" matColumnDef="{{column}}">
+                <!--
+                No idea why this didnt work 
+                <ng-container *ngFor="let column of displayedColumns; index as i" matColumnDef="{{column}}">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>{{colNames[i]}}</th>
+
+                    <ng-container *ngSwitch="column">
+                        <ng-container *ngSwitchCase="'expectedDate'">
+                            <td mat-cell *matCellDef="let element"> {{ element.expectedDate | date }} </td>
+                        </ng-container>
+                        <ng-container *ngSwitchCase="'status'">
+                            <td mat-cell *matCellDef="let element">
+                                <mat-icon [ngClass]="{'green':statusIsClosed(element.status),'red': statusIsNew(element.status),
+                                    'purple': statusIsHold(element.status),
+                                    'yellow': statusIsProcessing(element.status)}">
+                                    {{ giveIcon(element.status) }}
+                                </mat-icon>
+                            </td>
+                        </ng-container>
+                        <ng-container *ngSwitchDefault>
+                            <td mat-cell *matCellDef="let element">{{element[column]}}</td>
+                        </ng-container>
+                    </ng-container>  
+                </ng-container> 
+                -->
+
+
+                <!-- ticketType -->
+                <ng-container matColumnDef="ticketType">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Ticket Type</th>
+                    <td mat-cell *matCellDef="let element">
+                        <mat-icon matTooltip="{{ element.ticketType }}" 
+                            matTooltipPosition="left"
+                            [matTooltipShowDelay]="70" 
+                            [ngClass]="{'blue': element.ticketType == 'New Requirement',
+                            'yellow': element.ticketType == 'Enhancements',
+                            'red': element.ticketType == 'Bugs',
+                            'purple': element.ticketType == 'Others'}">
+                            {{ giveTypeIcon(element.ticketType) }}
+                        </mat-icon>
+                    </td>
+                </ng-container>
+                <!-- generate all columns AFTER tickType EXCEPT status & expectedDate -->
+                <ng-container *ngFor="let column of displayedColumns.slice(1,-2); index as i" matColumnDef="{{column}}">
                     <th mat-header-cell *matHeaderCellDef mat-sort-header>{{colNames[i]}}</th>
                     <td mat-cell *matCellDef="let element">{{element[column]}}</td>
                 </ng-container>
@@ -185,10 +350,10 @@
                 <ng-container matColumnDef="status">
                     <th mat-header-cell *matHeaderCellDef mat-sort-header>Status</th>
                     <td mat-cell *matCellDef="let element">
-                        <mat-icon [ngClass]="{'green':statusIsClosed(element.status),'red': statusIsPending(element.status),
+                        <mat-icon [ngClass]="{'green':statusIsClosed(element.status),'red': statusIsNew(element.status),
                             'purple': statusIsHold(element.status),
                             'yellow': statusIsProcessing(element.status)}">
-                            {{ giveIcon(element.status) }}
+                            {{ giveStatusIcon(element.status) }}
                         </mat-icon>
                     </td>
                 </ng-container>
@@ -199,51 +364,57 @@
                         <div class="rowDetail"
                             [@detailExpand] = "element == expandedRow? 'expanded': 'collapsed'">
                             <div style="padding: 0rem 2rem 0.75rem 0.5rem;">
-                                <h2>{{element.title}} ({{element.tid}})</h2>
-                                <p *ngIf="element.desc" style="font-size: larger; width: 40rem; overflow: auto;">{{element.desc}}</p>
+                                <h2 class="ticketTitle" (click)="goToDetails(element.key)"> <span class="ticketTID">{{element.tid}}</span>{{element.title}} </h2>
+                                <p *ngIf="element.desc" style="font-size: larger; width: 40rem; overflow: auto; color: grey; font-style: italic;">{{element.desc}}</p>
                                 <p><strong>Platform: </strong>{{element.company}} {{element.platform}}</p>
                                 <p><strong>Issued By: </strong>{{element.empEid}}
-                                <strong style="margin-left: 2rem;">Dept: </strong>{{element.dept}}</p>
+                                <!-- <strong style="margin-left: 2rem;">Dept: </strong>{{element.dept}}</p> -->
                                 <p><strong>Issue Date: </strong>{{element.issueDate | date}}
                                     <strong style="margin-left: 2rem;" *ngIf="element.expectedDate">Expected: </strong>In {{element.duration}} on {{element.expectedDate | date}}
+                                    <!-- key: {{element.key}} -->
+                                    <a routerLink="/ticket/{{element.key}}" style="display: block; margin-top: 0.5rem;">See More</a>
                                 </p>
-                                <p *ngIf="element.comments" style="margin-bottom: 8px;"><strong>Comments: </strong>{{element.comments}}</p>
                                 <button class="fredoka actionButton updateButton"
-                                    style="font-size: 1rem; padding: 0.25rem 0.5rem;" (click)="updateTicket(element)">
+                                    style="font-size: 1rem; padding: 0.25rem 0.5rem; margin-right: 0.5rem;"
+                                    *ngIf="!statusIsClosed(element.status)" (click)="updateTicket(element)">
                                     Update
                                 </button>
-                                <button class="fredoka actionButton deleteButton"
-                                    style="font-size: 1rem; padding: 0.25rem 0.5rem; margin-left: 0.5rem;"
+                                <button [disabled]="!(this.currUser.empEid && isAdmin(this.currUser.empEid))" 
+                                    class="fredoka actionButton deleteButton"
+                                    style="font-size: 1rem; padding: 0.25rem 0.5rem; margin-right: 0.5rem;"
                                     (click)="deleteTicket(element)">
                                     Delete
                                 </button>
+                                <button class="fredoka actionButton reminderButton"
+                                    *ngIf="isOverdue(element)"
+                                    style="font-size: 1rem; padding: 0.25rem 0.5rem;"
+                                    >
+                                    Send Reminder
+                                </button>
                             </div>
-                            <div style="display: flex; justify-content: center; padding: 2rem 2rem 0rem 0rem;">
-                                <mat-icon [ngClass]="{'green':statusIsClosed(element.status),'red': statusIsPending(element.status),
-                                'purple': statusIsHold(element.status),'yellow': statusIsProcessing(element.status)}" 
+                            <div style="display: flex; justify-content: center; padding: 2rem 3rem 0rem 0rem;">
+                                <mat-icon [ngClass]="{'green':statusIsClosed(element.status),'red': statusIsNew(element.status),
+                                'purple': statusIsHold(element.status),'yellow': statusIsProcessing(element.status),
+                                'processingPadding': statusIsProcessing(element.status)}" 
                                 style="font-size: 5rem;">
-                                    {{ giveIcon(element.status) }}
+                                    {{ giveStatusIcon(element.status) }}
                                 </mat-icon>
 
-                                <h2 [ngClass]="{'green':statusIsClosed(element.status),'red': statusIsPending(element.status),
+                                <h2 [ngClass]="{'green':statusIsClosed(element.status),'red': statusIsNew(element.status),
                                 'purple': statusIsHold(element.status),'yellow': statusIsProcessing(element.status),
-                                'alignStatusHeading': true}" (click)="statusIsHold(element.status)">
+                                'statusHeading': true, 'newPlusHoldStatusPadding': statusIsNew(element.status) || statusIsHold(element.status)}" (click)="statusIsHold(element.status)">
                                     {{ element.status }}
                                 </h2>
+                                <!-- <h4 class="green" *ngIf="statusIsClosed(element.status)">{{element.closedDate}}</h4> -->
                             </div>
                         </div>
                     </td>
                 </ng-container>
-    
-                <!-- 
-                    ticket-row = example-element-row
-                    ticket-expanded-row = example-expanded-row
-                 -->
                 
                 <!-- generate rows -->
                 <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
                 <tr mat-row *matRowDef="let element; columns: displayedColumns;"
-                class="ticket-row" [class.overdue]="isOverdue(element)" 
+                [class.overdue]="isOverdue(element)" 
                 [class.ticket-expanded-row]="expandedRow === element"
                 (click)="expandedRow = (expandedRow === element ? null : element)"></tr>
                 <tr mat-row *matRowDef="let row; columns: ['expandedDetail'];" class="expandedDetailRow"></tr>

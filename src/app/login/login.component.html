@@ -2,6 +2,10 @@
     body{
         display: flex;
         height: 100%;
+        /* background: linear-gradient(to right, hsla(204, 71%, 65%, 0.65),hsla(348, 71%, 45%, 0.8)),url('https://www.nxtdigital.co.in/contents/static/2019/11/home-splash-bird.png'); */
+        background: url('https://www.nxtdigital.co.in/contents/static/2019/11/home-splash-bird.png');
+        background-repeat: round;
+        
     }
     .width50{
         width: 50%;
@@ -13,29 +17,27 @@
         justify-content: center;
     }
 
-    .imageDiv{
-        overflow: hidden;
+    /* .imageDiv{
         width: 52.5%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
+    } */
 </style>
 
 <body>
-    <div class="width50 imageDiv"><img src="../../assets/images/login.jpg" alt="" style="height: 40rem;"></div>
-    <div class="width50 centerAll" style="background-color: rgb(5, 106, 221); width: 47.5%; flex-flow: column wrap;">
-        <h1 style="font-family: 'Lobster'; color: white; font-size: 2rem; margin-bottom: 1.5px; margin-top: -1.5rem;">TicketTracker</h1>
+
+    <div style="width: 52.5%;"></div>
+
+    <div class="width50 centerAll" style="background-color: transparent; width: 47.5%; flex-flow: column wrap;">
+        <h1 style="font-family: 'Quicksand'; color: white; font-weight: 400; font-size: 2rem; margin-bottom: 1.5px; margin-top: -1.5rem;"><strong>NXT</strong>Digital TicketMaster</h1>
         <h4 style="font-family: 'Roboto'; color: rgb(215, 220, 223);">Track the changes you need, collaborate, and co-operate seamlessly</h4>
         <mat-card style="width: 75%; border-radius: 1rem; padding: 2rem 0rem 2rem 1.5rem;">
-            <mat-card-title class="fredoka" style="color: rgb(5, 106, 221); margin-bottom: 0.75rem;">Welcome Back!</mat-card-title>
+            <mat-card-title class="fredoka" style="color: rgb(173,32,88); margin-bottom: 0.75rem;">Welcome Back!</mat-card-title>
                 <!-- <mat-card-subtitle>Track the changes you need, collaborate, and co-operate seamlessly</mat-card-subtitle> -->
                 <mat-card-content>
                     <form class="login-form">
                         <mat-form-field appearance="outline" style="width: 80%;">
-                            <mat-label>Employee ID/Email</mat-label>
+                            <mat-label>Email ID</mat-label>
                             <input type="email" matInput [formControl]="unameFormControl" placeholder="Eg: NXT902287" #emailid>
-                            <mat-hint>As provided on ID card</mat-hint>
+                            <mat-hint>As provided by company, not personal</mat-hint>
                             <mat-error *ngIf="invalidID(emailid.value) && !unameFormControl.hasError('required')">
                                 Please enter a valid email address
                             </mat-error>
@@ -49,13 +51,14 @@
                             <mat-label>Password</mat-label>
                             <input type="{{hide?'password':'text'}}" matInput [formControl]="passwordFormControl" placeholder="Password" #password>
                             <button mat-icon-button matSuffix (click)="hide = !hide"><mat-icon>{{hide?'visibility_off':'visibility'}}</mat-icon></button>
-                            <mat-hint>Something only you'll know <em>(and remember, hopefully)</em></mat-hint>
+                            <mat-hint>Something only you know <em>(and remember, hopefully)</em></mat-hint>
                         </mat-form-field>
                         <mat-icon *ngIf="!passwordFormControl.hasError('required') && checkPasswordValid()" class="looks-good-tick">check_circle</mat-icon>
 
                         <div style="display: flex; flex-flow: row wrap; justify-content: space-between; margin-right: 5rem; font-family: 'Fredoka', sans-serif;">
-                            <mat-checkbox color="primary">Remember Me</mat-checkbox>
-                            <span id="forgotPassword">Forgot Password?</span>
+                            <!-- <mat-checkbox color="primary">Remember Me</mat-checkbox> -->
+                            <div></div>
+                            <span id="forgotPassword" style="margin-bottom: 1rem; margin-top: -0.7rem;" (click)="resetPassword(emailid.value)">Forgot Password?</span>
                         </div>
                     </form>
                     <div class="enableButtonHover">
@@ -65,6 +68,7 @@
                 </mat-card-content>
         </mat-card>
     </div>
+    
 </body>
 
 <!-- <a href='https://www.freepik.com/vectors/ui-designer'>Ui designer vector created by storyset - www.freepik.com</a> -->

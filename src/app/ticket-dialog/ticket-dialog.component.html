@@ -8,50 +8,110 @@
     }
     mat-form-field{
         display: inline-block !important;
-        margin-bottom: 0.5rem;
+        /* margin-bottom: 0.25rem; */
     }
 </style>
 
 <mat-dialog-content>
-    <h2 class="fredoka500" (click)="metaData(currentTicket)">{{data.ticketDialogTitle}} Ticket</h2>
-    <mat-form-field appearance="outline">
+    <h2 class="fredoka500">{{data.ticketDialogTitle}} Ticket</h2>
+
+    <mat-form-field>
+        <mat-select placeholder="Select Ticket Type" [(value)]="this.currentTicket.ticketType" appearance="fill" required>
+            <mat-option *ngFor="let type of ticketTypes" value="{{type}}">{{type}}</mat-option>
+        </mat-select>
+    </mat-form-field>
+    <mat-form-field appearance="outline" style="margin-left: 1rem;">
         <mat-label>Ticket Title</mat-label>
         <input type="text" matInput [(ngModel)]="this.currentTicket.title" placeholder="Eg: Payment History Visibility" #ticketTitle required>
-        <mat-hint>3-4 words to describe problem</mat-hint>
+        <!-- <mat-hint>3-4 words to describe problem</mat-hint> -->
     </mat-form-field>
-    <mat-form-field style="margin-left: 1rem;">
+    <mat-form-field style="margin-left: 1.25rem; width: 13rem;">
         <mat-select placeholder="Select Priority" appearance="fill" [(value)]="this.currentTicket.priority" required>
             <mat-option *ngFor="let priority of priorities" value="{{priority}}">{{priority}}</mat-option>
         </mat-select>
     </mat-form-field>
-    <mat-form-field style="margin-left: 1rem;" appearance="outline">
-        <mat-label>Expected (mm/dd/yyyy)</mat-label>
-        <input matInput [matDatepicker]="pickerExpected" [(ngModel)]="currentTicket.expectedDate">
-        <mat-datepicker-toggle matSuffix [for]="pickerExpected"></mat-datepicker-toggle>
-        <mat-datepicker #pickerExpected></mat-datepicker>
-    </mat-form-field>
+
     <mat-form-field>
+        <mat-label>Project Lead</mat-label>
+        <input type="text" matInput [(ngModel)]="this.currentTicket.projLead" placeholder="Project Lead from NXT/IMCL" required>
+    </mat-form-field>
+    <mat-form-field style="margin-left: 1rem;">
         <mat-select placeholder="Select company" appearance="fill"  [(value)]="this.currentTicket.company" required>
             <mat-option value="NXTDigital">NXTDigital</mat-option>
-            <mat-option value="InDigital">InDigital</mat-option>
+            <mat-option value="INDigital">INDigital</mat-option>
         </mat-select>
     </mat-form-field>
-    <mat-form-field style="margin-left: 2rem;">
+    <mat-form-field style="margin-left: 2.25rem; width: 13rem;">
         <mat-select placeholder="Select Platform" appearance="fill" [(value)]="this.currentTicket.platform" required>
             <mat-option *ngFor="let platform of platformConsolidatedList" value="{{platform.name}}">{{platform.name}}</mat-option>
         </mat-select>
     </mat-form-field>
-    <mat-form-field style="margin-left: 1.5rem;">
-        <mat-select placeholder="Select Status" appearance="fill" [(value)]="this.currentTicket.status" required>
+
+    <mat-form-field>
+        <mat-label>Vendor</mat-label>
+        <input type="text" matInput [(ngModel)]="this.currentTicket.vendor" 
+            placeholder="" [matAutocomplete]="auto" (ngModelChange)="doAutoCompleteFilter()">
+        <mat-autocomplete #auto = "matAutocomplete">
+            <mat-option *ngFor="let vendor of filteredACVendors$ | async" [value]="vendor">{{vendor}}</mat-option>
+        </mat-autocomplete>
+    </mat-form-field>
+    <mat-form-field style="margin-left: 1rem;">
+        <mat-select *ngIf="data.ticketDialogTitle=='Create'" placeholder="Select Status" appearance="fill" [(value)]="this.currentTicket.status" required disabled>
             <mat-option *ngFor="let status of statuses" value="{{status}}">{{status}}</mat-option>
         </mat-select>
+        <mat-select *ngIf="data.ticketDialogTitle=='Update'" placeholder="Select Status" appearance="fill" [(value)]="this.currentTicket.status" required>
+            <mat-option value="{{this.oldStatus}}">{{this.oldStatus}}</mat-option>
+            <mat-option value="{{this.nextStatus}}"><mat-chip color="primary" selected>MOVE TO </mat-chip><span style="margin-left: 5px;">{{this.nextStatus}}</span></mat-option>
+            <mat-option value="Hold"><mat-chip color="warn" selected>PUT ON </mat-chip><span style="margin-left: 5px;">Hold</span></mat-option>
+        </mat-select>
     </mat-form-field>
+    <mat-form-field style="margin-left: 2rem;" appearance="outline">
+        <mat-label>Expected (dd/mm/yyyy)</mat-label>
+        <input matInput [matDatepicker]="pickerExpected" [(ngModel)]="currentTicket.expectedDate">
+        <mat-datepicker-toggle matSuffix [for]="pickerExpected"></mat-datepicker-toggle>
+        <mat-datepicker #pickerExpected></mat-datepicker>
+    </mat-form-field>
+    
+    <mat-form-field floatLabel="always" style="width: 7.5rem;">
+        <mat-label>Estimated Amount</mat-label>
+        <span matPrefix>₹</span>
+        <span matSuffix>/-</span>
+        <input type="text" matInput placeholder="Amount" [(ngModel)]="currentTicket.estimatedAmount" style="text-align: right;">
+    </mat-form-field>
+    <mat-form-field floatLabel="always" style="width: 7.5rem; margin-left: 1rem;" *ngIf="this.currentTicket.status == 'Approved'">
+        <mat-label>Approved Amount</mat-label>
+        <span matPrefix>₹</span>
+        <span matSuffix>/-</span>
+        <input type="text" matInput placeholder="Amount" [(ngModel)]="currentTicket.approvedAmount" style="text-align: right;">
+    </mat-form-field>
+    
+    <div style="padding: 0.5rem 0.5rem 0rem; border: 1px solid #c7c4c4; border-radius: 0.5rem; margin-bottom: 0.5rem;">
+        <em style="color: #797979;">IF requested by a specific department: </em>
+        <mat-form-field style="margin-left: 1rem;">
+            <mat-select placeholder="Requested by" appearance="fill"  [(value)]="this.currentTicket.requestedBy.dept">
+                <mat-option *ngFor="let dept of departments" value="{{dept}}">{{dept}}</mat-option>
+                <mat-option value="Other">Other</mat-option>
+            </mat-select>
+        </mat-form-field>
+
+        <mat-form-field  style="margin-left: 1rem;">
+            <mat-label>Requester's Name</mat-label>
+            <input type="text" matInput [(ngModel)]="this.currentTicket.requestedBy.requester" placeholder="Person requesting change">
+        </mat-form-field>
+    </div>
+
     <mat-form-field appearance="outline" style="display: block !important;">
         <mat-label>Description</mat-label>
         <textarea type="text" matInput [(ngModel)]="this.currentTicket.desc" placeholder="Include feature details, styles and specifics if any" style="height: 5rem;" #ticketDesc></textarea>
-        <mat-hint>Explain it in detail here</mat-hint>
-    </mat-form-field>  
+        <!-- <mat-hint>Explain it in detail here</mat-hint> -->
+    </mat-form-field>
+    
+    <mat-form-field appearance="outline" style="display: block !important;" *ngIf="data.ticketDialogTitle == 'Update'" style="width: 100%;">
+        <mat-label>Add a comment</mat-label>
+        <textarea type="text" matInput [(ngModel)]="this.updateMessage" placeholder="Few details regarding what you changed, and why" #updateComment></textarea>
+    </mat-form-field>
 </mat-dialog-content>
+
 <mat-dialog-actions align="end">
     <button class="fredoka" mat-raised-button [mat-dialog-close]="false">Cancel</button>
     <button *ngIf="data.ticketDialogTitle=='Create'" [disabled]="!allMandatoryFilled()" class="fredoka" mat-raised-button [mat-dialog-close]="true" (click)="createTicket()" style="background-color: rgb(5, 106, 221); color: white;">Create Ticket</button>

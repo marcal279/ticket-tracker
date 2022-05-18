@@ -3,8 +3,8 @@ import { Route, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 
-import { User } from './user';
-import { UserService } from './user.service';
+import { User } from '../../interfaces/user';
+import { UserService } from '../users/user.service';
 
 
 @Injectable({
@@ -50,6 +50,18 @@ export class UserAuthService {
       alert('Error');
       console.log('ERROR: '+err.message);
     })
+  }
+
+  sendMyResetPasswordEmail(email: string){
+    return this.fireAuth.sendPasswordResetEmail(email);
+  }
+
+  verifyMyPasswordResetCode(code: string){
+    return this.fireAuth.verifyPasswordResetCode(code);
+  }
+
+  confirmMyPasswordReset(password: string, actionCode: string){
+    return this.fireAuth.confirmPasswordReset(actionCode, password)
   }
 
   logout(){

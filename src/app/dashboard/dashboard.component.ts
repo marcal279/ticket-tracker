@@ -1,5 +1,5 @@
 // https://apexcharts.com/docs/angular-charts/
-import { Component, ViewChild, OnInit, ElementRef } from '@angular/core';
+import { Component, ViewChild, OnInit, ElementRef, OnDestroy } from '@angular/core';
 import { DatePipe } from '@angular/common';
 
 import {
@@ -17,18 +17,33 @@ import {
   ApexPlotOptions,
   ApexTheme
 } from "ng-apexcharts";
-import { Ticket } from '../ticket';
+
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
-import { TicketsService } from '../tickets.service';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
+import { map, Observable } from 'rxjs';
+
 import { TicketDialogComponent } from '../ticket-dialog/ticket-dialog.component';
-import { map } from 'rxjs';
-import { UserService } from '../user.service';
-import { UserAuthService } from '../user-auth.service';
-import { User } from '../user';
+
+import { TicketsService } from '../services/tickets/tickets.service';
+import { UserService } from '../services/users/user.service';
+import { UserAuthService } from '../services/user-auth/user-auth.service';
+
+import { Ticket } from '../interfaces/ticket';
+import { User } from '../interfaces/user';
+
+//* State Management
+
+//* USED ngrx State Management
+import { Store } from '@ngrx/store';
+import { UserAction } from '../ngrx-state/app.actions';
+// ! UNUSED: rxjs State Management
+import { StateDataService } from '../services/state-data/state-data.service';
+import { Router } from '@angular/router';
+
+
 
 export type LineChartOptions = {
   series: ApexAxisChartSeries;
@@ -84,36 +99,19 @@ export type PolarChartOptions = {
     ])
   ]
 })
-export class DashboardComponent implements OnInit {
+
+export class DashboardComponent implements OnInit, OnDestroy {
   
+  currPage:string = 'Dashboard';
+  allTickets: Ticket[] = []
+
   nightModeActive: boolean = false;
   currUID !: string;
   currUser !: User; // remove later by using ngrx
 
-  currPage:string = 'Dashboard';
-  sideNavIconList : string[] = ['severity--v2', 'two-tickets', 'bar-chart'];
-  sideNavSectionList: string[] = ['Dashboard', 'Ticket Manager', 'Analytics'];
+  expandedRow: Ticket|null = null;
 
-  toggleNightMode(){
-    this.nightModeActive = !this.nightModeActive;
-  }
-
-  createTicket(): void{
-    const dialogConfig = new MatDialogConfig();
-
-    dialogConfig.autoFocus = true;  // automatically sets focus to first text box
-    dialogConfig.width = '45rem';
-    dialogConfig.data = {
-      ticketDialogTitle: 'Create',
-      currEmail: this.currUser.empEid,
-    }
-
-    const dialogRef = this.dialog.open(TicketDialogComponent, dialogConfig);
-
-    // dialogRef.afterClosed().subscribe(resultObserver => {
-    //   if(resultObserver) this.getStatistics() done in retrieve ticket itself
-    // })
-  }
+  isAuthenticated = false;
 
   @ViewChild("lineChart") lineChart: ChartComponent | undefined;
   public lineChartOptions: Partial<LineChartOptions>;
@@ -127,117 +125,18 @@ export class DashboardComponent implements OnInit {
   @ViewChild("polarChart") polarChart: ChartComponent | undefined;
   public polarChartOptions!: Partial<PolarChartOptions>;
 
-  timeOfDay:string='';
-  getTimeOfDay():void{
-    let currDT = this.datepipe.transform((new Date), 'h:mm a');
-    // alert('currDT = '+currDT);
-    if(currDT?.slice(5)=='PM'){
-      if(Number(currDT?.slice(0,1))>=4) this.timeOfDay='Evening';
-      else this.timeOfDay='Afternoon';
-    }
-    else this.timeOfDay = 'Morning';
-  }
-
-  iconColour : string = "056ADD";
-  pageActive(iconName: string) : Boolean{
-    if(this.currPage == this.sideNavSectionList[this.sideNavIconList.indexOf(iconName)]) return true;
-    return false;
-  }
-
-  allTickets: Ticket[] = []
-  getTickets(){
-    this.ticketService.getTickets().subscribe(ticketObserver => this.allTickets = ticketObserver)
-  }
-
-  // retrievedAll: Boolean = false;
-  retrieveTickets(){ // from db
-    this.ticketService.readDBTicket().snapshotChanges().pipe(
-      map(changes =>changes.map( (c: { payload: { key: any; val: () => any; }; })=>
-      ({ key: c.payload.key, ...c.payload.val() }) )
-      )
-    ).subscribe(observer => {
-      this.dataSource.data = observer.slice(-3);  // only last 3 records
-      this.dataSource.sort = this.sort;
-      this.allTickets = observer;
-      
-      this.getStatistics();
-    });
-  }
-
-  statusIsPending(status: string): boolean{
-    if(status.endsWith('Pending')) return true; // handles AAPending and Pending
-    return false;
-  }
-  statusIsClosed(status: string){
-    if(status.endsWith('Closed')) return true;
-    return false;
-  }
-  statusIsHold(status: string){
-    if(status.endsWith('Hold')) return true;
-    return false;
-  }
-  statusIsProcessing(status: string){
-    if(!this.statusIsClosed(status) && !this.statusIsPending(status)&& !this.statusIsHold(status)) return true;
-    return false;
-  }
-  lastIcon: string = 'tick';
-
-  giveIcon(status: string){
-    return this.statusIsClosed(status)? 'done' : ( this.statusIsPending(status) ? 'schedule' : ( this.statusIsHold(status) ? 'pause_circle' : 'construction' ) )
-  }
-
-  myPending = 0; myProduction = 0; myClosed = 0;
-  getMyCounts(){
-    let currEid = this.currUser? this.currUser.empEid : 'marc.almeida@gmail.com';
-    // alert('currEid = '+currEid)
-    if(this.allTickets.length > 0){
-      // console.log('entered')
-      let pending=0, prod=0, closed=0;
-      let myTickets = this.allTickets.filter((value: Ticket)=>{
-        if(value.empEid == currEid){
-          if(this.statusIsPending(value.status)) pending+=1
-          else if(this.statusIsClosed(value.status)) closed+=1
-          else prod+=1
-          return value;
-        }
-        else return null;
-      });
-      this.myPending = pending;
-      this.myClosed = closed;
-      this.myProduction = prod;
-    }
-    else alert('len 0')
-    // let total = myTickets.length;
-  }
-
-  isOverdue(element: Ticket){
-    let expected = new Date(element.expectedDate).getTime();
-    let today = new Date().getTime();
-    if(expected < today) return true;
-    return false;
-  }
-  
-  displayedColumns: string[] = ['tid','title', 'empEid','priority', 'duration', 'expectedDate','status'];
-  colNames: string[] = ['TID', 'Title', 'Raised By', 'Priority', 'Duration','Expected','Status'];
-
-  dataSource = new MatTableDataSource<Ticket>();
-  @ViewChild(MatSort) sort!: MatSort;
-  // @ViewChild('ticketPaginator') ticketPaginator !: MatPaginator;
-
-  ngAfterViewInit() {
-    this.dataSource.data = this.allTickets.slice(0,3); // TODO change this to most recent 3
-    this.dataSource.sort = this.sort;
-  }
-
-  expandedRow: Ticket|null = null;
-
   pieChartNoData = {
-    pending: 0,
-    production: 0,
+    // ['New', 'Approved', 'Hold', 'In Progress', 'Dev Complete', 'QA', 'UAT Ready', 'Production Ready', 'Closed', 'Reopened'],
+    new: 0,
+    approved: 0,
     hold: 0,
-    testing: 0,
-    approval: 0,
-    closed: 0
+    progress: 0,
+    dev: 0,
+    qa: 0,
+    uat: 0,
+    production: 0,
+    closed: 0,
+    reopened: 0
   }
   doubleBarChartNoData = {
     nxt: {
@@ -264,131 +163,12 @@ export class DashboardComponent implements OnInit {
     }
   }
 
-  getPieData(){
-    let pieDataCopy = {...this.pieChartNoData};
-    if(this.allTickets.length > 0){
-      let myTickets = this.allTickets.filter((value: Ticket)=>{
-        if(value.status){
-          if(this.statusIsPending(value.status)) pieDataCopy.pending+=1
-          else if(this.statusIsClosed(value.status)) pieDataCopy.closed+=1
-          else if(value.status == 'Production') pieDataCopy.production+=1
-          else if(value.status == 'Hold') pieDataCopy.hold+=1
-          else if(value.status == 'Testing') pieDataCopy.testing+=1
-          else if(value.status == 'Approval') pieDataCopy.approval+=1
-          return value;
-        }
-        else return null;
-      });
-    }
-    else alert('len 0 pieChart')
-
-    this.pieChartOptions.series = Object.values(pieDataCopy)
-  }
-  getDoubleBarData(){
-    let doubleBarDataCopy = {...this.doubleBarChartNoData};
-    if(this.allTickets.length > 0){
-      let myTickets = this.allTickets.filter((value: Ticket)=>{
-        if(value.platform){
-          if(value.company == 'NXTDigital'){
-            switch(value.platform){
-              case 'LCO Portal':
-                doubleBarDataCopy.nxt.lcoP +=1;
-                break;
-              case 'LCO App':
-                doubleBarDataCopy.nxt.lcoA +=1;
-                break;
-              case 'LCO Admin':
-                doubleBarDataCopy.nxt.lcoAdmin +=1;
-                break;
-              case 'Selfcare Portal':
-                doubleBarDataCopy.nxt.scP +=1;
-                break;
-              case 'Selfcare App':
-                doubleBarDataCopy.nxt.scA +=1;
-                break;
-              case 'DP Collection Portal':
-                doubleBarDataCopy.nxt.dpP +=1;
-                break;
-              case 'DP Collection App':
-                doubleBarDataCopy.nxt.dpA +=1;
-                break;
-              case 'DP Collection Admin':
-                doubleBarDataCopy.nxt.dpAdmin +=1;
-                break;
-              case 'Website':
-                doubleBarDataCopy.nxt.web +=1;
-                break;
-              default:
-                alert('none for '+value.title+' with '+value.platform);
-                break;
-            }
-          }
-          else if(value.company == 'InDigital'){
-            switch(value.platform){
-              case 'LCO Portal':
-                doubleBarDataCopy.imcl.lcoP +=1;
-                break;
-              case 'LCO App':
-                doubleBarDataCopy.imcl.lcoA +=1;
-                break;
-              case 'LCO Admin':
-                doubleBarDataCopy.imcl.lcoAdmin +=1;
-                break;
-              case 'Selfcare Portal':
-                doubleBarDataCopy.imcl.scP +=1;
-                break;
-              case 'Selfcare App':
-                doubleBarDataCopy.imcl.scA +=1;
-                break;
-              case 'DP Collection Portal':
-                doubleBarDataCopy.imcl.dpP +=1;
-                break;
-              case 'DP Collection App':
-                doubleBarDataCopy.imcl.dpA +=1;
-                break;
-              case 'DP Collection Admin':
-                doubleBarDataCopy.imcl.dpAdmin +=1;
-                break;
-              case 'Website':
-                doubleBarDataCopy.imcl.web +=1;
-                break;
-              default:
-                alert('none for '+value.title+' with '+value.platform);
-                break;
-            }
-          }
-          return value;
-        }
-        else return null;
-      });
-    }
-    else alert('len 0 pieChart')
-
-    if(this.grBarChartOptions.series){
-      alert(this.grBarChartOptions.series[0].data)
-      alert(this.grBarChartOptions.series[1].data)
-      this.grBarChartOptions.series[0].data = Object.values(doubleBarDataCopy.nxt)
-      this.grBarChartOptions.series[1].data = Object.values(doubleBarDataCopy.imcl)
-      alert(this.grBarChartOptions.series[0].data)
-      alert(this.grBarChartOptions.series[1].data)
-      // alert('nxt: '+Object.values(doubleBarDataCopy.nxt))
-      // alert('imcl: '+Object.values(doubleBarDataCopy.imcl))
-    }
-  }
-  
-  getStatistics(){
-    this.getMyCounts();
-    
-    // get Pie Chart
-    this.getPieData();
-    
-    // get Double Bar data
-    // this.getDoubleBarData();
-  }
-
   constructor(
     public dialog: MatDialog, public datepipe: DatePipe, private ticketService: TicketsService,
-    private userService: UserService, private authService: UserAuthService
+    private userService: UserService, private authService: UserAuthService,
+    private store: Store< {userReducer: {currUser: User}} >,
+    private stateData: StateDataService,
+    private router: Router
     ){
     // we also use constructor to initialize charts
     this.lineChartOptions = {
@@ -449,7 +229,7 @@ export class DashboardComponent implements OnInit {
     };
 
     this.pieChartOptions = {
-      series: [20, 0, 0, 0, 0, 0],
+      series: [1, 0, 0, 0, 0, 0, 0, 0, 0, 0],
       chart: {
         // type: "donut",
         type: "pie",
@@ -469,7 +249,7 @@ export class DashboardComponent implements OnInit {
           customScale: 0.7,
         }
       },
-      labels: ["Pending", "Production", "Hold", "Testing", "Approval", "Closed"],
+      labels: ['New', 'Approved', 'Hold', 'In Progress', 'Dev Complete', 'QA', 'UAT Ready', 'Production Ready', 'Closed', 'Reopened'],
       dataLabels: {
         style: {
           fontSize: "9px",
@@ -495,12 +275,11 @@ export class DashboardComponent implements OnInit {
         // palette: 'palette10', 
         monochrome: {
           enabled: true,
-          // shadeTo: 'dark',
-          // color: '#2780ff',
-          shadeTo: 'light',
-          // color: '#005ee3',
-          color: '#005ee3',
-          shadeIntensity: 0.8
+          shadeTo: 'dark',
+          color: '#2780ff',
+          // shadeTo: 'light',
+          // color: '#005edd',
+          shadeIntensity: 0.6
         },
       }
     };
@@ -509,12 +288,12 @@ export class DashboardComponent implements OnInit {
       series: [
         {
           name: "NXT",
-          data: [44, 55, 41, 64, 22, 43, 21, 13, 15],
+          data: [0, 0, 0, 0, 0, 0, 0, 0, 0],
           color: '#B1006F'
         },
         {
           name: "IMCL",
-          data: [53, 32, 33, 52, 13, 44, 32, 20, 10],
+          data: [0, 0, 0, 0, 0, 0, 0, 0, 0],
           color: '#045add'
         }
       ],
@@ -558,26 +337,325 @@ export class DashboardComponent implements OnInit {
       }
     };
     // NXT labels:["LCO Portal","LCO App","LCO Admin","Selfcare Portal", "Selfcare App", "DP Portal", "DP App", "DP Admin Portal", "Website","MSO"],
-    // IMCL labels:["LCO Portal","LCO App","LCO Admin","Selfcare Portal", "Selfcare App","Selfcare Admin Portal","DP Portal", "DP App", "DP Admin Portal", "Website"],
-    
-    
+    // IMCL labels:["LCO Portal","LCO App","LCO Admin","Selfcare Portal", "Selfcare App","Selfcare Admin Portal","DP Portal", "DP App", "DP Admin Portal", "Website"],  
   }
+
+  checkIsAuthenticated(){
+    return this.authService.isAuthenticated
+  }
+
+  goToDetails(key: string){
+    this.router.navigate([`/ticket/${key}`]);
+  }
+
+  toggleNightMode(){
+    this.nightModeActive = !this.nightModeActive;
+  }
+
+  getIndex(fromTicket: Ticket): Number{
+    let numPattern = /[0-9]/g;
+    return Number(fromTicket.tid.match(numPattern).join(''))
+  }
+
+  createTicket(): void{
+    if(!this.currUser.empEid){
+      alert('Fetching user details, please try again in 5 seconds');
+      this.getAuthUser();
+      this.ngrxStoreUser();
+    }
+
+    else{
+      const dialogConfig = new MatDialogConfig();
+
+      dialogConfig.autoFocus = false;  // automatically sets focus to first text box
+      dialogConfig.width = '46rem';
+      dialogConfig.data = {
+        ticketDialogTitle: 'Create',
+        currEmail: this.currUser.empEid,
+        nextIndex: this.allTickets.slice(-1)[0] ? (+this.getIndex(this.allTickets.slice(-1)[0]) + 1) : 1
+      }
+
+      const dialogRef = this.dialog.open(TicketDialogComponent, dialogConfig);
+      // dialogRef.afterClosed().subscribe(resultObserver => {
+      //   if(resultObserver) this.getStatistics() done in retrieve ticket itself
+      // })
+    }
+  }
+
+  timeOfDay:string='';
+  getTimeOfDay():void{
+    let currDT = this.datepipe.transform((new Date()), 'h:mm a');
+    // alert('currDT = '+currDT);
+    if(currDT?.endsWith('PM')){
+      if(Number(currDT?.slice(0,1))>=4) this.timeOfDay='Evening';
+      else this.timeOfDay='Afternoon';
+    }
+    else this.timeOfDay = 'Morning';
+  }
+
+
+  displayedColumns: string[] = ['ticketType','tid','title', 'empEid','priority', 'duration', 'expectedDate','status'];
+  colNames: string[] = ['Type','TID','Title', 'Raised By', 'Priority', 'Duration','Expected','Status'];
+
+  dataSource = new MatTableDataSource<Ticket>();
+  @ViewChild(MatSort) sort!: MatSort;
+
+  retrieveTickets(){ // from db
+    this.ticketService.readDBTicket().snapshotChanges().pipe(
+      map(changes => changes.map( (c: { payload: { key: any; val: () => any; }; })=>
+      ({ key: c.payload.key, ...c.payload.val() }) )
+      )
+    ).subscribe(observer => {
+      this.dataSource.data = observer.slice(-3).reverse();  // only last 3 records
+      this.dataSource.sort = this.sort;
+      this.allTickets = observer;
+      
+      this.getStatistics();
+    });
+  }
+
+  statusIsNew(status: string): boolean{
+    if(status.endsWith('New')) return true;
+    return false;
+  }
+  statusIsClosed(status: string){
+    if(status.endsWith('Closed')) return true;
+    return false;
+  }
+  statusIsHold(status: string){
+    if(status.endsWith('Hold')) return true;
+    return false;
+  }
+  statusIsProcessing(status: string){
+    if(!this.statusIsClosed(status) && !this.statusIsNew(status)&& !this.statusIsHold(status)) return true;
+    return false;
+  }
+
+  giveIcon(status: string){
+    return this.statusIsClosed(status)? 'done' : ( this.statusIsNew(status) ? 'schedule' : ( this.statusIsHold(status) ? 'pause_circle' : 'construction' ) )
+  }
+
+  giveTypeIcon(type: string){
+    switch(type){
+      case 'New Requirement': return 'add_circle';
+      case 'Enhancements': return 'tips_and_updates';
+      case 'Bugs': return 'bug_report';
+      case 'Others': return 'label_important';
+      default: return 'dangerous'
+    }
+  }
+
+  isOverdue(element: Ticket){
+    let expected = new Date(element.expectedDate).getTime();
+    let today = new Date().getTime();
+    if(expected < today && !this.statusIsClosed(element.status)) return true;
+    return false;
+  }
+
+
+  myPending = 0; myProduction = 0; myClosed = 0;
+  getMyCounts(){
+    // let currEid = (await this.currUser)  // todo try using await and async in dashboard 
+    let currEid = this.currUser? this.currUser.empEid : '';
+    // alert('currEid = '+currEid)
+    if(this.allTickets.length > 0){
+      // console.log('entered')
+      let pending=0, prod=0, closed=0;
+      let myTickets = this.allTickets.filter((value: Ticket)=>{
+        if(value.empEid == currEid){
+          if(this.statusIsNew(value.status)) pending+=1
+          else if(this.statusIsClosed(value.status)) closed+=1
+          else prod+=1
+          return value;
+        }
+        else return null;
+      });
+      this.myPending = pending;
+      this.myClosed = closed;
+      this.myProduction = prod;
+    }
+    // else alert('len 0')
+    // let total = myTickets.length;
+  }
+
+  refreshBoth(){
+    this.getAuthUser();
+    this.getMyCounts();
+  }
+
+
+  getPieData(){
+    let pieDataCopy = {...this.pieChartNoData};
+    if(this.allTickets.length > 0){
+      this.allTickets.forEach((value: Ticket)=>{
+        if(value.status){
+          // ['New', 'Approved', 'Hold', 'In Progress', 'Dev Complete', 'QA', 'UAT Ready', 'Production Ready', 'Closed', 'Reopened']
+          switch(value.status){
+            case 'New': pieDataCopy.new+=1; break;
+            case 'Approved': pieDataCopy.approved+=1; break;
+            case 'Hold': pieDataCopy.hold+=1; break;
+            case 'In Progress': pieDataCopy.progress+=1; break;
+            case 'Dev Complete': pieDataCopy.dev+=1; break;
+            case 'QA': pieDataCopy.qa+=1; break;
+            case 'UAT Ready': pieDataCopy.uat+=1; break;
+            case 'Production Ready': pieDataCopy.production+=1; break;
+            case 'Closed': pieDataCopy.closed+=1; break;
+            case 'Reopened': pieDataCopy.reopened+=1; break;
+            default:
+              break;
+          }
+        }
+      });
+    }
+    // else alert('len 0 pieChart')
+    this.pieChartOptions.series = Object.values(pieDataCopy)
+  }
+  getDoubleBarData(){
+    let doubleBarDataCopy = {...this.doubleBarChartNoData};
+    if(this.allTickets.length > 0){
+      this.allTickets.forEach((value: Ticket)=>{
+        if(value.platform){
+          if(value.company == 'NXTDigital'){
+            switch(value.platform){
+              case 'LCO Portal': doubleBarDataCopy.nxt.lcoP +=1; break;
+              case 'LCO App': doubleBarDataCopy.nxt.lcoA +=1; break 
+              case 'LCO Admin App': doubleBarDataCopy.nxt.lcoAdmin +=1; break;
+              case 'Selfcare Portal': doubleBarDataCopy.nxt.scP +=1; break;
+              case 'Selfcare App': doubleBarDataCopy.nxt.scA +=1; break;
+              case 'DP Collection Portal': doubleBarDataCopy.nxt.dpP +=1; break;
+              case 'DP Collection App': doubleBarDataCopy.nxt.dpA +=1; break;
+              case 'DP Collection Admin': doubleBarDataCopy.nxt.dpAdmin +=1; break;
+              case 'Website': doubleBarDataCopy.nxt.web +=1; break;
+              case 'Other': break; // todo add this in graph later if needed 
+              default:
+                alert('none for '+value.title+' with '+value.platform);
+                break;
+            }
+          }
+          else if(value.company == 'INDigital'){
+            switch(value.platform){
+              case 'LCO Portal': doubleBarDataCopy.imcl.lcoP +=1; break;
+              case 'LCO App': doubleBarDataCopy.imcl.lcoA +=1; break;
+              case 'LCO Admin App': doubleBarDataCopy.imcl.lcoAdmin +=1; break;
+              case 'Selfcare Portal': doubleBarDataCopy.imcl.scP +=1; break;
+              case 'Selfcare App': doubleBarDataCopy.imcl.scA +=1; break;
+              case 'DP Collection Portal': doubleBarDataCopy.imcl.dpP +=1; break;
+              case 'DP Collection App': doubleBarDataCopy.imcl.dpA +=1; break;
+              case 'DP Collection Admin': doubleBarDataCopy.imcl.dpAdmin +=1; break;
+              case 'Website': doubleBarDataCopy.imcl.web +=1; break;
+              case 'Other': break; // todo add this in graph later if needed 
+              default:
+                alert('none for '+value.title+' with '+value.platform);
+                break;
+            }
+          }
+        }
+        else{alert('no platform for '+value.title+' tid: '+value.tid)}
+      });
+    }
+    // else alert('len 0 doubleBarChart')
+
+    if(this.grBarChartOptions.series){
+      //* See https://apexcharts.com/docs/angular-charts/#:~:text=Updating%20Angular%20Chart%20Data
+      this.grBarChartOptions.series = [
+        {data: Object.values(doubleBarDataCopy.nxt)},
+        {data: Object.values(doubleBarDataCopy.imcl)}
+      ]
+    }
+  }
+  
+  getStatistics(){
+    this.getMyCounts();
+    
+    // get Pie Chart
+    this.getPieData();
+    
+    // get Double Bar data
+    this.getDoubleBarData();
+  }
+
+  
 
   ngOnInit(): void {
     this.getTimeOfDay();
 
-    this.retrieveTickets();
-    // setTimeout(()=>{this.showCurrUser()}, 4000);
-    setTimeout(()=>{this.showCurrUser()}, 2000);
+    this.retrieveTickets(); // also retrieves statistics
+
+    // if renavigate to dash from some other page in our app doesnt need to fetch user every time
+    if(sessionStorage.getItem('initialized')!='1'){ // initial startup
+      this.getAuthUser();
+    }
+    else{
+      this.ngrxGetUser();
+      this.currUser = this.ngrxCurrUser
+    }
+
+    // if page is refreshed, but user still authenticated, get user
+    if(this.checkIsAuthenticated()) this.getAuthUser();
   }
 
-  showCurrUser(){
+  getAuthUser(){
+    console.log('getting AuthUser at '+(new Date()).toLocaleTimeString())
+    this.currUID = this.authService.currentUserUID();
+    if(this.currUID){
+      // console.log('uid = '+this.currUID)
+      this.userService.readDBsingleUser(this.currUID).subscribe((response) => {this.currUser = response as User});
+      // console.log('User details from dashboard: ',this.currUser)
+      sessionStorage.setItem('initialized', '1');
+      // this.isAuthenticated = true;
+      // console.log('Authenticated here')
+    }
+    else setTimeout(()=>{this.getAuthUser()}, 500)
+  }
+
+
+  refreshUser(){
     if(!this.currUID && !this.currUser){
       this.currUID = this.authService.currentUserUID(); // it just works here idk why
-      this.userService.readDBsingleUser(this.currUID).subscribe(observer => {this.currUser = observer as User});
+      this.userService.readDBsingleUser(this.currUID).subscribe(observer => {this.currUser = observer as User});;
     }
-    // alert(this.currUID+' '+JSON.stringify(this.currUser))
+
     this.getMyCounts();
   }
 
+  giveCurrentUser(){
+    alert(JSON.stringify(this.currUser))
+  }
+  // rxjsStoreCurrentUser(){
+  //   this.stateData.setUser(this.currUser);
+  // }
+  // rxjsGetCurrentUser(){
+  //   this.stateData.currentUser.forEach((user)=> {
+  //     //alert('rxjs sends '+JSON.stringify(user))
+  //     this.currUser = user;
+  //   })  // or use .subscribe()
+  // }
+
+  ngrxUserObservable: Observable<{currUser: User}>;
+  // ngrxUserObservable: Observable<{currUser: User, nextIndex: Number}>;
+  ngrxCurrUser: User;
+  ngrxGetUser(){
+    this.ngrxUserObservable = this.store.select('userReducer');
+    this.ngrxUserObservable.subscribe(observer => {
+      this.ngrxCurrUser = observer.currUser;
+      console.log(observer);
+      // console.log('Next Index: '+ observer.nextIndex);
+      // alert(JSON.stringify(observer))
+    })
+  }
+  ngrxStoreUser(){
+    this.store.dispatch(new UserAction(this.currUser))
+  }
+
+
+  logout(){
+    this.authService.logout();
+    sessionStorage.removeItem('initialized')
+  }
+
+
+  ngOnDestroy(){
+    console.log('On Destroy');
+    this.ngrxStoreUser()
+  }
 }

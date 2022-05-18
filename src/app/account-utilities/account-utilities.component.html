@@ -1,0 +1,73 @@
+<style>
+    .allContent{
+        display: flex;
+        height: 100%; width: 100%;
+        justify-content: center;
+        align-items: center;
+        background-color: rgb(0, 132, 255);
+    }
+
+    .brandName{
+        color: white;
+        position: absolute;
+        margin: 0.75rem;
+        font-family: 'Lobster', cursive;
+        /* font-family: 'Quicksand', sans-serif; */
+    }
+
+    .mat-card{
+        padding: 2rem;
+        border-radius: 1.25rem;
+        width: 37.5vw;
+    }
+
+    .mat-card-title{
+        margin-bottom: 2rem;
+    }
+
+    .looks-good-tick{
+        color: rgb(0, 196, 33); 
+        font-size: 2rem;
+        position: relative; 
+        top: 0.3rem; 
+        left: 0.5rem; 
+    }
+
+    .customButton{
+        display: block;
+        background-color: rgb(0, 132, 255);
+        margin-left: 0rem;
+    }
+
+    .blue{ color:rgb(0, 132, 255) }
+</style>
+
+<h2 class="brandName"> TicketMaster </h2>
+<div class="allContent" [ngSwitch]="currMode">
+<!-- <div class="allContent">  added for unit testing -->
+    <mat-card class="enableButtonHover">
+        <mat-card-title class="fredoka blue">{{returnTitle(this.currMode)}}</mat-card-title>
+        <mat-card-content>
+            <ng-container *ngSwitchCase="'resetPassword'">
+            <!-- <ng-container>  added for unit testing -->
+                <mat-form-field appearance="fill" style="width: 70%;">
+                    <mat-label>Password</mat-label>
+                    <input type="{{passwHide?'password':'text'}}" matInput placeholder="Something you'll remember" [(ngModel)]="passwordVal" #password>
+                    <button mat-icon-button matSuffix (click)="passwHide = !passwHide"><mat-icon>{{passwHide?'visibility_off':'visibility'}}</mat-icon></button>
+                </mat-form-field>
+                <mat-icon *ngIf="checkPasswordValid()" class="looks-good-tick">check_circle</mat-icon>
+                <mat-form-field appearance="fill" style=" width: 70%;">
+                    <mat-label>Confirm Password</mat-label>
+                    <input type="{{passwHide?'password':'text'}}" matInput placeholder="Check it again" [(ngModel)]="passwordMatchVal" #passwordConfirm>
+                    <button mat-icon-button matSuffix (click)="passwHide = !passwHide"><mat-icon>{{passwHide?'visibility_off':'visibility'}}</mat-icon></button>
+                </mat-form-field>
+                <mat-icon *ngIf="checkPasswordMatch()" class="looks-good-tick">check_circle</mat-icon>
+
+                <button (click)="resetPassword()" class="customButton fredoka">Reset Password</button>
+            </ng-container>
+
+            <ng-container *ngSwitchCase="'recoverEmail'">Recover Email</ng-container>
+            <ng-container *ngSwitchCase="'verifyEmail'">Verify Email</ng-container>
+        </mat-card-content>
+    </mat-card>
+</div>

@@ -1,355 +1,413 @@
 <style>
 
-/* some stylings also in app.css */
-
-    #lineChart{grid-area: lineCh;}
-    #donutChart{grid-area: donutCh;}
-    #NXTvIMCL{grid-area: doubleBarCh;}
-    #gridContent{
-        display: grid;
-        grid-template-rows: 200px ;
-        grid-template-columns: 400px 430px;
-        gap: 1rem 0rem;
-        padding: 0.5rem;
-        grid-template-areas: 
-        'lineCh donutCh';
-        justify-content: space-evenly;
-    }
-
-    #leftContent{
-        /* margin-left: 3rem; */
-        width: 65%;
-        padding: 0.5rem 1rem 1rem;
-    }
-    .nightMode{
-        background-color: black;
-        color: white;
-    }
-    #summaries{
-        display: inline-block;
-        /* border-radius: 1rem; */
-    }
-
-
-    .BIchart{
-        display: inline-block;
-        width: 25rem;
-        border-radius: 0.5rem;
-        padding: 0.5rem 0.5rem 12.5rem 0.25rem;
-    }
-    #yourInsights{
-        width: 25rem;
-        background-color: rgb(230, 241, 252);
-        padding: 0.45rem;
-    }
-
-    #yourInsights .customButton{
-        width: 9.5rem;
-        border: 1px rgb(216, 245, 252) solid;
-        border-radius: 1rem;
-        margin: 0.75rem 0.5rem;
-        padding: 0.65rem;
-        background-color: white;
-        color: rgb(5, 81, 221);
-    }
-    #yourInsights .customButton:hover{
-        border: none;
-        background-color: rgb(60, 151, 255);
-        color: azure;
-        transition-duration: 0.25s;
-    }
-    .customButton mat-icon{
-        font-size: 1.1rem;
-        position: relative;
-        bottom: -4px;
-        left: -2px;
-    }
-
-
-
-    table{
-        margin: 1rem 1rem 1rem 1rem;
-        border-radius: 0.5rem;
-    }
-    .mat-column-tid{
-        width: 6rem;
-    }
-    .mat-column-title{
-        width: 9rem;
-        /* margin-right: 7rem; */
-    }
-    .mat-column-desc{
-        width: 8rem;
-    }
-    .mat-column-empEid{
-        width: 12rem;
-    }
-    .mat-column-dept{
-        width: 6rem;
-    }
-    .mat-column-priority{
-        width: 5rem;  
-    }
-    .mat-column-duration{
-        width: 5rem;  
-    }
-    .mat-column-expectedDate{
-        width: 7rem; 
-    }
-    .mat-column-status{
-        width: 3rem; 
-    }
-
-    :host ::ng-deep .mat-paginator-container {
-        margin-left: 1.5rem;
-        justify-content: left;
-    }
-
-    .overdue{
-        background-color: rgb(255, 185, 185);
-    }
-
-    .rowDetail{
-        overflow: hidden;
-        display: flex;
-        justify-content: space-between;
-    }
-
-    .expandedDetailRow{
-        height: 0;
-    }
-
-    tr.mat-row:not(.expandedDetailRow):hover{
-        cursor: pointer;
-        background-color: rgb(233, 231, 231);
-    }
-
-    .rowDetail h2{
-        margin-top: 0.5rem;
-        margin-bottom: 0.15rem;
-    }
-
-    .alignStatusHeading{
-        position: relative;
-        top: 4.5rem;
-        left: -1rem;
-    }
+    /* some stylings also in app.css */
     
-    .allContentMod{
-        display: flex;
-        flex-flow: row wrap;
-        /* justify-content: space-between; */
-        height: 100%;
-    }
-
-    .red{color: red;}
-    .yellow{color: rgb(255, 174, 0);}
-    .green{color: green;}
-    .purple{color: rgb(119, 0, 255);}
-
-</style>
-
-<!-- <div class="allContent"> -->
-<div class="allContentMod">
-
-
-
-    <app-side-nav [currPage] = this.currPage></app-side-nav>
-
-
-
-<!-- 0551DD -->
-    <div style="display: flex; width: 97%; justify-content: space-between; margin-left: 3rem; flex-flow: row wrap;">
-        <div id="leftContent" [class.nightMode]="nightModeActive"> <!-- all content in white -->
-            <div style="display: flex; justify-content: space-between; align-items: center;">
-                <div>
-                    <img class="headingIcon" 
-                    src="https://img.icons8.com/fluency-systems-regular/30/0551DD/user-male-circle.png" >
-                    <h2 style="display: inline-block; color: rgb(5, 81, 221);" class="fredoka500">Good {{this.timeOfDay}}, {{currUser?.name||'User'}}</h2>
-                </div>
-                <div class="enableButtonHover" style="display: flex;">
-                    <button class="complemCustomButton" 
-                        style="width: 3rem; padding: 0.4rem 0.3rem 0.6rem 0.5rem; border-radius: 50%;"
-                        (click)="toggleNightMode()">
-                        <mat-icon style="font-size: 1.5rem;">bedtime</mat-icon>
-                    </button>
-                    <button class="fredoka500 customButton" (click)="createTicket()"><mat-icon>add</mat-icon>New Ticket</button>
-                </div>
-            </div>
-            <div id="summaries"> <!-- grid Title + gridContent -->
-                <h3 class="divHeading fredoka500">
-                    <img class="headingIcon" 
-                    src="https://img.icons8.com/fluency-systems-regular/30/0551DD/brief.png" >
-                    Summaries
-                </h3>
-                <div id="gridContent">
-                    <div class="BIchart" id="lineChart" *ngIf="lineChartOptions.series && 
-                    lineChartOptions.chart && lineChartOptions.xaxis  && 
-                    lineChartOptions.dataLabels && lineChartOptions.grid && 
-                    lineChartOptions.stroke && lineChartOptions.title">
-                        <apx-chart
-                        [series]="lineChartOptions.series"
-                        [chart]="lineChartOptions.chart"
-                        [xaxis]="lineChartOptions.xaxis"
-                        [dataLabels]="lineChartOptions.dataLabels"
-                        [grid]="lineChartOptions.grid"
-                        [stroke]="lineChartOptions.stroke"
-                        [title]="lineChartOptions.title"></apx-chart>
-                    </div>
-                    <div class="BIchart" id="pieChart" *ngIf="pieChartOptions.series && 
-                    pieChartOptions.chart && pieChartOptions.responsive &&
-                    pieChartOptions.title && 
-                    pieChartOptions.dataLabels && pieChartOptions.theme">
-                        <apx-chart
-                            [series]="pieChartOptions.series"
-                            [chart]="pieChartOptions.chart"
-                            [labels]="pieChartOptions.labels"
-                            [responsive]="pieChartOptions.responsive"
-                            [dataLabels]="pieChartOptions.dataLabels"
-                            [title]="pieChartOptions.title"
-                            [theme]="pieChartOptions.theme"></apx-chart>
-                    </div>
-                </div>
-                <h3 class="divHeading fredoka500">
-                    <img class="headingIcon" 
-                    src="https://img.icons8.com/fluency-systems-regular/30/0551DD/time-machine.png" >
-                    Recently Raised Tickets
-                </h3>
-                <!-- table -->
-                <div>
-                    <table mat-table matSort="desc" [dataSource]="dataSource" multiTemplateDataRows class="mat-elevation-z2">
-                            
-                        <!-- generate all columns except status -->
-                        <ng-container *ngFor="let column of displayedColumns.slice(0,-2); index as i" matColumnDef="{{column}}">
-                            <th mat-header-cell *matHeaderCellDef mat-sort-header>{{colNames[i]}}</th>
-                            <td mat-cell *matCellDef="let element">{{element[column]}}</td>
-                        </ng-container>
-                        <!-- Expected date -->
-                        <ng-container matColumnDef="expectedDate">
-                            <th mat-header-cell *matHeaderCellDef mat-sort-header>Expected</th>
-                            <td mat-cell *matCellDef="let element">
-                                {{ element.expectedDate | date }}
-                            </td>
-                        </ng-container>
-                        <!-- status -->
-                        <ng-container matColumnDef="status">
-                            <th mat-header-cell *matHeaderCellDef mat-sort-header>Status</th>
-                            <td mat-cell *matCellDef="let element">
-                                <mat-icon [ngClass]="{'green':statusIsClosed(element.status),'red': statusIsPending(element.status),
-                                'purple': statusIsHold(element.status),
-                                'yellow': statusIsProcessing(element.status)}">
-                                    {{ giveIcon(element.status) }}
-                                </mat-icon>
-                            </td>
-                        </ng-container>
-        
-                        <!-- expandable row content. one row that spans all columns -->
-                        <ng-container matColumnDef="expandedDetail">
-                            <td mat-cell *matCellDef="let element" [attr.colspan]="displayedColumns.length">
-                                <div class="rowDetail"
-                                    [@detailExpand] = "element == expandedRow? 'expanded': 'collapsed'">
-                                    <div>
-                                        <h2>{{element.title}} ({{element.tid}})</h2>
-                                        <p *ngIf="element.desc">{{element.desc}}</p>
-                                        <p><strong>Issued By: </strong>{{element.empEid}}
-                                        <strong style="margin-left: 2rem;">Dept: </strong>{{element.dept}}</p>
-                                        <p><strong>Company: </strong>{{element.company}}
-                                        <strong style="margin-left: 2rem;">Platform: </strong>{{element.platform}}</p>
-                                        <p><strong>Issue Date: </strong>{{element.issueDate | date}}</p>
-                                        <p><strong>Expected By: </strong>{{element.expectedDate | date}}</p>
-                                        <p *ngIf="element.comments"><strong>Comments: </strong>{{element.comments}}</p>
-                                    </div>
-                                    <div style="display: flex; justify-content: center; padding: 2rem 2rem 0rem 0rem;">
-                                        <mat-icon [ngClass]="{'green':statusIsClosed(element.status),'red': statusIsPending(element.status),
-                                        'purple': statusIsHold(element.status),'yellow': statusIsProcessing(element.status)}" 
-                                        style="font-size: 5rem;">
-                                            {{ giveIcon(element.status) }}
-                                        </mat-icon>
-                                        
-
-                                        <h2 [ngClass]="{'green':statusIsClosed(element.status),'red': statusIsPending(element.status),
-                                        'purple': statusIsHold(element.status),'yellow': statusIsProcessing(element.status),
-                                        'alignStatusHeading': true}" (click)="statusIsHold(element.status)">
-                                            {{ element.status }}
-                                        </h2>
-                                    </div>
-                                </div>
-                            </td>
-                        </ng-container>
-            
-                        <!-- 
-                            ticket-row = example-element-row
-                            ticket-expanded-row = example-expanded-row
-                        -->
-                        
-                        <!-- generate rows -->
-                        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                        <tr mat-row *matRowDef="let element; columns: displayedColumns;"
-                        class="ticket-row" [class.overdue]="isOverdue(element)"
-                        [class.ticket-expanded-row]="expandedRow === element"
-                        (click)="expandedRow = (expandedRow === element ? null : element)"></tr>
-                        <tr mat-row *matRowDef="let row; columns: ['expandedDetail'];" class="expandedDetailRow"></tr>
-                    </table>
-                    <!-- <mat-paginator #ticketPaginator [length]="sampleTickets.length" 
-                    [pageSize]="5" [pageSizeOptions]="[5, 10, 15, 20]"
-                    showFirstLastButtons aria-label="Select page">
-                    </mat-paginator> -->
-                </div>
-            </div>
-        </div>
-
-
-
-
-
-
-
-
-        <div id="yourInsights">
-            <h3 class="fredoka500 divHeading" style="margin-bottom: 0.75rem;">
-                <img class="headingIcon" 
-                src="https://img.icons8.com/fluency-systems-regular/30/0551DD/statistic-document.png"
-                (click)="getMyCounts()">
-                Your Insights
-            </h3>
-            <div style="
-            margin: 0.5rem 1rem 1rem;
-            padding: 1rem;
+        #lineChart{grid-area: lineCh;}
+        #donutChart{grid-area: donutCh;}
+        #NXTvIMCL{grid-area: doubleBarCh;}
+        #gridContent{
+            display: grid;
+            grid-template-rows: 200px ;
+            grid-template-columns: 400px 430px;
+            gap: 1rem 0rem;
+            padding: 0.5rem;
+            grid-template-areas: 
+            'lineCh donutCh';
+            justify-content: space-evenly;
+        }
+    
+        #leftContent{
+            /* margin-left: 3rem; */
+            width: 65%;
+            padding: 0.5rem 1rem 1rem;
+        }
+        .nightMode{
+            background-color: black;
+            color: white !important;
+        }
+        #summaries{
+            display: inline-block;
+            /* border-radius: 1rem; */
+        }
+    
+    
+        .BIchart{
+            display: inline-block;
+            width: 25rem;
+            border-radius: 0.5rem;
+            padding: 0.5rem 0.5rem 12.5rem 0.25rem;
+        }
+        #yourInsights{
+            width: 25rem;
+            background-color: rgb(230, 241, 252);
+            padding: 0.45rem;
+        }
+    
+        #yourInsights .customButton{
+            width: 9.5rem;
+            border: 1px rgb(216, 245, 252) solid;
             border-radius: 1rem;
+            margin: 0.75rem 0.5rem;
+            padding: 0.65rem;
+            background-color: white;
+            color: rgb(5, 81, 221);
+        }
+        #yourInsights .customButton:hover{
+            border: none;
+            background-color: rgb(60, 151, 255);
+            color: azure;
+            transition-duration: 0.25s;
+        }
+        .customButton mat-icon{
+            font-size: 1.1rem;
+            position: relative;
+            bottom: -4px;
+            left: -2px;
+        }
+    
+    
+    
+        table{
+            margin: 1rem 1rem 1rem 1rem;
+            border-radius: 0.5rem;
+        }
+        .mat-column-tid{
+            width: 6rem;
+        }
+        .mat-column-tickType{
+            width: 5rem;
+        }
+        .mat-column-title{
+            width: 9rem;
+            /* margin-right: 7rem; */
+        }
+        .mat-column-desc{
+            width: 8rem;
+        }
+        .mat-column-empEid{
+            width: 14rem;
+        }
+        .mat-column-priority{
+            width: 5rem;  
+        }
+        .mat-column-duration{
+            width: 5rem;  
+        }
+        .mat-column-expectedDate{
+            width: 7rem; 
+        }
+        .mat-column-status{
+            width: 3rem; 
+        }
+    
+        :host ::ng-deep .mat-paginator-container {
+            margin-left: 1.5rem;
+            justify-content: left;
+        }
+    
+        .rowDetail{
+            overflow: hidden;
+            display: flex;
+            justify-content: space-between;
+        }
+    
+        .expandedDetailRow{
+            height: 0;
+        }
+    
+        tr.mat-row:not(.expandedDetailRow):hover{
+            cursor: pointer;
+            background-color: rgb(233, 231, 231);
+        }
+    
+        .rowDetail h2{
+            margin-top: 0.5rem;
+            margin-bottom: 0.15rem;
+        }
+    
+        .processingPadding{
+            position: relative;
+            left: 1rem;
+        }
+
+        .newPlusHoldStatusPadding{
+            padding-left: 0.5rem;
+        }
+
+        .statusHeading{
+            position: relative;
+            top: 4.5rem;
+            left: -0.75rem;
+            width: 5rem;
+            line-height: 1;
+            /* text-align: center; */
+        }
+        
+        .allContentMod{
+            display: flex;
+            flex-flow: row wrap;
+            /* justify-content: space-between; */
+            height: 100%;
+        }
+    
+        .overdue{ background-color: rgb(255, 185, 185); }
+        tr.mat-row.overdue:hover{ background-color: rgb(241, 149, 149); }
+        
+        .red{color: red;}
+        .yellow{color: rgb(255, 174, 0);}
+        .green{color: green;}
+        .purple{color: rgb(119, 0, 255);}
+        .blue{color: rgb(5, 81, 221);}
+
+        .ticketTID{
             background-color: rgb(5, 81, 221);
             color: white;
-            width: 85%;
-            height: 5rem;"
-            class="fredoka">
-                <p style="font-size: 0.8rem;">My Tickets</p>
-                <span style="font-size: 2rem; margin: 0.5rem 0.5rem 0.5rem 0rem;">{{myPending}} Pending,</span> {{myProduction}} production, {{myClosed}} closed
-                <button class="customButton fredoka500"><mat-icon>info</mat-icon>Detailed Status</button>
-                <button class="customButton fredoka500"><mat-icon>edit</mat-icon>Edit Existing</button>
-            </div>
-            
-            <h3 class="fredoka500 divHeading" style="margin-top: 2rem; margin-bottom: 0rem;">
-                <img class="headingIcon" 
-                src="https://img.icons8.com/fluency-systems-regular/30/0551DD/total-sales-1.png">
-                Total Tickets 2021 NXT vs IMCL
-            </h3>
+            padding: 0rem 0.2rem;
+            margin-right: 0.3rem;
+        }
+        .ticketTitle:hover{
+            text-decoration: underline;
+            cursor: pointer;
+        }
 
-            <div class="BIchart" id="NXTvIMCL" 
-            *ngIf="grBarChartOptions.series && 
-            grBarChartOptions.chart && grBarChartOptions.dataLabels && 
-            grBarChartOptions.plotOptions && grBarChartOptions.xaxis &&
-            grBarChartOptions.stroke && grBarChartOptions.title"
-            style="margin-left: 0.3rem; padding: 0rem;">
-                <apx-chart
-                    [series]="grBarChartOptions.series"
-                    [chart]="grBarChartOptions.chart"
-                    [dataLabels]="grBarChartOptions.dataLabels"
-                    [plotOptions]="grBarChartOptions.plotOptions"
-                    [xaxis]="grBarChartOptions.xaxis"
-                    [stroke]="grBarChartOptions.stroke"
-                    [title]="grBarChartOptions.title">
-                </apx-chart>
+
+        .notAuth{
+            position: absolute;
+            height: 100vh;
+            width: 100vw;
+            background-color: rgba(245, 245, 245, 0.801);
+            z-index: 100;
+        }
+    
+    </style>
+    
+    <!-- <div class="allContent"> -->
+    <div class="notAuth" [hidden]="checkIsAuthenticated()"></div>
+
+
+    <div class="allContentMod">
+    
+    
+    
+        <app-side-nav [currPage] = this.currPage></app-side-nav>
+    
+    
+    
+        
+        <div style="display: flex; width: 97%; justify-content: space-between; margin-left: 3rem; flex-flow: row wrap; overflow-y: scroll;">
+            <div id="leftContent" [class.nightMode]="nightModeActive"> <!-- all content in white -->
+                <div style="display: flex; justify-content: space-between; align-items: center; margin: 0rem 1rem 0rem 1.35rem;">
+                    <div>
+                        <img class="headingIcon" 
+                        src="https://img.icons8.com/fluency-systems-regular/30/0551DD/user-male-circle.png" >
+                        <h2 style="display: inline-block; color: rgb(5, 81, 221);" class="fredoka500">Good {{this.timeOfDay}}, {{currUser?.name||'User'}}</h2>
+                    </div>
+                    <div class="enableButtonHover" style="display: flex;">
+                        <!-- <button class="complemCustomButton" 
+                            style="width: 3rem; padding: 0.4rem 0.3rem 0.6rem 0.5rem; border-radius: 50%;"
+                            (click)="toggleNightMode()">
+                            <mat-icon style="font-size: 1.5rem;">{{ nightModeActive? 'bedtime' : 'light_mode' }}</mat-icon>
+                        </button> -->
+                        <button class="complemCustomButton" 
+                            style="width: 3rem; padding: 0.4rem 0.3rem 0.6rem 0.5rem; border-radius: 50%;"
+                            (click)="logout()">
+                            <mat-icon style="font-size: 1.5rem;">power_settings_new</mat-icon>
+                        </button>
+                        <button class="fredoka500 customButton" (click)="createTicket()"><mat-icon>add</mat-icon>New Ticket</button>
+                    </div>
+                </div>
+                <div id="summaries"> <!-- grid Title + gridContent -->
+                    <h3 class="divHeading fredoka500">
+                        <img class="headingIcon" 
+                        src="https://img.icons8.com/fluency-systems-regular/30/0551DD/brief.png" >
+                        Summaries
+                    </h3>
+                    <div id="gridContent">
+                        <div class="BIchart" id="lineChart" *ngIf="lineChartOptions.series && 
+                        lineChartOptions.chart && lineChartOptions.xaxis  && 
+                        lineChartOptions.dataLabels && lineChartOptions.grid && 
+                        lineChartOptions.stroke && lineChartOptions.title">
+                            <apx-chart
+                            [series]="lineChartOptions.series"
+                            [chart]="lineChartOptions.chart"
+                            [xaxis]="lineChartOptions.xaxis"
+                            [dataLabels]="lineChartOptions.dataLabels"
+                            [grid]="lineChartOptions.grid"
+                            [stroke]="lineChartOptions.stroke"
+                            [title]="lineChartOptions.title"></apx-chart>
+                        </div>
+                        <div class="BIchart" id="pieChart" *ngIf="pieChartOptions.series && 
+                        pieChartOptions.chart && pieChartOptions.responsive &&
+                        pieChartOptions.title && 
+                        pieChartOptions.dataLabels && pieChartOptions.theme">
+                            <apx-chart
+                                [series]="pieChartOptions.series"
+                                [chart]="pieChartOptions.chart"
+                                [labels]="pieChartOptions.labels"
+                                [responsive]="pieChartOptions.responsive"
+                                [dataLabels]="pieChartOptions.dataLabels"
+                                [title]="pieChartOptions.title"
+                                [theme]="pieChartOptions.theme"></apx-chart>
+                        </div>
+                    </div>
+                    <h3 class="divHeading fredoka500">
+                        <img class="headingIcon" 
+                        src="https://img.icons8.com/fluency-systems-regular/30/0551DD/time-machine.png" >
+                        Recently Raised Tickets
+                    </h3>
+                    <!-- table -->
+                    <div>
+                        <table mat-table matSort="desc" [dataSource]="dataSource" multiTemplateDataRows class="mat-elevation-z2">
+                                
+                            <!-- ticketType -->
+                            <ng-container matColumnDef="ticketType">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header>Ticket Type</th>
+                                <td mat-cell *matCellDef="let element">
+                                    <mat-icon  matTooltip="{{ element.ticketType }}" 
+                                        matTooltipPosition="left"
+                                        [matTooltipShowDelay]="70"
+                                        [ngClass]="{'blue': element.ticketType == 'New Requirement',
+                                        'yellow': element.ticketType == 'Enhancements',
+                                        'red': element.ticketType == 'Bugs',
+                                        'purple': element.ticketType == 'Others'}">
+                                        {{ giveTypeIcon(element.ticketType) }}
+                                    </mat-icon>
+                                </td>
+                            </ng-container>
+                            <!-- generate all columns AFTER tickType EXCEPT status & expectedDate -->
+                            <ng-container *ngFor="let column of displayedColumns.slice(1,-2); index as i" matColumnDef="{{column}}">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header>{{colNames[i]}}</th>
+                                <td mat-cell *matCellDef="let element">{{element[column]}}</td>
+                            </ng-container>
+                            <!-- Expected date -->
+                            <ng-container matColumnDef="expectedDate">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header>Expected</th>
+                                <td mat-cell *matCellDef="let element">
+                                    {{ element.expectedDate | date }}
+                                </td>
+                            </ng-container>
+                            <!-- status -->
+                            <ng-container matColumnDef="status">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header>Status</th>
+                                <td mat-cell *matCellDef="let element">
+                                    <mat-icon [ngClass]="{'green':statusIsClosed(element.status),'red': statusIsNew(element.status),
+                                    'purple': statusIsHold(element.status),
+                                    'yellow': statusIsProcessing(element.status)}">
+                                        {{ giveIcon(element.status) }}
+                                    </mat-icon>
+                                </td>
+                            </ng-container>
+            
+                            <!-- expandable row content. one row that spans all columns -->
+                            <ng-container matColumnDef="expandedDetail">
+                                <td mat-cell *matCellDef="let element" [attr.colspan]="displayedColumns.length">
+                                    <div class="rowDetail"
+                                        [@detailExpand] = "element == expandedRow? 'expanded': 'collapsed'">
+                                        <div>
+                                            <h2 class="ticketTitle" (click)="goToDetails(element.key)"> <span class="ticketTID">{{element.tid}}</span>{{element.title}} </h2>
+                                            <p *ngIf="element.desc">{{element.desc}}</p>
+                                            <p><strong>Issued By: </strong>{{element.empEid}}
+                                            <strong style="margin-left: 2rem;">Type: </strong>{{element.ticketType}}</p>
+                                            <p><strong>Company: </strong>{{element.company}}
+                                            <strong style="margin-left: 2rem;">Platform: </strong>{{element.platform}}</p>
+                                            <p><strong>Issue Date: </strong>{{element.issueDate | date}}</p>
+                                            <p><strong>Expected By: </strong>{{element.expectedDate | date}}</p>
+                                            <p *ngIf="element.comments"><strong>Comments: </strong>{{element.comments}}</p>
+                                        </div>
+                                        <div style="display: flex; justify-content: center; padding: 2rem 2rem 0rem 0rem;">
+                                            <mat-icon [ngClass]="{'green':statusIsClosed(element.status),'red': statusIsNew(element.status),
+                                            'purple': statusIsHold(element.status),'yellow': statusIsProcessing(element.status),
+                                            'processingPadding': statusIsProcessing(element.status)}" 
+                                            style="font-size: 5rem;">
+                                                {{ giveIcon(element.status) }}
+                                            </mat-icon>
+
+                                            <h2 [ngClass]="{'green':statusIsClosed(element.status),'red': statusIsNew(element.status),
+                                            'purple': statusIsHold(element.status),'yellow': statusIsProcessing(element.status),
+                                            'statusHeading': true, 'newPlusHoldStatusPadding': statusIsNew(element.status) || statusIsHold(element.status)}" (click)="statusIsHold(element.status)">
+                                                {{ element.status }}
+                                            </h2>
+                                        </div>
+                                    </div>
+                                </td>
+                            </ng-container>
+                
+                            <!-- generate rows -->
+                            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                            <tr mat-row *matRowDef="let element; columns: displayedColumns;"
+                            [class.overdue]="isOverdue(element)"
+                            [class.ticket-expanded-row]="expandedRow === element"
+                            (click)="expandedRow = (expandedRow === element ? null : element)"></tr>
+                            <tr mat-row *matRowDef="let row; columns: ['expandedDetail'];" class="expandedDetailRow"></tr>
+                        </table>
+                        <!-- <mat-paginator #ticketPaginator [length]="sampleTickets.length" 
+                        [pageSize]="5" [pageSizeOptions]="[5, 10, 15, 20]"
+                        showFirstLastButtons aria-label="Select page">
+                        </mat-paginator> -->
+                    </div>
+                </div>
             </div>
-            <button (click)="showCurrUser()">Current User</button>
+    
+    
+    
+    
+    
+    
+    
+    
+            <div id="yourInsights">
+                <h3 class="fredoka500 divHeading" style="margin-bottom: 0.75rem;">
+                    <img class="headingIcon" 
+                    src="https://img.icons8.com/fluency-systems-regular/30/0551DD/statistic-document.png"
+                    (click)="getMyCounts()">
+                    Your Insights
+                </h3>
+                <div style="
+                margin: 0.5rem 1rem 1rem;
+                padding: 1rem;
+                border-radius: 1rem;
+                background-color: rgb(5, 81, 221);
+                color: white;
+                width: 85%;
+                height: 5rem;"
+                class="fredoka">
+                    <div style="display: flex; width: 100%; justify-content: space-between;">
+                        <p style="font-size: 0.8rem;">My Tickets</p>
+                        <button (click)="refreshUser()" 
+                        style="border-radius: 47.5%; background-color: white; border: none;
+                        color: rgb(5, 81, 221); height: 1.5rem; width: 1.5rem;">
+                            <mat-icon style="font-size: 1.25rem; position: relative;
+                            right: 6px; top: 1px;">refresh</mat-icon>
+                        </button>
+                    </div>
+                    <span style="font-size: 2rem; margin: 0.5rem 0.5rem 0.5rem 0rem;">{{myPending}} Pending,</span> {{myProduction}} production, {{myClosed}} closed
+                    <button class="customButton fredoka500" style="width: 20rem;" routerLink="/manage"><mat-icon>info</mat-icon>Detailed Status</button>
+                    <!-- <button class="customButton fredoka500"><mat-icon>edit</mat-icon>Edit Existing</button> -->
+                </div>
+                
+                <h3 class="fredoka500 divHeading" style="margin-top: 2rem; margin-bottom: 0rem;">
+                    <img class="headingIcon" 
+                    src="https://img.icons8.com/fluency-systems-regular/30/0551DD/total-sales-1.png">
+                    NXT vs IMCL Platform-wise Tickets
+                </h3>
+    
+                <div class="BIchart" id="NXTvIMCL" 
+                *ngIf="grBarChartOptions.series && 
+                grBarChartOptions.chart && grBarChartOptions.dataLabels && 
+                grBarChartOptions.plotOptions && grBarChartOptions.xaxis &&
+                grBarChartOptions.stroke && grBarChartOptions.title"
+                style="margin-left: 0.3rem; padding: 0rem;">
+                    <apx-chart
+                        [series]="grBarChartOptions.series"
+                        [chart]="grBarChartOptions.chart"
+                        [dataLabels]="grBarChartOptions.dataLabels"
+                        [plotOptions]="grBarChartOptions.plotOptions"
+                        [xaxis]="grBarChartOptions.xaxis"
+                        [stroke]="grBarChartOptions.stroke"
+                        [title]="grBarChartOptions.title">
+                    </apx-chart>
+                </div>
+                <!-- <button (click)="refreshBoth()">Here</button> -->
+            </div>
         </div>
     </div>
-</div>

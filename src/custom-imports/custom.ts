@@ -23,6 +23,11 @@ import {MatDatepickerModule} from '@angular/material/datepicker';
 import {MatNativeDateModule} from "@angular/material/core";
 import {MatSnackBarModule} from '@angular/material/snack-bar';
 import {MatStepperModule} from '@angular/material/stepper';
+import {MatExpansionModule} from '@angular/material/expansion';
+import {MatDividerModule} from '@angular/material/divider';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+import {MatProgressBarModule} from '@angular/material/progress-bar';
+import {MatAutocompleteModule} from '@angular/material/autocomplete';
 
 // Charts and BI
 import { NgApexchartsModule } from "ng-apexcharts";
@@ -54,6 +59,11 @@ import { NgApexchartsModule } from "ng-apexcharts";
         MatNativeDateModule,
         MatSnackBarModule,
         MatStepperModule,
+        MatExpansionModule,
+        MatDividerModule,
+        MatProgressSpinnerModule,
+        MatProgressBarModule,
+        MatAutocompleteModule
     ],
     exports:[
         MatToolbarModule,
@@ -80,6 +90,11 @@ import { NgApexchartsModule } from "ng-apexcharts";
         MatNativeDateModule,
         MatSnackBarModule,
         MatStepperModule,
+        MatExpansionModule,
+        MatDividerModule,
+        MatProgressSpinnerModule,
+        MatProgressBarModule,
+        MatAutocompleteModule
     ],
 })
 export class CustomMaterialModule{}

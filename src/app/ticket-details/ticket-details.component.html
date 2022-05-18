@@ -1,0 +1,269 @@
+<style>
+    body{
+        display: flex;
+        flex-flow: row nowrap;
+        justify-content: space-between;
+        /* overflow-y: hidden; */
+    }
+
+    .buttonStyles{
+        margin: 0rem 0.3rem 1.5rem 0rem;
+        padding: 0.5rem;
+        width: 6rem;
+    }
+
+    .scrollable{
+        /* height: 100vh;  vh = view height, 1 unit is 1 unit of view height. Think of it as efficient % */
+        overflow-y: scroll;
+    }
+
+    .header{
+        font-size: 15.5px;
+    }
+
+    .ticketTID{
+        background-color: rgb(5, 81, 221);
+        color: white;
+        padding: 0rem 0.2rem;
+        margin-right: 0.3rem;
+    }
+
+    .iconButton{
+        color: rgb(5, 81, 221);
+    }
+    .iconButton:hover{
+        cursor: pointer;
+        color: rgb(3, 55, 151);
+        transition-duration: 0.3s;
+    }
+
+    .deleteButton:disabled{
+        background-color: rgb(240, 100, 100);
+        border-color: rgb(240, 100, 100);
+    }
+    .deleteButton:disabled:hover{
+        cursor: default;
+    }
+
+    .red-bg{background-color: red; color: white;}
+    .yellow-bg{background-color: rgb(255, 174, 0); color: black;}
+    .green-bg{background-color: green; color: white;}
+    .purple-bg{background-color: rgb(119, 0, 255); color: white}
+
+    .red{color: red;}
+    .yellow{color: rgb(255, 174, 0);}
+    .green{color: green;}
+    .purple{color: rgb(119, 0, 255);}
+    .relativePad{position: relative; top: 6px;}
+
+    .bold{font-weight: 600;}
+
+
+    .downloadIcon{ color: rgb(5, 81, 221); margin-top: 0.2rem; }
+    .downloadIcon:hover{ cursor: pointer; color: rgb(3, 55, 151); }
+
+    .deleteIcon{ color: red; margin-top: 0.2rem; }
+    .deleteIcon:hover{ cursor: pointer; color: rgb(156, 0, 0); }
+
+    .downloadIcon, .deleteIcon { position: relative; top: 5px; }
+
+
+    #details tr{ height: 2rem; }
+
+    .loading{
+        position: absolute;
+        display: flex;
+        z-index: 15;
+        height: 100vh;
+        width: 100vw;
+        justify-content: center;
+        align-items: center;
+        background-color: rgba(245, 245, 245, 0.486);
+    }
+
+    #attachments{ margin-top: 1rem; }
+
+    th.mat-header-cell{
+        padding-top: 0.5rem;
+    }
+    .mat-column-name{
+        font-weight: 600;
+        width: 2rem;
+    }
+    .mat-column-name{
+        width: 82.5%;
+    }
+    .mat-row:hover{
+        background-color: #e9e6e6;    
+    }
+</style>
+<body>
+    <app-side-nav [currPage]="this.currPage"></app-side-nav>
+    
+    <div class="loading" *ngIf="allTickets.length == 0">
+        <mat-spinner></mat-spinner>
+    </div>
+
+    <div style="margin-left: 4rem; width: 70vw; padding: 1.5rem 2rem;" class="scrollable">
+        <div style="display: flex; justify-content: space-between;">
+            <h1 class="fredoka500" style="display: inline-block;">
+                <span class="ticketTID">
+                    {{currTicket.tid}}
+                </span>
+                {{currTicket.title}}
+            </h1>
+            <mat-icon class="iconButton" style="position: relative; top: 10px;">share</mat-icon>
+        </div>
+        <div>
+            <span class="enableButtonHover">
+                <button class="customButton fredoka buttonStyles" (click)="attachFile(currTicket)"><mat-icon>attach_file</mat-icon>Attach</button>
+                <button class="customButton fredoka buttonStyles" style="padding-left: 0rem;" (click)="updateTicket(currTicket)"><mat-icon>edit</mat-icon>Edit</button>
+            </span>
+            <button [disabled]="!(this.currUser.empEid && isAdmin(this.currUser.empEid))" class="customButton fredoka buttonStyles red-bg deleteButton" (click)="deleteTicket(currTicket)"><mat-icon>delete</mat-icon>Delete</button>
+        </div>
+        <!-- <p *ngIf="currTicket.desc"> -->
+        <p>
+            <strong class="header" style="display: block; margin-bottom: 0.2rem;
+            font-size: 1rem;">Description</strong>
+            {{currTicket.desc}}
+        </p>
+        <div>
+            <p>
+                <strong class="header">Raised On: </strong> {{currTicket.issueDate | date}} 
+                <strong class="header" style="margin-left: 2rem;">Expected On: </strong> {{currTicket.expectedDate | date}} 
+            </p>
+            <p>
+                <strong class="header">Raised By: </strong> {{currTicket.empEid}}
+            </p>
+            <p *ngIf="currTicket.requestedBy">
+                <strong class="header">Requesting Dept.: </strong>{{currTicket.requestedBy.dept}}
+                <strong class="header" style="margin-left: 2rem;">Requester: </strong>{{currTicket.requestedBy.requester}}
+            </p>
+
+            <div id="attachments">
+                <div *ngIf="!currTicket.zattachments">
+                    <strong class="header" style="display: block;">Attachments (0)</strong>
+                    <span>No Files Attached</span>
+                </div>
+                <div *ngIf="currTicket.zattachments">
+                    <strong class="header" style="display: block;">Attachments ({{currTicket.zattachments.length}})</strong>
+
+                    <mat-table [dataSource]="attachmentDataSource" class="mat-elevation-z8" style="margin-top: 0.5rem;">
+                        <ng-container matColumnDef="srNo">
+                            <th mat-header-cell *matHeaderCellDef>Sr. No.</th>
+                            <td mat-cell *matCellDef="let attachment"> {{currTicket.zattachments.indexOf(attachment)+1}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="name">
+                            <th mat-header-cell *matHeaderCellDef>File Name</th>
+                            <td mat-cell *matCellDef="let attachment"> {{attachment.name}} </td>
+                        </ng-container>
+                        
+                        <!-- <ng-container matColumnDef="url">
+                            <th mat-header-cell *matHeaderCellDef>URL</th>
+                            <td mat-cell *matCellDef="let attachment"> {{attachment.url}} </td>
+                        </ng-container> -->
+                        
+                        <ng-container matColumnDef="actions">
+                            <th mat-header-cell *matHeaderCellDef>Actions</th>
+                            <td mat-cell *matCellDef="let attachment">
+                                <a [href]="attachment.url"><mat-icon class="downloadIcon">download</mat-icon></a>
+                                <a (click)="deleteFile(attachment)"><mat-icon class="deleteIcon">delete</mat-icon></a>
+                            </td>
+                        </ng-container>
+
+                        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                    </mat-table>
+
+                </div>
+            </div>
+            <div *ngIf="this.currTicket.updateHistory">
+                <strong class="header" style="display: block; margin-top: 1.5rem;">Update History</strong>
+                <div style="margin-top: 0.25rem; padding-left: 0.5rem;">
+                    <table style="border-left: 2px solid rgb(185, 185, 185); border-collapse: separate; border-spacing: 0.75rem;">
+                        <!-- Updates -->
+                        <tr style="position: relative; left: -1.3rem; z-index: 100; margin: 0.25rem 0rem;" *ngFor="let event of currTicket.updateHistory.reverse().slice(0,-1)">
+                            <td><div style="display: inline-block; border-radius: 50%; height: 10px; width: 10px; background-color: white; border: 2px solid rgb(121, 121, 121)"></div></td>
+                            <td>
+                                <span>
+                                    <strong>{{event.updater? event.updater: 'Anonymous'}} at {{event.updateDate | date: 'shortTime'}} on {{event.updateDate | date}}:</strong> {{event.commitMessage}}
+                                </span>
+                            </td>
+                        </tr>
+
+                        <!-- Created -->
+                        <tr style="position: relative; left: -1.75rem; z-index: 100; margin: 0.25rem 0rem;" *ngFor="let event of currTicket.updateHistory.slice(-1)">
+                            <td><img src="../../assets/images/update-icon.png" style="background-color: white; border-radius: 50%;"></td>
+                            <td>
+                                <span>
+                                    <strong>{{event.updater? event.updater: 'Anonymous'}} at {{event.updateDate | date: 'shortTime'}} on {{event.updateDate | date}}:</strong> {{event.commitMessage}}
+                                </span>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div style="width: 37vw; padding: 2rem; position: relative; background-color: whitesmoke;"  class="scrollable" id="details">
+        <h2 class="fredoka500" (click)="showTicket()">Details</h2>
+
+        <span style="display: block;">
+            <strong class="header fredoka500">Current Status: </strong>
+
+            <span [ngClass]="{'green-bg':statusIsClosed(currTicket.status),'red-bg': statusIsNew(currTicket.status),
+            'purple-bg': statusIsHold(currTicket.status),'yellow-bg': statusIsProcessing(currTicket.status)}"
+            style="padding: 0.5rem; margin-left: 0.5rem;">
+                {{currTicket.status}} <mat-icon style="position: relative; top: 6px;">{{giveIcon(currTicket.status)}}</mat-icon>
+            </span>
+        </span>
+
+
+        <mat-expansion-panel [expanded]="true" style="margin: 1rem 0rem;">
+            <mat-expansion-panel-header>
+                <mat-panel-title>
+                    <strong class="header fredoka500" style="color: rgb(5, 81, 221);">Primary Details</strong>
+                </mat-panel-title>
+            </mat-expansion-panel-header>
+            <mat-divider style="margin-bottom: 1rem;"></mat-divider>
+            <table>
+                <colgroup>
+                    <col style="width: 15rem;"> <!-- Represents first column, so we can do column-wise styling -->
+                    <col>                       <!-- Represents second column -->
+                </colgroup>
+                <tr><td class="bold">Created By</td>  <td>{{currTicket.empEid}}</td></tr>
+                <tr><td class="bold">Ticket Type</td>  <td>{{currTicket.ticketType}}</td></tr>
+                <tr><td class="bold">Company</td>  <td>{{currTicket.company}}</td></tr>
+                <tr><td class="bold">Platform</td>  <td>{{currTicket.platform}}</td></tr>
+                <tr><td class="bold">Priority</td>  <td><mat-icon [ngClass]="{'red': currTicket.priority == 'High', 'yellow': currTicket.priority == 'Medium', 'green': currTicket.priority == 'Low', 'relativePad': currTicket.priority == 'High'||currTicket.priority == 'Low'}">{{getPrioritySymbol()}}</mat-icon>{{currTicket.priority}}</td></tr>
+                <tr><td class="bold">Original Time Estimate</td>  <td>{{currTicket.duration}}</td></tr>
+                <tr><td class="bold">Expected On</td>  <td><mat-chip>{{currTicket.expectedDate | date}}</mat-chip></td></tr>
+                <tr *ngIf="currTicket.closedDate"><td class="bold">Closed On</td>  <td>{{currTicket.closedDate | date}}</td></tr>
+            </table>
+        </mat-expansion-panel>
+        
+        
+        <mat-expansion-panel style="margin: 1rem 0rem;">
+            <mat-expansion-panel-header>
+                <mat-panel-title>
+                    <strong class="header fredoka500" style="color: rgb(5, 81, 221);">Additional Information</strong>
+                </mat-panel-title>
+            </mat-expansion-panel-header>
+            <mat-divider style="margin-bottom: 1rem;"></mat-divider>
+            <table>
+                <colgroup>
+                    <col style="width: 10rem;"> <!-- Represents first column, so we can do column-wise styling -->
+                    <col>                       <!-- Represents second column -->
+                </colgroup>
+                <tr><td class="bold">Project Lead</td>  <td>{{currTicket.projLead}}</td></tr>
+                <tr><td class="bold">Commercial Amount Approved</td>  <td>{{currTicket.approvedAmount == ' '? 'NA': '₹ '+currTicket.approvedAmount+' /-'}}</td></tr>
+                <tr><td class="bold">Last Updated By</td>  <td>{{lastUpdater}}</td></tr>
+                <tr><td class="bold">Last Updated Date</td>  <td>{{currTicket.lastUpdated | date}}</td></tr>
+                <tr><td class="bold">Last Viewed Date</td>  <td>{{currTicket.lastUpdated | date}}</td></tr>
+            </table>
+        </mat-expansion-panel>
+        <!-- <button (click)="getTicket()">here</button> -->
+    </div>
+</body>

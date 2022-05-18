@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { User } from '../user';
-import { UserAuthService } from '../user-auth.service';
-import { UserService } from '../user.service';
+
+import { User } from '../interfaces/user';
+import { UserAuthService } from '../services/user-auth/user-auth.service';
+import { UserService } from '../services/users/user.service';
 
 @Component({
   selector: 'app-signup',
@@ -11,11 +12,11 @@ import { UserService } from '../user.service';
 })
 export class SignupComponent implements OnInit {
 
+  constructor(public userService: UserService, public matSnack: MatSnackBar, private authService: UserAuthService) { }
+
   openSnackBar(message: string, action: string = 'Close') {
     this.matSnack.open(message, action);
   }
-
-  constructor(public userService: UserService, public matSnack: MatSnackBar, private authService: UserAuthService) { }
 
   newUser !: User;
 
@@ -48,6 +49,5 @@ export class SignupComponent implements OnInit {
   ngOnInit(): void {
     this.newUser = this.userService.newUserObject();
   }
-
 
 }

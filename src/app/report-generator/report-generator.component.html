@@ -1,0 +1,135 @@
+<style>
+    body{
+        display: flex;
+        flex-flow: row nowrap;
+        justify-content: space-between;
+    }
+
+    .filterForm{
+        margin-left: 1.5rem;
+        width: 67.5%;
+        border: 1px solid rgb(0, 102, 255);
+        border-radius: 1.25rem;
+        padding: 0.75rem 1.5rem 1rem;
+    }
+</style>
+
+<body>
+    <app-side-nav [currPage]="this.currPage"></app-side-nav>
+    
+    <div style="margin: 1.5rem 0rem 1rem 5rem; width: 70%;">
+        <div>
+            <img class="headingIcon" 
+                src="https://img.icons8.com/fluency-systems-regular/30/0551DD/bar-chart.png" >
+            <h2 style="display: inline-block;" class="fredoka500">Report Generator</h2>
+            <p class="fredoka" style="color: rgb(102, 102, 102); margin-left: 2rem;">Generate Reports for required time frames with appropriate filters for efficient and seamless analysis</p>
+        </div>
+
+        <div class="filterForm">
+            <h3 class="fredoka500" style="margin-bottom: 0rem;">Filters</h3>
+            <p class="fredoka" style="color: grey;">Select paramaters required for report to be generated</p>
+        
+            <form [formGroup]="filterForm">
+                <div formGroupName="timeFilter">
+                    <span style="color: gray;">Time Period: </span>
+                    <mat-form-field style="margin-left: 1.5rem;" appearance="outline">
+                        <mat-label>From Date (dd/mm/yyyy)</mat-label>
+                        <input matInput [matDatepicker]="pickerStart" formControlName="startDate">
+                        <mat-datepicker-toggle matSuffix [for]="pickerStart"></mat-datepicker-toggle>
+                        <mat-datepicker #pickerStart></mat-datepicker>
+                    </mat-form-field>
+
+                    <mat-form-field style="margin-left: 1.5rem;" appearance="outline">
+                        <mat-label>End Date (dd/mm/yyyy)</mat-label>
+                        <input matInput [matDatepicker]="pickerEnd" formControlName="endDate">
+                        <mat-datepicker-toggle matSuffix [for]="pickerEnd"></mat-datepicker-toggle>
+                        <mat-datepicker #pickerEnd></mat-datepicker>
+                    </mat-form-field>
+                </div>
+                
+
+                <div class="enableButtonHover" formGroupName="ticketFilter">
+                    <mat-form-field>
+                        <mat-select placeholder="Select Ticket Types" formControlName="ticketType" required multiple>
+                            <mat-select-trigger>
+                                {{(filterForm.get(['ticketFilter','ticketType'])?.value.length == ticketTypes.length+1) ? 'All': filterForm.get(['ticketFilter','ticketType'])?.value[0]}}
+                                <span *ngIf="ticketTypes.length+1 > filterForm.get(['ticketFilter','ticketType'])?.value.length && filterForm.get(['ticketFilter','ticketType'])?.value.length > 1">(+ {{filterForm.get(['ticketFilter','ticketType'])?.value.length-1}} other)</span>
+                            </mat-select-trigger>
+                            <mat-option (click)="toggleAllSelected('ticketType', allType.selected)" value="All" #allType>All</mat-option>
+                            <mat-option *ngFor="let type of ticketTypes" (click)="tossleEachOne('ticketType')" value="{{type}}">{{type}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+
+                    <mat-form-field style="margin-left: 2rem;">
+                        <mat-select placeholder="Priorities" formControlName="priority" required multiple>
+                            <mat-select-trigger>
+                                {{(filterForm.get(['ticketFilter','priority'])?.value.length == priorities.length+1) ? 'All': filterForm.get(['ticketFilter','priority'])?.value[0]}}
+                                <span *ngIf="priorities.length+1 > filterForm.get(['ticketFilter','priority'])?.value.length && filterForm.get(['ticketFilter','priority'])?.value.length > 1">(+ {{filterForm.get(['ticketFilter','priority'])?.value.length-1}} other)</span>
+                            </mat-select-trigger>
+                            <mat-option (click)="toggleAllSelected('priority', allPriority.selected)" value="All" #allPriority>All</mat-option>
+                            <mat-option *ngFor="let priority of priorities" (click)="tossleEachOne('priority')" value="{{priority}}">{{priority}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+
+                    <mat-form-field style="margin-left: 2rem;">
+                        <mat-select placeholder="Companies" formControlName="company" required multiple>
+                            <mat-select-trigger>
+                                {{(filterForm.get(['ticketFilter','company'])?.value.length == companies.length+1) ? 'Both': filterForm.get(['ticketFilter','company'])?.value[0]}}
+                                <span *ngIf="companies.length+1 > filterForm.get(['ticketFilter','company'])?.value.length && filterForm.get(['ticketFilter','company'])?.value.length > 1">(+ {{filterForm.get(['ticketFilter','company'])?.value.length-1}} other)</span>
+                            </mat-select-trigger>
+                            <mat-option (click)="toggleAllSelected('company', allCompany.selected)" value="All" #allCompany>Both</mat-option>
+                            <mat-option *ngFor="let company of companies" (click)="tossleEachOne('company')" value="{{company}}">{{company}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <mat-select placeholder="Select Platforms" formControlName="platform" required multiple>
+                            <mat-select-trigger>
+                                {{(filterForm.get(['ticketFilter','platform'])?.value.length == platforms.length+1) ? 'All': filterForm.get(['ticketFilter','platform'])?.value[0]}}
+                                <span *ngIf="platforms.length+1 > filterForm.get(['ticketFilter','platform'])?.value.length && filterForm.get(['ticketFilter','platform'])?.value.length > 1">(+ {{filterForm.get(['ticketFilter','platform'])?.value.length-1}} other)</span>
+                            </mat-select-trigger>
+                            <mat-option (click)="toggleAllSelected('platform', allPlatform.selected)" value="All" #allPlatform>All</mat-option>
+                            <mat-option *ngFor="let platform of platforms" (click)="tossleEachOne('platform')" value="{{platform.name}}">{{platform.name}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    
+                    <mat-form-field style="margin-left: 2rem;">
+                        <mat-select placeholder="Select Statuses" formControlName="status" required multiple>
+                            <mat-select-trigger>
+                                {{(filterForm.get(['ticketFilter','status'])?.value.length == statuses.length+1) ? 'All': filterForm.get(['ticketFilter','status'])?.value[0]}}
+                                <span *ngIf="statuses.length+1 > filterForm.get(['ticketFilter','status'])?.value.length && filterForm.get(['ticketFilter','status'])?.value.length > 1">(+ {{filterForm.get(['ticketFilter','status'])?.value.length-1}} other)</span>
+                            </mat-select-trigger>
+                            <mat-option (click)="toggleAllSelected('status', allStatus.selected)" value="All" #allStatus>All</mat-option>
+                            <mat-option *ngFor="let status of statuses" (click)="tossleEachOne('status')" value="{{status}}">{{status}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    <button class="customButton fredoka" style="display: block; margin-left: 79%;" (click)="generateReport()">Generate Report</button>
+                </div>
+            </form>
+            <div style="padding: 1rem 0rem 0.5rem 1rem; justify-content: center; border: 1px solid rgb(0, 102, 255);
+            border-radius: 1.25rem;" [hidden]="!generated" class="enableButtonHover" [class.blueBorder] = "true">
+                <div [hidden]="!(generated && this.filteredTickets.length!=0)">
+                    <div style="display: flex; justify-content: space-between;">
+                        <div>
+                            <h2 class="fredoka">Report Generated Successfully!!</h2>
+                            <h4 style="font-family: 'Quicksand', sans-serif; font-weight: 600;">Total {{this.filteredTickets.length}} tickets found matching given criteria</h4>
+                            <!-- <ul>
+                                <li *ngFor="let ticket of filteredTickets">{{tickDetails(ticket)}}</li>
+                            </ul> -->
+                        </div>
+                        <div>
+                            <button class="customButton" style="width: 4rem; border-radius: 1.25rem; margin-left: 0rem;" (click)="downloadCSV()"><mat-icon>download</mat-icon></button>
+                        </div>
+                    </div>
+                </div>
+                <div [hidden]="!(generated && this.filteredTickets.length==0)">
+                    <h2 class="fredoka" style="color: red;">No Tickets Found</h2>
+                    <h4 style="color: red; font-family: 'Quicksand', sans-serif; font-weight: 600;">Could not find any tickets matching given criteria</h4>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div style="width: 24%; padding: 2rem; justify-content: center;">
+    </div>
+</body>

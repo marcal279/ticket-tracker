@@ -1,0 +1,105 @@
+TODO:
+    ✔ If no tickets match, Report Generator shows no reports message @done(22-05-02 14:35)
+    Add "Closed Date", "Commercial Approve Amount" fields to Tickets:
+        ✔ Add Closed Date @done(22-05-03 17:32)
+        ✔ Add Commercial Approve Amount @done(22-05-03 16:50)
+        ✔ Delete all currently existing tickets (old format) @done(22-05-03 17:32)
+        ✔ Repopulate Tables @done(22-05-03 17:32)
+        ✔ Fix CSV Download @done(22-05-03 17:33)
+    Add State Management:
+        ✔ Add currUser @done(22-05-03 15:09) [using ngrx]
+        ✔ Add nextIndex @done(22-05-03 16:17)
+        ✔ nextIndex fetch from last Ticket generated and store into ngrx Store on app Loadup @done(22-05-05 14:35)
+        ✔ Remove randomly generated index from ticket service @done(22-05-03 16:17)
+        Fix RxJS Issue:
+            ✔ FIX: Only works if Store RXJS User button clicked in dashboard on first entry @done(22-05-03 15:10)
+    Fix User ID for Ticket Manager:
+        ✔ Either fetch async from firebase or pass data like in FastFood application @done(22-05-02 18:00)
+        passed using state management
+    Ticket Details (Individual Ticket Page):
+        ✔ Add Individual Page @done(22-05-06 16:15)
+        ✔ Routing and route mapping on Ticket Key @done(22-05-06 16:15)
+        ✔ Add Update Ticket option on right of page @done(22-05-06 16:15)
+        ✔ Add loading Progress Spinner on page load @done(22-05-09 13:13)
+        ✔ Share Option @done(22-05-12 12:25)
+        ☐ Add comments box at bottom (Add nesting in table for storing comments if can't outsource) 
+            [ https://www.linkedin.com/pulse/comment-box-angular-6-piyali-das/ OR https://codequs.com/p/rJUmN3SF ]
+        Add Attach Files :
+            ✔ Attach Files MatDialog? @done(22-05-11 18:06)
+            ✔ [ https://www.bezkoder.com/angular-11-file-upload-firebase-storage/ ] @done(22-05-11 18:06)
+            ✔ Delete file button @done(22-05-12 17:03)
+            ✔ Check if downloadCSV() works even with attachments. As in see that it hasnt messed up the csv format @done(22-05-12 12:09)
+    Fix Dashboard Charts:
+        ✔ Replace Double Bar with 2 Radials or Fix Update Issue @done(22-05-04 16:10) FIXED
+        ☐ Replace Line Graph or fix
+        ✔ Links in the top right My Insights box @done(22-05-10 18:08)
+    Report Generator:
+        ✔ Add datepickers to compare times, remove the fiscal year thing (all that effort for nothing smh) @done(22-05-09 12:36)
+        ✔ Add time filtering @done(22-05-09 12:36)
+        ✔ Cleanup bottom part @done(22-05-04 10:49)
+        ✔ Layout redesign? @done(22-05-04 11:30)
+        Consider Previously Generated Reports/instructions on right side, report itself shows at bottom
+        Add 'Select All' option:
+            ✔ When user click on All then all options shall be selected and when user click All again then all options shall be deselcted. @done(22-05-04 15:23)
+            ✔ If All option is checked and user click any other checkbox than All then All and clicked checkbox shall be deselected. @done(22-05-09 11:25)
+            ✔ When user selects 4 options one by one then All shall be selected. @done(22-05-09 11:25)
+    Ticket Manager:
+        ✔ Add filters from Report Generator to this page @done(22-05-05 16:47)
+        ✔ Overdue Tickets only Filter @done(22-05-05 17:33)
+        ✔ All Filters Logic @done(22-05-05 17:33)
+        ☐ Check Logic integration + usage order discrepancy if any: 
+            MyTickets and then anything doesn't work. Suggest to make it unreactive, and only applies when click 'Apply'
+        ✔ Fix myTicketsOnly toggle empEid @done(22-05-05 16:31)
+    Profile Page:
+        ✔ User Profile picture @done(22-05-18 14:54)
+        ✔ Cleanup @done(22-05-16 12:31)
+        ☐ Add settings
+    Ticket Dialog:
+        Change date to dd/mm/yyyy or just disable input
+    Utilities:
+        ✔ Forgot password functionality [ https://c-innovative.medium.com/implementing-password-reset-can-be-a-tricky-but-inevitable-task-737badfb7bab ] @done(22-05-18 14:54)
+        ☐ Email verification for account create
+        ☐ Remember Me (Maybe we use localStorage to store, on logout clear from localStorage)
+    Miscellaneous:
+        ✔ Work on NIGHT MODE, or remove @done(22-05-12 17:11)
+        ✔ If not Logged in, dont show anything, could add in from Firebase rules too @done(22-05-16 12:45)
+        ☐ Media Breakpoints
+        Consider making a filter form component, allows modularization. Downside, no custom styling
+        User Roles
+
+        Update History:
+            ✔ Last Updated By @done(22-05-13 13:06)
+            ✔ All updators so far in array, along with creator: See 'watchers' columns @done(22-05-13 13:06)
+            ✔ This will have updator name, time of update and commit message if any @done(22-05-13 13:06)
+
+            ✔ Update History array will always have Created as first element @done(22-05-13 13:06)
+            ✔ Delete all existing tickets, create new ones to test this @done(22-05-13 17:41)
+        Additional:
+            ☐ Add sprint calculation and column: 1 sprint = 7 days
+    
+    
+    Expansion Ideas:
+        Kanban Board to move tasks from one stage to another
+
+    ASK SIR:
+        Use Device Emulator for window size [1366 x 625]
+        Should observables be unsubscribed from in onDestroy
+        Next Index try to store from Dash or TickManager || Pending meeting with Barco sir
+        How to wait for an observable to load and then perform actions
+        what is the sorcery behind ngrx selectors?????
+        Good video/site to learn ngrx
+        Any features I should add in this
+        Ever used Firebase? What are their db rules protocol?
+
+    Improvements:
+        Each COPE needs to be manually reset/changed for any update. Integrate to single platform?
+        Each COPE also requires internet connection for Free To Watch channels every 7 days
+        GPS for wach COPE removed due to costs
+
+        COPE can provide service to any number of set top boxes
+        2 manufacturers for COPEs: Dexin and Gospel; Dexin is better, both are CHINA based
+        CHINA manufacturers all boards, including MUXes, Set Top Boxes
+        3 vendors for COPEs: Saima (East dominant, Gospel provider), MCBS (North dominant, Dexin provider) and Spike (Mh and south); Spike is new player
+
+
+    

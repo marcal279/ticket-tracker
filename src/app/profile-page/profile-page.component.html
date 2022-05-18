@@ -21,11 +21,15 @@
         background-color: rgb(226, 241, 253); 
         display: flex; 
         width: 24%;
+        height: 200%;
     }
     #tableOfContents a{
         text-decoration: none;
         color: black;
     }
+
+    .customButton{ margin-left: 0rem; }
+    .enableButtonHover .customButton:hover{ background-color: transparent; }
 </style>
 
 <!-- current page : {{currPage}} -->
@@ -38,7 +42,7 @@
             <h2 style="display: inline-block; color: rgb(5, 81, 221);" class="fredoka500" (click)="metadata()">My Profile</h2>
         </div>
         <div style="margin: 1rem 0rem 1rem 2rem;">
-            <img src="https://media-exp1.licdn.com/dms/image/C4E03AQEqis2UyP-_Ow/profile-displayphoto-shrink_200_200/0/1633333854582?e=1655337600&v=beta&t=HYYY9o3JfCHhrb4tUsipDonQ6gaD34Dn5HWQuPTmXJQ"
+            <img src="https://img.icons8.com/windows/96/0551DD/user-male-circle.png"
                 style="float: left; border-radius: 50%; height: 6rem;
                 margin-right: 1.25rem;">
             <h2 style="display: inline-block;" class="fredoka500">{{currUser?.name}}</h2>
@@ -54,20 +58,20 @@
                 </mat-form-field>
                 <mat-form-field appearance="fill">
                     <mat-label>Employee ID</mat-label>
-                    <input type="text" matInput placeholder="" value="NXT123" #empID disabled>
+                    <input type="text" matInput placeholder="" value="-" #empID disabled>
                 </mat-form-field>
                 <mat-form-field appearance="fill" class="width50" style="margin: 0rem 2rem 0.5rem 0rem;">
                     <mat-label>Email</mat-label>
                     <input type="email" matInput placeholder="" #email [(ngModel)]="currUser.empEid" required>
                 </mat-form-field>   
-                <mat-form-field appearance="fill">
+                <!-- <mat-form-field appearance="fill">
                     <mat-label>Role</mat-label>
-                    <input type="text" matInput placeholder="" value="Admin" value="{{currUser.role}}" #role disabled>
+                    <input type="text" matInput placeholder="" value="Employee" value="{{currUser.role}}" #role disabled>
                     <mat-hint>Provided by admin</mat-hint>
-                    <!-- <mat-select value="Admin">
+                    <mat-select value="Admin">
                         <mat-option></mat-option>
-                    </mat-select> -->
-                </mat-form-field>
+                    </mat-select>
+                </mat-form-field> -->
             </div>
             <div id="contact-info">
                 <h4 class="fredoka500">Contact Info</h4>
@@ -105,23 +109,20 @@
                     <input type="text" matInput placeholder="" [(ngModel)]="currUser.dept" #dept>
                 </mat-form-field>
             </div>
-            <button (click)="addUser()">Add User(Remove later)</button>
             <button (click)="updateUser()">Update User(Remove later)</button>
+
             <div id="settings">
-                what settings should i put here yaar
             </div>
-            <div>
+            <!-- <div>
                 Users:
                 <ul>
                     <li *ngFor="let user of USERS"><strong>{{user.key}}:</strong> {{user.empEid}}</li>
                 </ul>
-            </div>
-            <button (click)="currUserDetails()">Current User</button>
-            <button (click)="logout()">Log Out</button>
+            </div> -->
         </div>
     </div>
     <div id="tableOfContents" class="fredoka">
-        <div style="padding: 2rem; line-height: 1.25; position: fixed;">
+        <div style="padding: 2rem; line-height: 1.25; position: fixed;" class="enableButtonHover">
             <h3 class="fredoka500" style="text-decoration: underline; margin-bottom: 0.5rem;">On This Page</h3>
             <ul class="noBulletList">
                 <li>
@@ -132,18 +133,18 @@
                         <li><a href="#employee-info">Employee Information</a></li>
                     </ul>
                 </li>
-                <li>
+                <!-- <li>
                     <h4 class="fredoka500" style="margin-top: 0.5rem;">Settings</h4>
                     <ul class="noBulletList">
-                        <li>Set1</li>
-                        <li>Set2</li>
-                        <li>Set3</li>
+                        <li>Sett1</li>
+                        <li>Sett2</li>
+                        <li>Sett3</li>
                     </ul>
-                </li>
-
+                </li> -->
             </ul>
-            <button (click)="currUserDetails()">Current User</button>
-            <button (click)="logout()">Log Out</button>
+            <!-- <button (click)="currUserDetails()">Current User</button> -->
+            <button class="customButton fredoka" (click)="logout()" style="margin-right: 0.25rem;">Log Out</button>
+            <button class="customButton fredoka" [hidden]=" currUser.empEid=='' " (click)="resetPassword(currUser.empEid)" style="margin-right: 0rem;">Reset Password</button>
         </div>
     </div>
 </div>

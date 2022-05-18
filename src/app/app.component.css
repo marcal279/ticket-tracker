@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Lobster&family=Open+Sans&family=Fredoka:wght@400;500&family=Merriweather&family=Merriweather+Sans&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lobster&family=Quicksand:wght@400;600;700&family=Open+Sans&family=Fredoka:wght@400;500&family=Merriweather&family=Merriweather+Sans&display=swap');
 
 /* 
     :host ::ng-deep added in order to apply it as a global style
@@ -25,7 +25,7 @@
 
 :host ::ng-deep .allContent{
     display: flex;
-    flex-flow: row wrap;
+    flex-flow: row nowrap;
     justify-content: space-between;
     height: 100%;
 }

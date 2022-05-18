@@ -1,64 +1,63 @@
-    mat-form-field, mat-checkbox{
-        margin-bottom: 0.75rem;
-    }
+mat-form-field, mat-checkbox{
+    margin-bottom: 0.75rem;
+}
 
-    mat-checkbox{
-        font-size: 0.85rem;
-    }
+mat-checkbox{
+    font-size: 0.85rem;
+}
 
-    #forgotPassword{
-        font-size: 0.80rem;
-        font-weight: 500;
-        color: rgb(0, 98, 209);
-    }
-    #forgotPassword:hover{
-        cursor: pointer;
-        color: rgb(44, 130, 228);
-    }
+#forgotPassword{
+    font-size: 0.80rem;
+    font-weight: 500;
+    color: rgb(145, 10, 64);
+}
+#forgotPassword:hover{
+    cursor: pointer;
+    color: rgb(173,32,88);
+}
 
-    .looks-good-tick{
-        color: rgb(0, 196, 33); 
-        font-size: 2rem;
-        position: relative; 
-        top: 0.3rem; 
-        left: 0.5rem; 
-    }
+.looks-good-tick{
+    color: rgb(0, 196, 33); 
+    font-size: 2rem;
+    position: relative; 
+    top: 0.3rem; 
+    left: 0.5rem; 
+}
 
-    .login-button{
-        width: 39%; 
-        padding: 0.75rem 0rem;
-        border: 1px solid rgb(0,98,209);
-        border-radius: 1.5rem;
-        background-color: rgb(0, 98, 209);
-        color: white;
-        font-family: 'Fredoka', sans-serif;
-        font-size: 1rem;
-    }
-    .login-button:hover{
-        background-color: rgb(240, 244, 247);
-        color: rgb(0, 98, 209);
-        font-weight: 600;
-        transition-duration: 0.3s;
-    }
+.login-button{
+    width: 39%; 
+    padding: 0.75rem 0rem;
+    border: 1px solid rgb(173,32,88);
+    border-radius: 1.5rem;
+    background-color: rgb(173,32,88);
+    color: white;
+    font-family: 'Fredoka', sans-serif;
+    font-size: 1rem;
+}
+.login-button:hover{
+    background-color: rgb(240, 244, 247);
+    color: rgb(173,32,88);
+    /* font-weight: 600; */
+    transition-duration: 0.3s;
+}
 
-    .signup-button{
-        background-color: rgb(0, 119, 255);
-        /* border-color: rgb(30, 30, 190); */
-        border-color: rgb(0, 119, 255);
-    }
-    .signup-button:hover{
-        color: rgb(0, 119, 255);
-    }
+.signup-button{
+    background-color: rgb(145, 10, 64);
+    border-color: rgb(145, 10, 64);
+}
+.signup-button:hover{
+    color: rgb(145, 10, 64);
+}
 
-    /*
-    @media screen and (max-width: 1095px) {
-        .loginHalf{height: 50%; width: 100%;}
-        #loginImg{height: 15.5rem;}
-        #imgContainer{height: 20%;}
-        mat-card{height: 120%; width: 95%; margin-top: 0rem;}
-        #loginForm{}
-        mat-card-title,mat-form-field, mat-checkbox, #forgotPassword{margin-bottom: 0.5rem;}
-        mat-card-title{font-size: 1.5rem; margin-bottom: 0.5rem;}
-        mat-form-field{width: 97.5%;}
-        .login-button{padding-top: 0rem; padding-bottom: 0rem;}
-    } */
+/*
+@media screen and (max-width: 1095px) {
+    .loginHalf{height: 50%; width: 100%;}
+    #loginImg{height: 15.5rem;}
+    #imgContainer{height: 20%;}
+    mat-card{height: 120%; width: 95%; margin-top: 0rem;}
+    #loginForm{}
+    mat-card-title,mat-form-field, mat-checkbox, #forgotPassword{margin-bottom: 0.5rem;}
+    mat-card-title{font-size: 1.5rem; margin-bottom: 0.5rem;}
+    mat-form-field{width: 97.5%;}
+    .login-button{padding-top: 0rem; padding-bottom: 0rem;}
+} */

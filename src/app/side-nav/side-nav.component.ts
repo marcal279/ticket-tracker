@@ -11,22 +11,15 @@ export class SideNavComponent implements OnInit {
   
   @Input() currPage?:string;
   sideNavIconList : string[] = ['severity--v2', 'two-tickets', 'bar-chart', 'user'];
-  sideNavSectionList: string[] = ['Dashboard', 'Ticket Manager', 'Generate Reports', 'My Profile'];
-
-  pageActive(iconName: string) : Boolean{
-    if(this.currPage == this.sideNavSectionList[this.sideNavIconList.indexOf(iconName)]) return true;
-    return false;
-  }
+  sideNavSectionList: string[] = ['Dashboard', 'Ticket Manager', 'Report Generator', 'My Profile'];
 
   toolTipPosition: TooltipPosition = "right";
   
   constructor(private router: Router) { }
 
-  ngOnInit(): void {
-  }
-
-  canClick(){
-    alert('clickable')
+  pageActive(iconName: string) : Boolean{
+    if(this.currPage == this.sideNavSectionList[this.sideNavIconList.indexOf(iconName)]) return true;
+    return false;
   }
 
   goToPage(icon: string){
@@ -39,7 +32,7 @@ export class SideNavComponent implements OnInit {
         navigateTo = 'manage';
         break;
       case 'bar-chart':
-        navigateTo = '';
+        navigateTo = 'reports';
         break;
       case 'user':
         navigateTo = 'user';
@@ -48,5 +41,8 @@ export class SideNavComponent implements OnInit {
         break;  
     }
     this.router.navigate([navigateTo])
+  }
+
+  ngOnInit(): void {
   }
 }

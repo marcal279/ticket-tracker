@@ -1,0 +1,62 @@
+<style>
+    .fredoka{
+        font-family: 'Fredoka', sans-serif;
+    }
+    .fredoka500{
+        font-family: 'Fredoka', sans-serif;
+        font-weight: 500;
+    }
+
+    .uploadButton{
+        margin-left: 50%; margin-bottom: 1rem;
+        background-color: rgb(2, 120, 255);
+        color: white;
+        padding: 0.25rem;
+        border: 1px solid rgb(2, 120, 255);
+        border-radius: 1.25rem;
+    }
+    .uploadButton:hover{
+        cursor: pointer;
+        background-color: white;
+        color: rgb(2, 120, 255);
+        transition-duration: 0.3s;
+    }
+    .uploadButton:disabled{
+        border: rgb(132, 184, 243);
+        background-color: rgb(132, 184, 243);
+    }
+
+    .doneButton{
+        background-color: rgb(2, 120, 255);
+        color: white;
+    }
+</style>
+
+<mat-dialog-content>
+    <h2 class="fredoka500" style="margin: 0rem;">Upload files</h2>
+    <em style="color: grey; font-size: small;">Choose files you need to upload</em>
+    
+    <div style="margin-top: 1.5rem;">
+        <input type="file" (change)="selectFile($event)" multiple>
+        <button class="fredoka uploadButton" (click)="myUploadAllFiles()" [disabled]="!selectedFiles">Upload</button>
+        <div>
+            <mat-progress-bar [value]="percentageUploaded" style="display: inline-block; width: 90%;"></mat-progress-bar>
+            <span [hidden]="percentageUploaded>=100" style="margin-left: 1rem;">{{(percentageUploaded ? percentageUploaded : 0) | number:'1.1-1'}}%</span>
+            <mat-icon *ngIf="percentageUploaded>=100" style="color: green; position: relative; top: 10px; left: 5px;">check_circle</mat-icon>
+        </div>
+    </div>
+    <div *ngIf="percentageUploaded>99 && fileUploads.length == 0" style="display: flex; justify-content: center;">
+        <mat-spinner diameter="30"></mat-spinner>
+    </div>
+    <div *ngIf="fileUploads.length>0">
+        <h4 class="fredoka500" style="margin: 1rem 0rem 0rem;">Uploaded Files:</h4>
+        <table>
+            <tr *ngFor="let file of fileUploads"> <td><strong>{{file.name}}</strong></td>  <td>{{file.url}}</td> </tr>
+        </table>
+    </div>
+    <!-- <button (click)="giveURLS()">Give URLs</button> -->
+</mat-dialog-content>
+<mat-dialog-actions>
+    <button class="fredoka" mat-raised-button [mat-dialog-close]="false">Cancel</button>
+    <button class="fredoka doneButton" mat-raised-button [mat-dialog-close]="true" (click)="attachToTicket()">Done</button>
+</mat-dialog-actions>

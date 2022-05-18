@@ -6,6 +6,9 @@ import { SignupComponent } from "./signup/signup.component";
 import { DashboardComponent } from "./dashboard/dashboard.component";
 import { TicketManagerComponent } from "./ticket-manager/ticket-manager.component";
 import { ProfilePageComponent } from "./profile-page/profile-page.component";
+import { TicketDetailsComponent } from "./ticket-details/ticket-details.component";
+import { ReportGeneratorComponent } from "./report-generator/report-generator.component";
+import { AccountUtilitiesComponent } from "./account-utilities/account-utilities.component";
 
 const routes: Routes = [
     {path: 'login', component: LoginComponent},
@@ -14,6 +17,9 @@ const routes: Routes = [
     {path: 'dash', component: DashboardComponent},
     {path: 'manage', component: TicketManagerComponent},
     {path: 'user', component: ProfilePageComponent},
+    {path: 'ticket/:key', component: TicketDetailsComponent},
+    {path: 'reports', component: ReportGeneratorComponent},
+    {path: 'utilities', component: AccountUtilitiesComponent},
 ]
 
 @NgModule({
