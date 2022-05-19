@@ -369,7 +369,7 @@
                                 <p><strong>Platform: </strong>{{element.company}} {{element.platform}}</p>
                                 <p><strong>Issued By: </strong>{{element.empEid}}
                                 <!-- <strong style="margin-left: 2rem;">Dept: </strong>{{element.dept}}</p> -->
-                                <p><strong>Issue Date: </strong>{{element.issueDate | date}}
+                                <p><strong>Created Date: </strong>{{element.issueDate | date}}
                                     <strong style="margin-left: 2rem;" *ngIf="element.expectedDate">Expected: </strong>In {{element.duration}} on {{element.expectedDate | date}}
                                     <!-- key: {{element.key}} -->
                                     <a routerLink="/ticket/{{element.key}}" style="display: block; margin-top: 0.5rem;">See More</a>

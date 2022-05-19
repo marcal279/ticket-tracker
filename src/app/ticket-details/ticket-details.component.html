@@ -45,6 +45,8 @@
         cursor: default;
     }
 
+    .hoverPointer:hover{ cursor: pointer; }
+
     .red-bg{background-color: red; color: white;}
     .yellow-bg{background-color: rgb(255, 174, 0); color: black;}
     .green-bg{background-color: green; color: white;}
@@ -183,21 +185,23 @@
                 <div style="margin-top: 0.25rem; padding-left: 0.5rem;">
                     <table style="border-left: 2px solid rgb(185, 185, 185); border-collapse: separate; border-spacing: 0.75rem;">
                         <!-- Updates -->
-                        <tr style="position: relative; left: -1.3rem; z-index: 100; margin: 0.25rem 0rem;" *ngFor="let event of currTicket.updateHistory.reverse().slice(0,-1)">
+                        <tr style="position: relative; left: -1.3rem; z-index: 100; margin: 0.25rem 0rem;" *ngFor="let event of updateHistory.slice(0,-1)">
                             <td><div style="display: inline-block; border-radius: 50%; height: 10px; width: 10px; background-color: white; border: 2px solid rgb(121, 121, 121)"></div></td>
                             <td>
                                 <span>
-                                    <strong>{{event.updater? event.updater: 'Anonymous'}} at {{event.updateDate | date: 'shortTime'}} on {{event.updateDate | date}}:</strong> {{event.commitMessage}}
+                                    <!-- {{event.commitMessage}} -->
+                                    <strong>{{event.commitMessage.slice(0,event.commitMessage.indexOf('M):')+3)}}</strong>{{event.commitMessage.slice(event.commitMessage.indexOf('M):')+3)}}
                                 </span>
                             </td>
                         </tr>
 
                         <!-- Created -->
-                        <tr style="position: relative; left: -1.75rem; z-index: 100; margin: 0.25rem 0rem;" *ngFor="let event of currTicket.updateHistory.slice(-1)">
+                        <tr style="position: relative; left: -1.75rem; z-index: 100; margin: 0.25rem 0rem;" *ngFor="let event of updateHistory.slice(-1)">
                             <td><img src="../../assets/images/update-icon.png" style="background-color: white; border-radius: 50%;"></td>
                             <td>
                                 <span>
-                                    <strong>{{event.updater? event.updater: 'Anonymous'}} at {{event.updateDate | date: 'shortTime'}} on {{event.updateDate | date}}:</strong> {{event.commitMessage}}
+                                    <!-- {{event.commitMessage}} -->
+                                    <strong>{{event.commitMessage.slice(0,event.commitMessage.indexOf('M):')+3)}}</strong>{{event.commitMessage.slice(event.commitMessage.indexOf('M):')+3)}}
                                 </span>
                             </td>
                         </tr>
@@ -214,7 +218,8 @@
             <strong class="header fredoka500">Current Status: </strong>
 
             <span [ngClass]="{'green-bg':statusIsClosed(currTicket.status),'red-bg': statusIsNew(currTicket.status),
-            'purple-bg': statusIsHold(currTicket.status),'yellow-bg': statusIsProcessing(currTicket.status)}"
+            'purple-bg': statusIsHold(currTicket.status),'yellow-bg': statusIsProcessing(currTicket.status),
+            'hoverPointer': true}"  (click)="updateTicket(currTicket)"
             style="padding: 0.5rem; margin-left: 0.5rem;">
                 {{currTicket.status}} <mat-icon style="position: relative; top: 6px;">{{giveIcon(currTicket.status)}}</mat-icon>
             </span>

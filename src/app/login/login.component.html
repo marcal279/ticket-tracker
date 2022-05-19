@@ -36,7 +36,7 @@
                     <form class="login-form">
                         <mat-form-field appearance="outline" style="width: 80%;">
                             <mat-label>Email ID</mat-label>
-                            <input type="email" matInput [formControl]="unameFormControl" placeholder="Eg: NXT902287" #emailid>
+                            <input type="email" matInput [formControl]="unameFormControl" placeholder="" #emailid>
                             <mat-hint>As provided by company, not personal</mat-hint>
                             <mat-error *ngIf="invalidID(emailid.value) && !unameFormControl.hasError('required')">
                                 Please enter a valid email address

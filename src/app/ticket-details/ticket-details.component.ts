@@ -71,10 +71,23 @@ export class TicketDetailsComponent implements OnInit {
     })
   }
 
+  updateHistory: { updater: string, updateDate: Date, commitMessage ?: string }[] = []
+
   getTicket(){
     let key =  String(this.route.snapshot.paramMap.get('key'));
     console.log(`Key from route = ${key}`)
     this.currTicket = this.getSingleTicket(key);
+
+    this.updateHistory = [...this.currTicket.updateHistory].reverse();
+    // this.updateHistory.sort((a,b) => {
+    //   return (new Date(b.updateDate).getTime() - new Date(a.updateDate).getTime())
+    // });
+  }
+
+  printUpdateHistory(hist: Object[]){
+    hist.forEach(el=>{
+      console.log(JSON.stringify(el))
+    })
   }
 
   getSingleTicket(key: String): Ticket{

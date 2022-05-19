@@ -121,7 +121,7 @@ export class TicketDialogComponent implements OnInit {
     this.currentTicket.lastUpdated = rightNow;
     if(this.data.currEmail){
       this.currentTicket.empEid = this.data.currEmail;
-      this.currentTicket.updateHistory = [{updater: this.data.currEmail, updateDate: rightNow, commitMessage: `Created on ${rightNow.toDateString()} at ${rightNow.toLocaleTimeString()}`}];
+      this.currentTicket.updateHistory = [{updater: this.data.currEmail, updateDate: rightNow, commitMessage: `${this.data.currEmail} (${rightNow.toDateString()}, ${rightNow.toLocaleTimeString()}): Created ticket ${this.currentTicket.tid}`}];
     }
     else{
       alert('User not logged in!!');
@@ -155,9 +155,11 @@ export class TicketDialogComponent implements OnInit {
     }
     this.currentTicket.lastUpdated = rightNow;
 
-    if(!this.updateMessage) this.updateMessage = `Updated by ${this.data.currEmail} on ${rightNow.toDateString()} at ${rightNow.toLocaleTimeString()}`;
+    // if(!this.updateMessage) this.updateMessage = `Updated by ${this.data.currEmail} on ${rightNow.toDateString()} at ${rightNow.toLocaleTimeString()}`;
+    if(!this.updateMessage) this.updateMessage = `${this.data.currEmail} (${rightNow.toDateString()}, ${rightNow.toLocaleTimeString()}): Updated by ${this.data.currEmail}`;
+    else this.updateMessage = `${this.data.currEmail} (${rightNow.toDateString()}, ${rightNow.toLocaleTimeString()}): `+this.updateMessage;
 
-    this.currentTicket.updateHistory.push({updater: this.data.currEmail, updateDate: this.currentTicket.lastUpdated, commitMessage: this.updateMessage})
+    this.currentTicket.updateHistory.push({updater: this.data.currEmail, updateDate: rightNow, commitMessage: this.updateMessage})
 
     if(this.currentTicket.status=='Closed') this.currentTicket.closedDate = rightNow;
     if(this.data.ticket.key){

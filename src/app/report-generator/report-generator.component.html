@@ -7,11 +7,15 @@
 
     .filterForm{
         margin-left: 1.5rem;
-        width: 67.5%;
+        width: 60vw;
         border: 1px solid rgb(0, 102, 255);
         border-radius: 1.25rem;
-        padding: 0.75rem 1.5rem 1rem;
+        padding: 0.75rem 1.5rem 1rem 0rem;
     }
+
+    .oneHalfLeft{ margin-left: 1.5rem; }
+
+    .mat-form-field{ margin-left: 1.75rem; }
 </style>
 
 <body>
@@ -26,20 +30,20 @@
         </div>
 
         <div class="filterForm">
-            <h3 class="fredoka500" style="margin-bottom: 0rem;">Filters</h3>
-            <p class="fredoka" style="color: grey;">Select paramaters required for report to be generated</p>
+            <h3 class="fredoka500 oneHalfLeft" style="margin-bottom: 0rem;">Filters</h3>
+            <p class="fredoka oneHalfLeft" style="color: grey;">Select paramaters required for report to be generated</p>
         
             <form [formGroup]="filterForm">
                 <div formGroupName="timeFilter">
-                    <span style="color: gray;">Time Period: </span>
-                    <mat-form-field style="margin-left: 1.5rem;" appearance="outline">
+                    <span style="color: gray;" class="oneHalfLeft">Time Period: </span>
+                    <mat-form-field appearance="outline">
                         <mat-label>From Date (dd/mm/yyyy)</mat-label>
                         <input matInput [matDatepicker]="pickerStart" formControlName="startDate">
                         <mat-datepicker-toggle matSuffix [for]="pickerStart"></mat-datepicker-toggle>
                         <mat-datepicker #pickerStart></mat-datepicker>
                     </mat-form-field>
 
-                    <mat-form-field style="margin-left: 1.5rem;" appearance="outline">
+                    <mat-form-field appearance="outline">
                         <mat-label>End Date (dd/mm/yyyy)</mat-label>
                         <input matInput [matDatepicker]="pickerEnd" formControlName="endDate">
                         <mat-datepicker-toggle matSuffix [for]="pickerEnd"></mat-datepicker-toggle>
@@ -60,7 +64,7 @@
                         </mat-select>
                     </mat-form-field>
 
-                    <mat-form-field style="margin-left: 2rem;">
+                    <mat-form-field>
                         <mat-select placeholder="Priorities" formControlName="priority" required multiple>
                             <mat-select-trigger>
                                 {{(filterForm.get(['ticketFilter','priority'])?.value.length == priorities.length+1) ? 'All': filterForm.get(['ticketFilter','priority'])?.value[0]}}
@@ -71,7 +75,7 @@
                         </mat-select>
                     </mat-form-field>
 
-                    <mat-form-field style="margin-left: 2rem;">
+                    <mat-form-field>
                         <mat-select placeholder="Companies" formControlName="company" required multiple>
                             <mat-select-trigger>
                                 {{(filterForm.get(['ticketFilter','company'])?.value.length == companies.length+1) ? 'Both': filterForm.get(['ticketFilter','company'])?.value[0]}}
@@ -93,7 +97,7 @@
                         </mat-select>
                     </mat-form-field>
                     
-                    <mat-form-field style="margin-left: 2rem;">
+                    <mat-form-field>
                         <mat-select placeholder="Select Statuses" formControlName="status" required multiple>
                             <mat-select-trigger>
                                 {{(filterForm.get(['ticketFilter','status'])?.value.length == statuses.length+1) ? 'All': filterForm.get(['ticketFilter','status'])?.value[0]}}
@@ -107,7 +111,7 @@
                 </div>
             </form>
             <div style="padding: 1rem 0rem 0.5rem 1rem; justify-content: center; border: 1px solid rgb(0, 102, 255);
-            border-radius: 1.25rem;" [hidden]="!generated" class="enableButtonHover" [class.blueBorder] = "true">
+            border-radius: 1.25rem;" [hidden]="!generated" class="enableButtonHover oneHalfLeft" [class.blueBorder] = "true">
                 <div [hidden]="!(generated && this.filteredTickets.length!=0)">
                     <div style="display: flex; justify-content: space-between;">
                         <div>
