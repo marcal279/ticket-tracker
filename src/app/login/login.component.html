@@ -2,10 +2,9 @@
     body{
         display: flex;
         height: 100%;
-        /* background: linear-gradient(to right, hsla(204, 71%, 65%, 0.65),hsla(348, 71%, 45%, 0.8)),url('https://www.nxtdigital.co.in/contents/static/2019/11/home-splash-bird.png'); */
+        /* background: linear-gradient(to right, hsla(204, 71%, 65%, 0.65),hsla(348, 71%, 45%, 0.8)),url('https://www.nxtdigital.co.in/contents/static/2019/11/home-splash-bird.png');
         background: url('https://www.nxtdigital.co.in/contents/static/2019/11/home-splash-bird.png');
-        background-repeat: round;
-        
+        background-repeat: round; */
     }
     .width50{
         width: 50%;
@@ -17,14 +16,18 @@
         justify-content: center;
     }
 
-    /* .imageDiv{
+    .imageDiv{
+        overflow: hidden;
         width: 52.5%;
-    } */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
 </style>
 
 <body>
 
-    <div style="width: 52.5%;"></div>
+    <div class="width50 imageDiv"><img src="../../assets/images/login.jpg" alt="" style="height: 40rem;"></div>
 
     <div class="width50 centerAll" style="background-color: transparent; width: 47.5%; flex-flow: column wrap;">
         <h1 style="font-family: 'Quicksand'; color: white; font-weight: 400; font-size: 2rem; margin-bottom: 1.5px; margin-top: -1.5rem;"><strong>NXT</strong>Digital TicketMaster</h1>
