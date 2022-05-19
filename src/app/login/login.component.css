@@ -9,11 +9,11 @@ mat-checkbox{
 #forgotPassword{
     font-size: 0.80rem;
     font-weight: 500;
-    color: rgb(145, 10, 64);
+    color: rgb(2, 69, 145);
 }
 #forgotPassword:hover{
     cursor: pointer;
-    color: rgb(173,32,88);
+    color: rgb(5, 106, 221);
 }
 
 .looks-good-tick{
@@ -27,26 +27,26 @@ mat-checkbox{
 .login-button{
     width: 39%; 
     padding: 0.75rem 0rem;
-    border: 1px solid rgb(173,32,88);
+    border: 1px solid rgb(5, 106, 221);
     border-radius: 1.5rem;
-    background-color: rgb(173,32,88);
+    background-color: rgb(5, 106, 221);
     color: white;
     font-family: 'Fredoka', sans-serif;
     font-size: 1rem;
 }
 .login-button:hover{
     background-color: rgb(240, 244, 247);
-    color: rgb(173,32,88);
+    color: rgb(5, 106, 221);
     /* font-weight: 600; */
     transition-duration: 0.3s;
 }
 
 .signup-button{
-    background-color: rgb(145, 10, 64);
-    border-color: rgb(145, 10, 64);
+    background-color: rgb(2, 69, 145);
+    border-color: rgb(2, 69, 145);
 }
 .signup-button:hover{
-    color: rgb(145, 10, 64);
+    color: rgb(2, 69, 145);
 }
 
 /*
