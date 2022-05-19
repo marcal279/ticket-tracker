@@ -1,4 +1,5 @@
-# NxtTicketMaster
+# TicketTracker
+![This look](https://user-images.githubusercontent.com/73192810/169275207-774df71b-4243-4c04-bcec-77db7c9d3126.png)
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 13.2.6.
 
