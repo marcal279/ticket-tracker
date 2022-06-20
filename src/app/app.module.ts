@@ -19,24 +19,24 @@ import { AngularFirestoreModule } from '@angular/fire/compat/firestore';   // fo
 import { AngularFireStorageModule } from '@angular/fire/compat/storage';   // for files
 
 // Components
-import { DashboardComponent } from './dashboard/dashboard.component';
-import { LoginComponent } from './login/login.component';
-import { ProfilePageComponent } from './profile-page/profile-page.component';
-import { SideNavComponent } from './side-nav/side-nav.component';
-import { SignupComponent } from './signup/signup.component';
-import { TicketDialogComponent } from './ticket-dialog/ticket-dialog.component';
-import { TicketManagerComponent } from './ticket-manager/ticket-manager.component';
+import { DashboardComponent } from './components/dashboard/dashboard.component';
+import { LoginComponent } from './components/login/login.component';
+import { ProfilePageComponent } from './components/profile-page/profile-page.component';
+import { SideNavComponent } from './components/side-nav/side-nav.component';
+import { SignupComponent } from './components/signup/signup.component';
+import { TicketDialogComponent } from './components/ticket-dialog/ticket-dialog.component';
+import { TicketManagerComponent } from './components/ticket-manager/ticket-manager.component';
+import { TicketDetailsComponent } from './components/ticket-details/ticket-details.component';
+import { ReportGeneratorComponent } from './components/report-generator/report-generator.component';
+import { AttachDialogComponent } from './components/attach-dialog/attach-dialog.component';
+import { AccountUtilitiesComponent } from './components/account-utilities/account-utilities.component';
 
 // Routing
 import { AppRoutingModule } from './app-routing.module';
-import { TicketDetailsComponent } from './ticket-details/ticket-details.component';
-import { ReportGeneratorComponent } from './report-generator/report-generator.component';
 
 // NgRx/store
 import { StoreModule } from '@ngrx/store';
-import { IndexReducer, UserReducer } from './ngrx-state/app.reducers';
-import { AttachDialogComponent } from './attach-dialog/attach-dialog.component';
-import { AccountUtilitiesComponent } from './account-utilities/account-utilities.component';
+import { IndexReducer, UserReducer } from './shared/ngrx-state/app.reducers';
 import { MAT_DATE_LOCALE } from '@angular/material/core';
 
 @NgModule({

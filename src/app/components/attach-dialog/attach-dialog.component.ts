@@ -3,8 +3,8 @@ import { AngularFireStorage } from '@angular/fire/compat/storage';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { finalize } from 'rxjs';
-import { DialogData } from '../interfaces/dialog-data';
-import { TicketsService } from '../services/tickets/tickets.service';
+import { DialogData } from '../../shared/interfaces/dialog-data';
+import { TicketsService } from '../../shared/services/tickets/tickets.service';
 
 @Component({
   selector: 'app-attach-dialog',

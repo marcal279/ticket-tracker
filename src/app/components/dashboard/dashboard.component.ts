@@ -27,20 +27,20 @@ import { map, Observable } from 'rxjs';
 
 import { TicketDialogComponent } from '../ticket-dialog/ticket-dialog.component';
 
-import { TicketsService } from '../services/tickets/tickets.service';
-import { UserService } from '../services/users/user.service';
-import { UserAuthService } from '../services/user-auth/user-auth.service';
+import { TicketsService } from '../../shared/services/tickets/tickets.service';
+import { UserService } from '../../shared/services/users/user.service';
+import { UserAuthService } from '../../shared/services/user-auth/user-auth.service';
 
-import { Ticket } from '../interfaces/ticket';
-import { User } from '../interfaces/user';
+import { Ticket } from '../../shared/interfaces/ticket';
+import { User } from '../../shared/interfaces/user';
 
 //* State Management
 
 //* USED ngrx State Management
 import { Store } from '@ngrx/store';
-import { UserAction } from '../ngrx-state/app.actions';
+import { UserAction } from '../../shared/ngrx-state/app.actions';
 // ! UNUSED: rxjs State Management
-import { StateDataService } from '../services/state-data/state-data.service';
+import { StateDataService } from '../../shared/services/state-data/state-data.service';
 import { Router } from '@angular/router';
 
 

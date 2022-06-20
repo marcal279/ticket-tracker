@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
-import { User } from '../interfaces/user';
-import { UserAuthService } from '../services/user-auth/user-auth.service';
-import { UserService } from '../services/users/user.service';
+import { User } from '../../shared/interfaces/user';
+import { UserAuthService } from '../../shared/services/user-auth/user-auth.service';
+import { UserService } from '../../shared/services/users/user.service';
 
 @Component({
   selector: 'app-signup',

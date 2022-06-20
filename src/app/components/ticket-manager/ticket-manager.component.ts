@@ -12,18 +12,18 @@ import { MatTableDataSource } from '@angular/material/table';
 import { map, Observable } from 'rxjs';
 
 import { TicketDialogComponent } from '../ticket-dialog/ticket-dialog.component';
-import { Ticket } from '../interfaces/ticket';
-import { TicketsService } from '../services/tickets/tickets.service';
-import { StateDataService } from '../services/state-data/state-data.service';
-import { User } from '../interfaces/user';
+import { Ticket } from '../../shared/interfaces/ticket';
+import { TicketsService } from '../../shared/services/tickets/tickets.service';
+import { StateDataService } from '../../shared/services/state-data/state-data.service';
+import { User } from '../../shared/interfaces/user';
 import { Store } from '@ngrx/store';
 
-import * as TicketParameters from '../parameters/tickets.parameters'
+import * as TicketParameters from '../../shared/parameters/tickets.parameters'
 import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
 import { Router } from '@angular/router';
-import { UserAuthService } from '../services/user-auth/user-auth.service';
-import { UserService } from '../services/users/user.service';
-import { UserAction } from '../ngrx-state/app.actions';
+import { UserAuthService } from '../../shared/services/user-auth/user-auth.service';
+import { UserService } from '../../shared/services/users/user.service';
+import { UserAction } from '../../shared/ngrx-state/app.actions';
 
 
 @Component({

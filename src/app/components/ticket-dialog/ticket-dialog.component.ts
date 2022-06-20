@@ -5,16 +5,16 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 
 // import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { DialogData } from '../interfaces/dialog-data';
-import { Ticket } from '../interfaces/ticket';
+import { DialogData } from '../../shared/interfaces/dialog-data';
+import { Ticket } from '../../shared/interfaces/ticket';
 
-import { TicketsService } from '../services/tickets/tickets.service';
+import { TicketsService } from '../../shared/services/tickets/tickets.service';
 import { Store } from '@ngrx/store';
-import { User } from '../interfaces/user';
+import { User } from '../../shared/interfaces/user';
 import { filter, map, Observable, of } from 'rxjs';
-import { IncrementIndexAction, StoreIndexAction } from '../ngrx-state/app.actions';
+import { IncrementIndexAction, StoreIndexAction } from '../../shared/ngrx-state/app.actions';
 import { Router } from '@angular/router';
-import * as TicketParameters from '../parameters/tickets.parameters';
+import * as TicketParameters from '../../shared/parameters/tickets.parameters';
 
 import { MAT_DATE_FORMATS } from '@angular/material/core';
 

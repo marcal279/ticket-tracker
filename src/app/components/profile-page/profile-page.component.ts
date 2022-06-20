@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
-import { User } from '../interfaces/user';
-import { UserAction } from '../ngrx-state/app.actions';
-import { StateDataService } from '../services/state-data/state-data.service';
-import { UserAuthService } from '../services/user-auth/user-auth.service';
-import { UserService } from '../services/users/user.service';
+import { User } from '../../shared/interfaces/user';
+import { UserAction } from '../../shared/ngrx-state/app.actions';
+import { StateDataService } from '../../shared/services/state-data/state-data.service';
+import { UserAuthService } from '../../shared/services/user-auth/user-auth.service';
+import { UserService } from '../../shared/services/users/user.service';
 
 @Component({
   selector: 'app-profile-page',

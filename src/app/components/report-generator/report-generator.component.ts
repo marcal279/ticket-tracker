@@ -2,12 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { filter, map, Observable } from 'rxjs';
-import { Ticket } from '../interfaces/ticket';
-import { User } from '../interfaces/user';
-import { MonthsList } from '../parameters/reports.parameters';
-import * as TicketParameters from '../parameters/tickets.parameters';
-import { StateDataService } from '../services/state-data/state-data.service';
-import { TicketsService } from '../services/tickets/tickets.service';
+import { Ticket } from '../../shared/interfaces/ticket';
+import { User } from '../../shared/interfaces/user';
+import { MonthsList } from '../../shared/parameters/reports.parameters';
+import * as TicketParameters from '../../shared/parameters/tickets.parameters';
+import { StateDataService } from '../../shared/services/state-data/state-data.service';
+import { TicketsService } from '../../shared/services/tickets/tickets.service';
 
 import { MAT_DATE_FORMATS } from '@angular/material/core';
 
