@@ -1,32 +1,96 @@
-<div id="sideNavIcons">
+<style>
+    .mat-tooltip{
+        font-size: 16px !important;
+    }
+
+    /* mat-sidenav{
+        background-color: rgb(170, 26, 134);
+        color: white;
+    }
+
+    .sideNav-container{
+        position: absolute;
+        top: 0;
+        left: 0;
+        bottom: 0;
+    }
+    .mat-drawer-inner-container{
+        padding: 1rem;
+    } */
+
+    .iconName{
+        color: white;
+        font-family: 'Fredoka';
+        font-weight: 500;
+        position: relative;
+        bottom: 0.45rem;
+        padding: 0rem 4.2rem 0rem 1rem;
+        /* transition: 0.5s; */
+    }
+
+    .notActive{
+        color: #D58EF5;
+    }
+
+    .displayNone{
+        display: none;
+    }
+
+    .slideRight{ animation: slideFromLtoR 0.5s; }
+    @keyframes slideFromLtoR {
+        0%{
+            left: -20rem;
+        }
+        100%{
+            left: 0rem;
+        }
+    }
+    
+    .slideLeft{ animation: slideFromRtoL 0.5s; }
+
+    @keyframes slideFromRtoL {
+        0%{
+            left: 0rem;
+        }
+        100%{
+            left: -20rem;
+        }
+    }
+</style>
+
+
+<div id="sideNavIcons" style="overflow: hidden;">
     <ul style="list-style-type: none;">
-        <li style="padding-left: 0.76rem;">
             <img src="https://img.icons8.com/fluency-systems-regular/30/0551DD/menu--v1.png" 
-            style="margin-bottom: 1.5rem; padding-left: 0rem;" id="menuIcon">
+        <li style="padding-left: 0.76rem;" (click)="toggleSideNav()">
+            style="margin-bottom: 1.5rem; padding-left: 0rem; display: inline-block;" id="menuIcon">
+            <!-- <span class="iconName" [hidden]="!sideNavOpen" style="bottom: 2rem;">Menu</span> -->
+            <span class="iconName" [hidden]="!sideNavOpen" [ngClass]="{slideRight: false}" style="bottom: 2rem;">Menu</span>
         </li>
         
         <li class="pagesIcons" *ngFor="let icon of sideNavIconList.slice(0,-1)"
         [ngClass]="{'active': pageActive(icon)}" style="margin: 1rem 0rem 2rem 0rem;"
-        matTooltip="{{ this.sideNavSectionList[this.sideNavIconList.indexOf(icon)] }}"
-        [matTooltipPosition]="toolTipPosition" 
-        [matTooltipShowDelay]="500"  (click)="goToPage(icon)">
+        (click)="goToPage(icon)">
             <img *ngIf="pageActive(icon)" 
                 src="https://img.icons8.com/fluency-systems-regular/25/0551DD/{{icon}}.png" #{{icon}}>
             
             <img *ngIf="!pageActive(icon)" 
                 src="https://img.icons8.com/fluency-systems-regular/25/61A6F5/{{icon}}.png" #{{icon}}>    
+            
+            <!-- <span class="iconName" [ngClass]="{notActive: !pageActive(icon)}" [hidden]="!sideNavOpen">{{givePageName(icon)}}</span> -->
+            <span class="iconName" [hidden]="!sideNavOpen" [ngClass]="{notActive: !pageActive(icon), slideRight: false}">{{givePageName(icon)}}</span>
         </li>
 
-        <li class="pagesIcons" [ngClass]="{'active': pageActive('user')}" style="position: absolute; bottom: 1rem; padding-right: 0.9rem;"
-        matTooltip="{{ this.sideNavSectionList[this.sideNavIconList.indexOf('user')] }}"
-        [matTooltipPosition]="toolTipPosition" 
-        [matTooltipShowDelay]="500" (click)="goToPage('user')">
+        <li class="pagesIcons" [ngClass]="{'active': pageActive('user')}" style="position: absolute; bottom: 1rem; padding-right: 0.8rem;"
+        (click)="goToPage('user')">
             <img *ngIf="pageActive('user')" 
                 src="https://img.icons8.com/fluency-systems-regular/25/0551DD/user.png" #user>
             
             <img *ngIf="!pageActive('user')" 
                 src="https://img.icons8.com/fluency-systems-regular/25/61A6F5/user.png" #user>
             <!-- <img style="height: 40px; border-radius: 50%; margin-left: -10px;" src="../../assets/images/profile-marc.jpg" #user> -->
+
+            <span class="iconName" [hidden]="!sideNavOpen" [ngClass]="{notActive: !pageActive('user'), slideRight: false}" style="padding-right: 6rem;">My Profile</span>
         </li>
     </ul>
 </div>

@@ -8,6 +8,12 @@ import { Router } from '@angular/router';
   styleUrls: ['./side-nav.component.css']
 })
 export class SideNavComponent implements OnInit {
+
+  sideNavOpen : boolean = false;
+
+  toggleSideNav(){
+    this.sideNavOpen = !this.sideNavOpen;
+  }
   
   @Input() currPage?:string;
   sideNavIconList : string[] = ['severity--v2', 'two-tickets', 'bar-chart', 'user'];
@@ -16,6 +22,10 @@ export class SideNavComponent implements OnInit {
   toolTipPosition: TooltipPosition = "right";
   
   constructor(private router: Router) { }
+
+  givePageName(iconName: string): string{
+    return this.sideNavSectionList[this.sideNavIconList.indexOf(iconName)];
+  }
 
   pageActive(iconName: string) : Boolean{
     if(this.currPage == this.sideNavSectionList[this.sideNavIconList.indexOf(iconName)]) return true;
