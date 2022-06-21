@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
+import { allowedDomains, adminList } from 'src/app/shared/parameters/tickets.parameters';
 
 import { UserAuthService } from '../../shared/services/user-auth/user-auth.service';
 
@@ -15,21 +16,36 @@ export class LoginComponent implements OnInit {
   
   constructor(private authService: UserAuthService) { }
 
+  isAdmin(username:string){
+    let admins = [...adminList]
+    if(admins.indexOf(username)>-1) return true;
+    return false;
+  }
 
-  invalidID(username:string) : Boolean{
-    if((username.match(/^(NXT|IMCL)[0-9]+/) || username.match(/\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}\b/)) && username.length>=5) return false;
-    else return true;
+  allowedDomainsHardcoded = [...allowedDomains]
+  isAllowedDomain(domain:string){
+    if(this.allowedDomainsHardcoded.indexOf(domain)>-1) return true;
+    return false
+  }
+
+  isValidID(emailID:string) : Boolean{
+    if((this.isAdmin(emailID) || this.isAllowedDomain(emailID.slice(emailID.indexOf('@')+1)) )) return true;
+    // if( (this.isAdmin(emailID) || emailID.endsWith('@nxtdigital.in')) ) return true;
+    return false;
   }
 
   hide:boolean=true;
 
-  checkPasswordValid(){
+  isValidPassword(){
     if(this.passwordFormControl.value.length>=4 && this.passwordFormControl.value.match(/[a-zA-Z]+[!@#$%^&-_.a-zA-Z]*[0-9]+[a-zA-Z]*$/)) return true;
     return false;
   }
 
   signIn(username: string, password:string){
-    this.authService.login(this.unameFormControl.value, this.passwordFormControl.value);
+    if(this.isValidID(username) && this.isValidPassword()) this.authService.login(this.unameFormControl.value, this.passwordFormControl.value);
+    else{
+      if(!this.isValidID(username)) alert('Invalid User ID, access denied')
+    }
   }
 
   resetPassword(email:string){
