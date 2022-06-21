@@ -66,8 +66,15 @@
                 <button (click)="resetPassword()" class="customButton fredoka">Reset Password</button>
             </ng-container>
 
-            <ng-container *ngSwitchCase="'recoverEmail'">Recover Email</ng-container>
-            <ng-container *ngSwitchCase="'verifyEmail'">Verify Email</ng-container>
+            <ng-container *ngSwitchCase="'recoverEmail'" class="enableButtonHover">
+                
+            </ng-container>
+
+            <ng-container *ngSwitchCase="'verifyEmail'">
+                <h3>Wait for alert</h3>
+                <button routerLink="../dash">Continue to dashboard</button>
+                <!-- <button (click)="resendVerificationEmail()">Resend</button> -->
+                <button routerLink="../">Back to Login</button> </ng-container>
         </mat-card-content>
     </mat-card>
 </div>
