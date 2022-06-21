@@ -16,4 +16,5 @@ export class StateDataService{
   setUser(currUser: User){
     this.userSource.next(currUser)
   }
+  
 }
