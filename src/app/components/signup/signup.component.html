@@ -69,41 +69,31 @@
             <mat-card-content>
                 <mat-stepper linear #signUpStepper>
                     <mat-step>
-                        <h3 class="fredoka500">Basic Information</h3>
-                        <mat-form-field appearance="fill" style="width: 65%">
+                        <h3 class="fredoka500">Employee Information</h3>
+                        <mat-form-field appearance="fill" style="width: 50%">
                             <mat-label>Full Name</mat-label>
                             <input type="text" matInput placeholder="" #name [(ngModel)]="newUser.name" required>
                         </mat-form-field>
-                        <mat-form-field appearance="fill" style="margin: 0rem 1rem; width: 7.5rem;">
-                            <mat-label>Employee ID</mat-label>
-                            <input type="text" matInput placeholder="On your ID Card" value="NXT902287" #empID required>
+                        <mat-form-field appearance="fill" style="margin-left: 1rem;">
+                            <mat-label>Mobile No.</mat-label>
+                            <input type="text" matInput placeholder="" [(ngModel)]="newUser.mob" #mob>
+                            <mat-error *ngIf="!isValidPhNumber(newUser.mob)">Invalid phone number, please enter 10 digits</mat-error>
                         </mat-form-field>
-                        <mat-form-field appearance="fill" style="width: 65%;">
+                        <mat-form-field appearance="fill" style="width: 65%; margin-bottom: 1.5rem;">
                             <mat-label>Company Email ID</mat-label>
                             <input type="email" matInput placeholder="" [(ngModel)]="newUser.empEid" #email required>
                             <!-- <span matSuffix>@nxtdigital.in</span> -->
+                            <!-- <mat-hint>Must be a nxtdigital.in Email ID</mat-hint> -->
                         </mat-form-field>
-                        <button mat-raised-button matStepperNext style="display: block;">Next</button>
+                        <button mat-raised-button matStepperNext style="display: block;" [disabled]="!isValidEmail(newUser.empEid) || newUser.name.length<2">Next</button>
                     </mat-step>
                     <mat-step>
-                        <h3 class="fredoka500">Contact Information</h3>
-                        <mat-form-field appearance="fill">
-                            <mat-label>Mobile No.</mat-label>
-                            <input type="text" matInput placeholder="" [(ngModel)]="newUser.mob" #mob>
-                        </mat-form-field>
-                        <mat-form-field appearance="fill" style="margin-left: 1rem;">
-                            <mat-label>Office No./Extension</mat-label>
-                            <input type="text" matInput placeholder="" [(ngModel)]="newUser.offExt" #offExt>
-                        </mat-form-field>  
-                        <button mat-raised-button matStepperPrevious>Previous</button>
-                        <button mat-raised-button matStepperNext>Next</button>
-                    </mat-step>
-                    <mat-step>
-                        <h3 class="fredoka500">Employee Information</h3>
+                        <h3 class="fredoka500">User Information (Optional)</h3>
                         <mat-form-field appearance="outline">
                             <mat-select placeholder="Company" required [(value)]="newUser.company">
                                 <mat-option value="NXTDigital">NXTDigital</mat-option>
                                 <mat-option value="InDigital">InDigital</mat-option>
+                                <mat-option value="3rd Party/Vendor">3rd Party/Vendor</mat-option>
                             </mat-select>
                         </mat-form-field>
                         <mat-form-field appearance="fill" style="margin-left: 1rem;">
@@ -112,10 +102,10 @@
                         </mat-form-field>
                         <mat-form-field appearance="fill">
                             <mat-label>Supervisor</mat-label>
-                            <input type="text" matInput placeholder="The guy/gal you don't want to disappoint" [(ngModel)]="newUser.supervisor" #supervisor>
+                            <input type="text" matInput [(ngModel)]="newUser.supervisor" #supervisor>
                         </mat-form-field>
-                        <mat-form-field appearance="fill" style="margin-left: 1rem;">
-                            <mat-label>Dept.</mat-label>
+                        <mat-form-field appearance="fill" style="margin-left: 1rem; margin-right: 1.5rem;">
+                            <mat-label>Dept. (If applicable)</mat-label>
                             <input type="text" matInput placeholder="" [(ngModel)]="newUser.dept" #dept>
                         </mat-form-field>
                         <button mat-raised-button matStepperPrevious>Previous</button>
