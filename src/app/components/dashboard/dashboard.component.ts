@@ -149,6 +149,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
       dpA: 0,// dp app
       dpAdmin: 0,// dp admin portal
       web: 0,// website
+      mso: 0// mso
     },
     imcl: {
       lcoP: 0, //lco portal
@@ -160,6 +161,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
       dpA: 0,// dp app
       dpAdmin: 0,// dp admin portal
       web: 0,// website
+      mso: 0// mso
     }
   }
 
@@ -175,7 +177,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
       series: [
         {
           name: "Tickets",
-          data: [10, 41, 35, 51, 40, 62, 14, 74, 102, 22, 10, 34],
+          data: [0,0,0,0,0,0,19,1,8,24,2,0],
         }
       ],
       chart: {
@@ -344,6 +346,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
     return this.authService.isAuthenticated
   }
 
+  goToTickManager(){
+    this.router.navigate(['/manage']);
+  }
+
   goToDetails(key: string){
     this.router.navigate([`/ticket/${key}`]);
   }
@@ -394,8 +400,13 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
 
-  displayedColumns: string[] = ['ticketType','tid','title', 'empEid','priority', 'duration', 'expectedDate','status'];
-  colNames: string[] = ['Type','TID','Title', 'Raised By', 'Priority', 'Duration','Expected','Status'];
+  displayedColumns: string[] = ['ticketType','tid','title', 'empEid','priority', 'issueDate', 'expectedDate','status'];
+  colNames: string[] = ['Type','TID','Title', 'Raised By', 'Priority','Created','Expected','Status'];
+  
+  
+  altDisplayedColumns: string[] = ['ticketType','tid','title', 'empEid','priority', 'issueDate','status'];
+  altColNames: string[] = ['Type','TID','Title', 'Raised By', 'Priority','Created','Status'];
+
 
   dataSource = new MatTableDataSource<Ticket>();
   @ViewChild(MatSort) sort!: MatSort;
@@ -450,6 +461,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
     let today = new Date().getTime();
     if(expected < today && !this.statusIsClosed(element.status)) return true;
     return false;
+  }
+
+  is2049(date: Date): boolean{
+    return (new Date(date)).getTime() == (new Date(2049,0,1)).getTime()
   }
 
 
@@ -519,13 +534,14 @@ export class DashboardComponent implements OnInit, OnDestroy {
             switch(value.platform){
               case 'LCO Portal': doubleBarDataCopy.nxt.lcoP +=1; break;
               case 'LCO App': doubleBarDataCopy.nxt.lcoA +=1; break 
-              case 'LCO Admin App': doubleBarDataCopy.nxt.lcoAdmin +=1; break;
+              case 'LCO Admin Portal': doubleBarDataCopy.nxt.lcoAdmin +=1; break;
               case 'Selfcare Portal': doubleBarDataCopy.nxt.scP +=1; break;
               case 'Selfcare App': doubleBarDataCopy.nxt.scA +=1; break;
               case 'DP Collection Portal': doubleBarDataCopy.nxt.dpP +=1; break;
               case 'DP Collection App': doubleBarDataCopy.nxt.dpA +=1; break;
               case 'DP Collection Admin': doubleBarDataCopy.nxt.dpAdmin +=1; break;
               case 'Website': doubleBarDataCopy.nxt.web +=1; break;
+              case 'MSO Portal': doubleBarDataCopy.nxt.mso +=1; break;
               case 'Other': break; // todo add this in graph later if needed 
               default:
                 alert('none for '+value.title+' with '+value.platform);
@@ -536,13 +552,14 @@ export class DashboardComponent implements OnInit, OnDestroy {
             switch(value.platform){
               case 'LCO Portal': doubleBarDataCopy.imcl.lcoP +=1; break;
               case 'LCO App': doubleBarDataCopy.imcl.lcoA +=1; break;
-              case 'LCO Admin App': doubleBarDataCopy.imcl.lcoAdmin +=1; break;
+              case 'LCO Admin Portal': doubleBarDataCopy.imcl.lcoAdmin +=1; break;
               case 'Selfcare Portal': doubleBarDataCopy.imcl.scP +=1; break;
               case 'Selfcare App': doubleBarDataCopy.imcl.scA +=1; break;
               case 'DP Collection Portal': doubleBarDataCopy.imcl.dpP +=1; break;
               case 'DP Collection App': doubleBarDataCopy.imcl.dpA +=1; break;
               case 'DP Collection Admin': doubleBarDataCopy.imcl.dpAdmin +=1; break;
               case 'Website': doubleBarDataCopy.imcl.web +=1; break;
+              case 'MSO Portal': doubleBarDataCopy.imcl.mso +=1; break;
               case 'Other': break; // todo add this in graph later if needed 
               default:
                 alert('none for '+value.title+' with '+value.platform);

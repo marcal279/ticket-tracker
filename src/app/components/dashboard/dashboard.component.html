@@ -38,8 +38,10 @@
             padding: 0.5rem 0.5rem 12.5rem 0.25rem;
         }
         #yourInsights{
-            /* width: 25rem; */
+            position: absolute;
+            right: 0!important;
             width: 29vw;
+            height: 97vh;
             min-width: 25rem;
             background-color: rgb(230, 241, 252);
             padding: 0.45rem;
@@ -77,8 +79,8 @@
         .mat-column-tid{
             width: 6rem;
         }
-        .mat-column-tickType{
-            width: 5rem;
+        .mat-column-ticketType{
+            width: 3.5rem;
         }
         .mat-column-title{
             width: 9rem;
@@ -93,8 +95,8 @@
         .mat-column-priority{
             width: 5rem;  
         }
-        .mat-column-duration{
-            width: 5rem;  
+        .mat-column-issueDate{
+            width: 7rem;  
         }
         .mat-column-expectedDate{
             width: 7rem; 
@@ -213,6 +215,7 @@
                         </button> -->
                         <button class="complemCustomButton" 
                             style="width: 3rem; padding: 0.4rem 0.3rem 0.6rem 0.5rem; border-radius: 50%;"
+                            matTooltip="Log Out" matTooltipPosition="left" [matTooltipShowDelay]="250"
                             (click)="logout()">
                             <mat-icon style="font-size: 1.5rem;">power_settings_new</mat-icon>
                         </button>
@@ -237,7 +240,8 @@
                             [dataLabels]="lineChartOptions.dataLabels"
                             [grid]="lineChartOptions.grid"
                             [stroke]="lineChartOptions.stroke"
-                            [title]="lineChartOptions.title"></apx-chart>
+                            [title]="lineChartOptions.title"
+                            [theme]="lineChartOptions.theme"></apx-chart>
                         </div>
                         <div class="BIchart" id="pieChart" *ngIf="pieChartOptions.series && 
                         pieChartOptions.chart && pieChartOptions.responsive &&
@@ -260,11 +264,9 @@
                     </h3>
                     <!-- table -->
                     <div>
-                        <table mat-table matSort="desc" [dataSource]="dataSource" multiTemplateDataRows class="mat-elevation-z2">
-                                
-                            <!-- ticketType -->
+                        <table mat-table [dataSource]="dataSource" multiTemplateDataRows class="mat-elevation-z2">
                             <ng-container matColumnDef="ticketType">
-                                <th mat-header-cell *matHeaderCellDef mat-sort-header>Ticket Type</th>
+                                <th mat-header-cell *matHeaderCellDef>Type</th>
                                 <td mat-cell *matCellDef="let element">
                                     <mat-icon  matTooltip="{{ element.ticketType }}" 
                                         matTooltipPosition="left"
@@ -277,19 +279,80 @@
                                     </mat-icon>
                                 </td>
                             </ng-container>
-                            <!-- generate all columns AFTER tickType EXCEPT status & expectedDate -->
-                            <ng-container *ngFor="let column of displayedColumns.slice(1,-2); index as i" matColumnDef="{{column}}">
-                                <th mat-header-cell *matHeaderCellDef mat-sort-header>{{colNames[i]}}</th>
+                            <ng-container matColumnDef="tid">
+                                <th mat-header-cell *matHeaderCellDef>TID</th>
+                                <td mat-cell *matCellDef="let element"> {{element.tid}} </td>
+                            </ng-container>
+                            <ng-container matColumnDef="title">
+                                <th mat-header-cell *matHeaderCellDef>Title</th>
+                                <td mat-cell *matCellDef="let element"> {{element.title}} </td>
+                            </ng-container>
+                            <ng-container matColumnDef="empEid">
+                                <th mat-header-cell *matHeaderCellDef>Raised By</th>
+                                <td mat-cell *matCellDef="let element"> {{element.empEid}} </td>
+                            </ng-container>
+                            <ng-container matColumnDef="priority">
+                                <th mat-header-cell *matHeaderCellDef>Priority</th>
+                                <td mat-cell *matCellDef="let element"> {{element.priority}} </td>
+                            </ng-container>
+                            <ng-container matColumnDef="issueDate">
+                                <th mat-header-cell *matHeaderCellDef>Created On</th>
+                                <td mat-cell *matCellDef="let element"> {{element.issueDate | date}} </td>
+                            </ng-container>
+                            <ng-container matColumnDef="status">
+                                <th mat-header-cell *matHeaderCellDef>Status</th>
+                                <!-- <td mat-cell *matCellDef="let element"> {{element.status}} </td> -->
+                                <td mat-cell *matCellDef="let element">
+                                    <mat-icon [ngClass]="{'green':statusIsClosed(element.status),'red': statusIsNew(element.status),
+                                    'purple': statusIsHold(element.status),
+                                    'yellow': statusIsProcessing(element.status)}">
+                                        {{ giveIcon(element.status) }}
+                                    </mat-icon>
+                                </td>
+                            </ng-container>
+
+                            <tr mat-header-row *matHeaderRowDef="altDisplayedColumns"></tr>
+                            <tr mat-row *matRowDef="let row; columns: altDisplayedColumns;" (click)="goToTickManager()"></tr>
+                        </table>
+                        <!-- <table mat-table matSort="desc" [dataSource]="dataSource" multiTemplateDataRows class="mat-elevation-z2">
+                                
+                            ticketType
+                            <ng-container matColumnDef="ticketType">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header>Ticket Type</th>
+                                <td mat-cell *matCellDef="let element">
+                                    <mat-icon  matTooltip="{{ element.ticketType }}" 
+                                        matTooltipPosition="left"
+                                        [matTooltipShowDelay]="70"
+                                        [ngClass]="{'blue': element.ticketType == 'New Requirement',
+                                        'yellow': element.ticketType == 'Enhancements',
+                                        'red': element.ticketType == 'Bugs',
+                                        'purple': element.ticketType == 'Others'}">
+                                        {{ giveTypeIcon(element.ticketType) }}
+                                    </mat-icon>
+                                    {{element.ticketType}}
+                                </td>
+                            </ng-container>
+                            generate all columns AFTER tickType EXCEPT issueDate, expectedDate & status
+                            <ng-container *ngFor="let column of displayedColumns.slice(1,-3); index as i" matColumnDef="{{column}}">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header>{{colNames[i+1]}}</th>
                                 <td mat-cell *matCellDef="let element">{{element[column]}}</td>
                             </ng-container>
-                            <!-- Expected date -->
+                            Issue/Created date
+                            <ng-container matColumnDef="issueDate">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header>Created</th>
+                                <td mat-cell *matCellDef="let element">
+                                    {{ element.issueDate | date }}
+                                </td>
+                            </ng-container>
+                            Expected date
                             <ng-container matColumnDef="expectedDate">
                                 <th mat-header-cell *matHeaderCellDef mat-sort-header>Expected</th>
                                 <td mat-cell *matCellDef="let element">
-                                    {{ element.expectedDate | date }}
+                                    <ng-container *ngIf="!is2049(element.expectedDate); else naExpected">{{ element.expectedDate | date }}</ng-container>
+                                    <ng-template #naExpected>NA</ng-template>
                                 </td>
                             </ng-container>
-                            <!-- status -->
+                            status
                             <ng-container matColumnDef="status">
                                 <th mat-header-cell *matHeaderCellDef mat-sort-header>Status</th>
                                 <td mat-cell *matCellDef="let element">
@@ -301,20 +364,26 @@
                                 </td>
                             </ng-container>
             
-                            <!-- expandable row content. one row that spans all columns -->
+                            expandable row content. one row that spans all columns
                             <ng-container matColumnDef="expandedDetail">
                                 <td mat-cell *matCellDef="let element" [attr.colspan]="displayedColumns.length">
                                     <div class="rowDetail"
                                         [@detailExpand] = "element == expandedRow? 'expanded': 'collapsed'">
                                         <div>
                                             <h2 class="ticketTitle" (click)="goToDetails(element.key)"> <span class="ticketTID">{{element.tid}}</span>{{element.title}} </h2>
-                                            <p *ngIf="element.desc">{{element.desc}}</p>
+                                            <pre *ngIf="element.desc" style="max-height: 10vh; overflow: auto; font-family: 'Roboto';">{{element.desc}}</pre>
                                             <p><strong>Issued By: </strong>{{element.empEid}}
                                             <strong style="margin-left: 2rem;">Type: </strong>{{element.ticketType}}</p>
                                             <p><strong>Company: </strong>{{element.company}}
                                             <strong style="margin-left: 2rem;">Platform: </strong>{{element.platform}}</p>
                                             <p><strong>Created Date: </strong>{{element.issueDate | date}}</p>
-                                            <p><strong>Expected By: </strong>{{element.expectedDate | date}}</p>
+                                            <p>
+                                                <span *ngIf="statusIsClosed(element.status)"><strong>Closed: </strong>{{element.closedDate | date}}</span>
+                                                <span *ngIf="!statusIsClosed(element.status)"><strong>Expected: </strong>
+                                                    <ng-container *ngIf="!is2049(element.expectedDate); else naExpected">{{ element.expectedDate | date }}</ng-container>
+                                                    <ng-template #naExpected>NA</ng-template>
+                                                </span>
+                                            </p>
                                             <p *ngIf="element.comments"><strong>Comments: </strong>{{element.comments}}</p>
                                         </div>
                                         <div style="display: flex; justify-content: center; padding: 2rem 2rem 0rem 0rem;">
@@ -335,18 +404,14 @@
                                 </td>
                             </ng-container>
                 
-                            <!-- generate rows -->
+                            generate rows
                             <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
                             <tr mat-row *matRowDef="let element; columns: displayedColumns;"
                             [class.overdue]="isOverdue(element)"
                             [class.ticket-expanded-row]="expandedRow === element"
                             (click)="expandedRow = (expandedRow === element ? null : element)"></tr>
                             <tr mat-row *matRowDef="let row; columns: ['expandedDetail'];" class="expandedDetailRow"></tr>
-                        </table>
-                        <!-- <mat-paginator #ticketPaginator [length]="sampleTickets.length" 
-                        [pageSize]="5" [pageSizeOptions]="[5, 10, 15, 20]"
-                        showFirstLastButtons aria-label="Select page">
-                        </mat-paginator> -->
+                        </table> -->
                     </div>
                 </div>
             </div>
@@ -359,9 +424,10 @@
     
     
             <div id="yourInsights">
+                <!-- Banner here -->
                 <h3 class="fredoka500 divHeading" style="margin-bottom: 0.75rem;">
                     <img class="headingIcon" 
-                    src="https://img.icons8.com/fluency-systems-regular/30/0551DD/statistic-document.png"
+                    src="https://img.icons8.com/fluency-systems-regular/30/AA1A86/statistic-document.png"
                     (click)="getMyCounts()">
                     Your Insights
                 </h3>
@@ -386,9 +452,10 @@
                     </div>
                     <span style="font-size: 2rem; margin: 0.5rem 0.5rem 0.5rem 0rem;">{{myPending}} Pending,</span> {{myProduction}} production, {{myClosed}} closed
                     <button class="customButton fredoka500" style="" routerLink="/manage"><mat-icon>info</mat-icon>Detailed Status</button>
-                    <!-- <button class="customButton fredoka500"><mat-icon>edit</mat-icon>Edit Existing</button> -->
                 </div>
                 
+                <!--
+                    *if ever uncommenting this, uncomment line 590 in ts file too
                 <h3 class="fredoka500 divHeading" style="margin-top: 2rem; margin-bottom: 0rem;">
                     <img class="headingIcon" 
                     src="https://img.icons8.com/fluency-systems-regular/30/0551DD/total-sales-1.png">
@@ -396,7 +463,7 @@
                 </h3>
     
                 <div class="BIchart" id="NXTvIMCL" 
-                *ngIf="grBarChartOptions.series && 
+                *ngIf="grBarChartOptions.series &&
                 grBarChartOptions.chart && grBarChartOptions.dataLabels && 
                 grBarChartOptions.plotOptions && grBarChartOptions.xaxis &&
                 grBarChartOptions.stroke && grBarChartOptions.title"
@@ -410,7 +477,7 @@
                         [stroke]="grBarChartOptions.stroke"
                         [title]="grBarChartOptions.title">
                     </apx-chart>
-                </div>
+                </div> -->
                 <!-- <button (click)="refreshBoth()">Here</button> -->
             </div>
         </div>
