@@ -60,11 +60,11 @@ export class ReportGeneratorComponent implements OnInit {
         endDate: ''
       }),
       ticketFilter: formBuilder.group({
-        ticketType: '',
-        priority: '',
-        company: '',
-        platform: '',
-        status: ''
+        ticketType: 'All',
+        priority: 'All',
+        company: 'All',
+        platform: 'All',
+        status: 'All'
       })
     });
   }
@@ -149,14 +149,17 @@ export class ReportGeneratorComponent implements OnInit {
 
 
   generateReport(){
-    // console.log(this.filterForm.get(['ticketFilter','ticketType'])?.value)
-    
-    this.filteredTickets = this.allTickets.filter((ticket)=>{
-      if(this.matchesFilters(ticket)) return ticket;
-      else return null;
-    })
-    console.log(this.filteredTickets)
-    this.generated = true;
+    if(!this.filterForm.get(['timeFilter','startDate'])?.value || !this.filterForm.get(['timeFilter','endDate'])?.value){
+      alert('Please choose dates to generate report for')
+    }
+    else{
+      this.filteredTickets = this.allTickets.filter((ticket)=>{
+        if(this.matchesFilters(ticket)) return ticket;
+        else return null;
+      })
+      console.log(this.filteredTickets)
+      this.generated = true;
+    }
   }
   
   tickDetails(ticket:Ticket){
@@ -208,6 +211,48 @@ export class ReportGeneratorComponent implements OnInit {
   }
 
 
+  downloadCSV__hardcoded(){
+    let ticketsCSV = [];
+
+    let orderedHeaders = [
+      'TID', 'Title', 'Description', 'Ticket Type', 'Priority', 'Company', 'Platform', 'Status',
+      'Raised By', 'Project Lead', 'Requested By', 'Vendor',
+      'Issue Date', 'Expected Date', 'Closed Date', 'Last Updated Date',
+      'Estimated Amount', 'Approved Amount'
+    ]
+
+    ticketsCSV.push(orderedHeaders.join(','));
+    this.filteredTickets.forEach(ticket => {
+      let row = '';
+      let closed = String(ticket.closedDate) == "undefined" ? 'NA' : ticket.closedDate;
+      let requestedBy = ticket.requestedBy.requester ? `${ticket.requestedBy.requester}, ${ticket.requestedBy.dept}` : ''
+      // let attachmentsLength = ticket.zattachments ? 0 : Number(ticket.zattachments.length);
+      
+      let tickValues = [
+        ticket.tid, ticket.title, ticket.desc, ticket.ticketType, ticket.priority, ticket.company, ticket.platform, ticket.status, 
+        ticket.empEid, ticket.projLead, requestedBy, String(ticket.vendor),
+        ticket.issueDate, ticket.expectedDate, closed, ticket.lastUpdated,
+        String(ticket.estimatedAmount), String(ticket.approvedAmount)
+      ] // 20, duration, updateHist
+      
+      row = tickValues.join('","')
+      ticketsCSV.push(`"${row}"`)
+    })
+
+    let finalCSVcontent = ticketsCSV.join("\r\n");
+
+    // * Source: https://code-boxx.com/javascript-export-array-csv/
+    let cb = new Blob([finalCSVcontent],{type: "text/csv"});
+    var url = window.URL.createObjectURL(cb);
+    var anchor = document.createElement("a");
+    anchor.href = url;
+    anchor.download = "tickets.csv";
+    anchor.click();
+    window.URL.revokeObjectURL(url);
+    anchor.remove()
+  }
+
+
 
   rxjsGetCurrentUser(){
     this.stateData.currentUser.forEach((user)=> {
@@ -237,7 +282,13 @@ export class ReportGeneratorComponent implements OnInit {
 
   ngOnInit(): void {
     this.retrieveTickets();
-    // this.rxjsGetCurrentUser();
+    
+    // set 'All' by default
+    let params = ['ticketType','priority','company','platform','status']
+    params.forEach((param)=>{
+      this.toggleAllSelected(param,true);
+    })
+
     this.ngrxGetUser()
   }
 }
