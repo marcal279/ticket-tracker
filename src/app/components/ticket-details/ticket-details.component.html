@@ -127,17 +127,17 @@
         <p>
             <strong class="header" style="display: block; margin-bottom: 0.2rem;
             font-size: 1rem;">Description</strong>
-            {{currTicket.desc}}
+            {{currTicket.desc || 'No description provided'}}
         </p>
         <div>
             <p>
                 <strong class="header">Raised On: </strong> {{currTicket.issueDate | date}} 
-                <strong class="header" style="margin-left: 2rem;">Expected On: </strong> {{currTicket.expectedDate | date}} 
+                <span *ngIf="!is2049(currTicket.expectedDate)"><strong class="header" style="margin-left: 2rem;">Expected On: </strong> {{currTicket.expectedDate | date}} </span>
             </p>
             <p>
                 <strong class="header">Raised By: </strong> {{currTicket.empEid}}
             </p>
-            <p *ngIf="currTicket.requestedBy">
+            <p *ngIf="currTicket.requestedBy.requester">
                 <strong class="header">Requesting Dept.: </strong>{{currTicket.requestedBy.dept}}
                 <strong class="header" style="margin-left: 2rem;">Requester: </strong>{{currTicket.requestedBy.requester}}
             </p>
@@ -185,23 +185,23 @@
                 <div style="margin-top: 0.25rem; padding-left: 0.5rem;">
                     <table style="border-left: 2px solid rgb(185, 185, 185); border-collapse: separate; border-spacing: 0.75rem;">
                         <!-- Updates -->
-                        <tr style="position: relative; left: -1.3rem; z-index: 100; margin: 0.25rem 0rem;" *ngFor="let event of updateHistory.slice(0,-1)">
+                        <tr style="position: relative; left: -1.3rem; z-index: 5; margin: 0.25rem 0rem;" *ngFor="let event of updateHistory.slice(0,-1)">
                             <td><div style="display: inline-block; border-radius: 50%; height: 10px; width: 10px; background-color: white; border: 2px solid rgb(121, 121, 121)"></div></td>
                             <td>
                                 <span>
                                     <!-- {{event.commitMessage}} -->
-                                    <strong>{{event.commitMessage.slice(0,event.commitMessage.indexOf('M):')+3)}}</strong>{{event.commitMessage.slice(event.commitMessage.indexOf('M):')+3)}}
+                                    <em>{{event.commitMessage.slice(0, findEmphasisPoint(event.commitMessage)+2)}}</em>{{event.commitMessage.slice(findEmphasisPoint(event.commitMessage)+2)}}
                                 </span>
                             </td>
                         </tr>
 
                         <!-- Created -->
-                        <tr style="position: relative; left: -1.75rem; z-index: 100; margin: 0.25rem 0rem;" *ngFor="let event of updateHistory.slice(-1)">
+                        <tr style="position: relative; left: -1.75rem; z-index: 5; margin: 0.25rem 0rem;" *ngFor="let event of updateHistory.slice(-1)">
                             <td><img src="../../assets/images/update-icon.png" style="background-color: white; border-radius: 50%;"></td>
                             <td>
                                 <span>
                                     <!-- {{event.commitMessage}} -->
-                                    <strong>{{event.commitMessage.slice(0,event.commitMessage.indexOf('M):')+3)}}</strong>{{event.commitMessage.slice(event.commitMessage.indexOf('M):')+3)}}
+                                    <em>{{event.commitMessage.slice(0, findEmphasisPoint(event.commitMessage)+2)}}</em>{{event.commitMessage.slice(findEmphasisPoint(event.commitMessage)+2)}}
                                 </span>
                             </td>
                         </tr>
@@ -229,7 +229,7 @@
         <mat-expansion-panel [expanded]="true" style="margin: 1rem 0rem;">
             <mat-expansion-panel-header>
                 <mat-panel-title>
-                    <strong class="header fredoka500" style="color: rgb(5, 81, 221);">Primary Details</strong>
+                    <strong class="header fredoka500" style="color: rgb(170, 26, 134);">Primary Details</strong>
                 </mat-panel-title>
             </mat-expansion-panel-header>
             <mat-divider style="margin-bottom: 1rem;"></mat-divider>
@@ -243,8 +243,9 @@
                 <tr><td class="bold">Company</td>  <td>{{currTicket.company}}</td></tr>
                 <tr><td class="bold">Platform</td>  <td>{{currTicket.platform}}</td></tr>
                 <tr><td class="bold">Priority</td>  <td><mat-icon [ngClass]="{'red': currTicket.priority == 'High', 'yellow': currTicket.priority == 'Medium', 'green': currTicket.priority == 'Low', 'relativePad': currTicket.priority == 'High'||currTicket.priority == 'Low'}">{{getPrioritySymbol()}}</mat-icon>{{currTicket.priority}}</td></tr>
-                <tr><td class="bold">Original Time Estimate</td>  <td>{{currTicket.duration}}</td></tr>
-                <tr><td class="bold">Expected On</td>  <td><mat-chip>{{currTicket.expectedDate | date}}</mat-chip></td></tr>
+                <tr><td class="bold">Original Time Estimate</td>  <td>{{currTicket.duration || 'NA'}}</td></tr>
+                <tr><td class="bold">Created On</td>  <td>{{currTicket.issueDate | date}}</td></tr>
+                <tr *ngIf="!is2049(currTicket.expectedDate)"><td class="bold">Expected On</td>  <td><mat-chip>{{currTicket.expectedDate | date}}</mat-chip></td></tr>
                 <tr *ngIf="currTicket.closedDate"><td class="bold">Closed On</td>  <td>{{currTicket.closedDate | date}}</td></tr>
             </table>
         </mat-expansion-panel>
@@ -263,7 +264,10 @@
                     <col>                       <!-- Represents second column -->
                 </colgroup>
                 <tr><td class="bold">Project Lead</td>  <td>{{currTicket.projLead}}</td></tr>
-                <tr><td class="bold">Commercial Amount Approved</td>  <td>{{currTicket.approvedAmount == ' '? 'NA': '₹ '+currTicket.approvedAmount+' /-'}}</td></tr>
+                <tr *ngIf="currTicket.requestedBy.requester"><td class="bold">Requested By</td>  <td>{{currTicket.requestedBy.requester}}, {{currTicket.requestedBy.dept}}</td></tr>
+                <tr *ngIf="currTicket.vendor"><td class="bold">Vendor</td>  <td>{{currTicket.vendor}}</td></tr>
+                <tr><td class="bold">Initial Estimated Amount</td>  <td>{{currTicket.estimatedAmount == ' ' || currTicket.estimatedAmount == '' ? 'NA': '₹ '+currTicket.estimatedAmount+' /-'}}</td></tr>
+                <tr><td class="bold">Final Amount Approved</td>  <td>{{currTicket.approvedAmount == ' ' || currTicket.estimatedAmount == '' ? 'NA': '₹ '+currTicket.approvedAmount+' /-'}}</td></tr>
                 <tr><td class="bold">Last Updated By</td>  <td>{{lastUpdater}}</td></tr>
                 <tr><td class="bold">Last Updated Date</td>  <td>{{currTicket.lastUpdated | date}}</td></tr>
                 <tr><td class="bold">Last Viewed Date</td>  <td>{{currTicket.lastUpdated | date}}</td></tr>

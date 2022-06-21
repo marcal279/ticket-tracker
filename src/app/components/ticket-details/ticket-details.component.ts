@@ -16,6 +16,7 @@ import { User } from '../../shared/interfaces/user';
 import { UserAction } from '../../shared/ngrx-state/app.actions';
 import { UserAuthService } from '../../shared/services/user-auth/user-auth.service';
 import { UserService } from '../../shared/services/users/user.service';
+import { AdminService } from 'src/app/shared/services/admin/admin.service';
 
 @Component({
   selector: 'app-ticket-details',
@@ -44,7 +45,8 @@ export class TicketDetailsComponent implements OnInit {
     private storage: AngularFireStorage,
     private store: Store<{userReducer: {currUser: User}}>,
     private authService: UserAuthService,
-    private userService: UserService){
+    private userService: UserService,
+    private adminService: AdminService){
   
   }
 
@@ -239,10 +241,19 @@ export class TicketDetailsComponent implements OnInit {
     }
   }
 
+  adminList: any;
+  readAdmins(){
+    this.adminService.getAdminList().subscribe((observer)=>{
+      this.adminList = observer;
+      // console.log('ADMINS: '); console.log(this.adminList);
+    })
+  }
   isAdmin(email:string){
-    if(email == 'marc.almeida.work@gmail.com' || 
-    email == 'thomas.john@nxtdigital.in' || email == 'tanuja.gujare@nxtdigital.in') return true;
-    return false;
+    if(this.adminList){
+      if(this.adminList.adminList.indexOf(email)>-1) return true;
+      else return false;
+    }
+    else return setTimeout(this.isAdmin(email),1000)
   }
 
   deleteTicket(ticket: any){
@@ -258,10 +269,23 @@ export class TicketDetailsComponent implements OnInit {
     this.matSnack.open(message, action);
   }
 
+
+  findEmphasisPoint(commitMessage: string){
+    if(commitMessage.startsWith('Imported')) return -2
+    if(commitMessage.toLowerCase().indexOf('pm') > -1) return commitMessage.toLowerCase().indexOf('pm') + 2;
+    return commitMessage.toLowerCase().indexOf('am') + 2;
+  }
+
+  is2049(date: Date): boolean{
+    return (new Date(date)).getTime() == (new Date(2049,0,1)).getTime()
+  }
+
+
   ngOnInit(): void {
     this.retrieveTickets();
     this.ngrxGetUser();
-    
+    this.readAdmins();
+
     setTimeout(()=>{this.getTicket()}, 2000);
   }
 
