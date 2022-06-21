@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
+import { AdminService } from 'src/app/shared/services/admin/admin.service';
 import { User } from '../../shared/interfaces/user';
 import { UserAction } from '../../shared/ngrx-state/app.actions';
 import { StateDataService } from '../../shared/services/state-data/state-data.service';
@@ -20,9 +21,12 @@ export class ProfilePageComponent implements OnInit {
   currUser!: User;
 
 
-  constructor( public userService: UserService, private authService: UserAuthService,
+  constructor( 
+    public userService: UserService, 
+    public authService: UserAuthService,
     private stateData: StateDataService,
-    private store: Store<{userReducer: {currUser: User}}> )
+    private store: Store<{userReducer: {currUser: User}}>,
+    private adminService: AdminService)
   {  }
 
 
@@ -38,13 +42,6 @@ export class ProfilePageComponent implements OnInit {
   addUser(){
     // this.userService.createDBUser(this.currUser);
     alert('no')
-  }
-
-  updateUser(){
-    this.userService.updateDBUser(this.userUID, this.currUser).then( () => {
-      alert('Updated profile for '+this.currUser.name+' successfully!')
-    })
-    .catch(err => alert(err));
   }
 
   retrieveUsers(){
@@ -90,7 +87,7 @@ export class ProfilePageComponent implements OnInit {
       // console.log(this.ngrxCurrUser);
       this.currUser = observer.currUser;
       console.log(this.currUser);
-    })
+    });
   }
 
   currUID: string;
@@ -111,15 +108,73 @@ export class ProfilePageComponent implements OnInit {
     this.store.dispatch(new UserAction(this.currUser))
   }
 
+  adminList: any;
+  readAdmins(){
+    this.adminService.getAdminList().subscribe((observer)=>{
+      this.adminList = observer;
+      // console.log('ADMINS: '); console.log(this.adminList);
+    })
+  }
+  isAdmin(email:string){
+    if(this.adminList){
+      if(this.adminList.adminList.indexOf(email)>-1) return true;
+      else return false;
+    }
+    else return setTimeout(this.isAdmin(email),1000)
+  }
+
+  showNewAdminBox = false;
+  toggleBox(){this.showNewAdminBox = !this.showNewAdminBox;}
+  newAdmin: string = '';
+  addAdmin(){
+    this.adminService.addAdmin(this.newAdmin);
+  }
+
+  showSelect = false;
+  toggleSelect(){this.showSelect = !this.showSelect;}
+  oldAdmin: string = '';
+  removeAdmin(){
+    if(confirm(`Are you sure you want to remove admin ${this.oldAdmin}?`)) this.adminService.removeAdmin(this.oldAdmin);
+  }
+
+
+  domainList: any;
+  readDomains(){
+    this.adminService.getDomainList().subscribe((observer)=>{
+      this.domainList = observer;
+      // console.log('DOMAINS: '); console.log(this.domainList);
+    })
+  }
+  isAllowedDomain(domain:string){
+    if(this.domainList){
+      if(this.domainList.allowedDomainList.indexOf(domain)>-1) return true;
+      else return false;
+    }
+    else return setTimeout(this.isAllowedDomain(domain),1000)
+  }
+
+  showNewDomainBox = false;
+  toggleDomainBox(){this.showNewDomainBox = !this.showNewDomainBox;}
+  newDomain: string = '';
+  addDomain(){
+    this.adminService.addDomain(this.newDomain);
+  }
+
+  showDomainSelect = false;
+  toggleDomainSelect(){this.showDomainSelect = !this.showDomainSelect;}
+  oldDomain: string = '';
+  removeDomain(){
+    if(confirm(`Are you sure you want to remove Domain ${this.oldDomain}?`)) this.adminService.removeDomain(this.oldDomain);
+  }
+
+
   ngOnInit(): void {
     // this.userUID = this.authService.currentUserUID();
     // this.userService.readDBsingleUser(this.userUID).subscribe(observer => {this.currUser = observer as User});
     this.retrieveUsers();
     this.ngrxGetUser();
 
-    // if(!this.currUser){
-    //   this.getAuthUser();
-    //   this.ngrxStoreUser();
-    // }
+    this.readAdmins();
+    this.readDomains();
   }
 }

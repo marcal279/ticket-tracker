@@ -21,25 +21,36 @@
         background-color: rgb(226, 241, 253); 
         display: flex; 
         width: 24%;
-        height: 200%;
+        height: 150%;
     }
     #tableOfContents a{
         text-decoration: none;
         color: black;
     }
 
+    #admin{
+        padding: 1rem 2rem 2rem;
+        margin: 1rem 0rem;
+        border-radius: 1.5rem;
+        border: 1px solid rgb(170, 26, 134);
+    }
+
+    /* #employee-info, #contact-info, #basic-info{
+        display: block;
+    } */
+
     .customButton{ margin-left: 0rem; }
     .enableButtonHover .customButton:hover{ background-color: transparent; }
 </style>
 
 <!-- current page : {{currPage}} -->
-<div class="allContent" style="justify-content: left;">
+<div class="allContent">
     <app-side-nav [currPage]="this.currPage"></app-side-nav>
     <div style="margin: 1.5rem 0rem 1rem 5rem; width: 70%;">
         <div>
             <img class="headingIcon" 
             src="https://img.icons8.com/fluency-systems-regular/30/0551DD/user.png" >
-            <h2 style="display: inline-block; color: rgb(5, 81, 221);" class="fredoka500" (click)="metadata()">My Profile</h2>
+            <h2 style="display: inline-block; color: #AA1A86;" class="fredoka500">My Profile</h2>
         </div>
         <div style="margin: 1rem 0rem 1rem 2rem;">
             <img src="https://img.icons8.com/windows/96/0551DD/user-male-circle.png"
@@ -100,25 +111,67 @@
                     <mat-label>Designation</mat-label>
                     <input type="text" matInput placeholder="" [(ngModel)]="currUser.designation" #designation>
                 </mat-form-field>
-                <mat-form-field appearance="fill">
-                    <mat-label>Supervisor</mat-label>
-                    <input type="text" matInput placeholder="The guy/gal you don't want to disappoint" [(ngModel)]="currUser.supervisor" #supervisor>
-                </mat-form-field>
-                <mat-form-field appearance="fill" style="margin: 0rem 0rem 0rem 2rem;">
-                    <mat-label>Dept.</mat-label>
-                    <input type="text" matInput placeholder="" [(ngModel)]="currUser.dept" #dept>
-                </mat-form-field>
+                <div>   <!-- this div is only to format wrapping correctly -->
+                    <mat-form-field appearance="fill">
+                        <mat-label>Supervisor</mat-label>
+                        <input type="text" matInput placeholder="The guy/gal you don't want to disappoint" [(ngModel)]="currUser.supervisor" #supervisor>
+                    </mat-form-field>
+                    <mat-form-field appearance="fill" style="margin: 0rem 0rem 0rem 2rem;">
+                        <mat-label>Dept.</mat-label>
+                        <input type="text" matInput placeholder="" [(ngModel)]="currUser.dept" #dept>
+                    </mat-form-field>
+                </div>
             </div>
-            <button (click)="updateUser()">Update User(Remove later)</button>
 
-            <div id="settings">
-            </div>
-            <!-- <div>
-                Users:
-                <ul>
-                    <li *ngFor="let user of USERS"><strong>{{user.key}}:</strong> {{user.empEid}}</li>
+            <div id="admin" *ngIf="isAdmin(currUser.empEid)">
+                <h3 class="fredoka500">Admin Section</h3>
+                
+                <ul>Admin List:
+                    <li *ngFor="let admin of adminList.adminList">{{admin}}</li>
                 </ul>
-            </div> -->
+                <button (click)="toggleBox()">Add Admin</button>
+                <div [hidden]="!showNewAdminBox">
+                    New Admin Email ID: 
+                    <input type="text" [(ngModel)]="newAdmin">
+                    <button (click)="addAdmin()">Add</button>
+                </div>
+                <button (click)="toggleSelect()">Remove Admin</button>
+                <div [hidden]="!showSelect">
+                    <mat-form-field>
+                        <mat-select [(ngModel)]="oldAdmin">
+                            <mat-option *ngFor="let option of adminList.adminList" [value] ="option">{{option}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    <button (click)="removeAdmin()">Remove</button>
+                </div>
+                
+                
+                <!-- <ul>Allowed Domain List:
+                    <li *ngFor="let domain of domainList.allowedDomainList">{{domain}}</li>
+                </ul>
+                <button (click)="toggleDomainBox()">Add Domain</button>
+                <div [hidden]="!showNewDomainBox">
+                    New Domain Email ID: 
+                    <input type="text" [(ngModel)]="newDomain">
+                    <button (click)="addDomain()">Add</button>
+                </div>
+                <button (click)="toggleDomainSelect()">Remove Domain</button>
+                <div [hidden]="!showSelect">
+                    <mat-form-field>
+                        <mat-select [(ngModel)]="oldDomain">
+                            <mat-option *ngFor="let option of domainList.allowedDomainList" [value] ="option">{{option}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    <button (click)="removeDomain()">Remove</button>
+                </div> -->
+
+                <ul>Allowed Domains:
+                    <li>nxtdigital.in</li>
+                    <li>mobiotics.in</li>
+                </ul>
+
+
+            </div>
         </div>
     </div>
     <div id="tableOfContents" class="fredoka">
@@ -133,18 +186,30 @@
                         <li><a href="#employee-info">Employee Information</a></li>
                     </ul>
                 </li>
-                <!-- <li>
+                <!-- 
+                <li>
                     <h4 class="fredoka500" style="margin-top: 0.5rem;">Settings</h4>
                     <ul class="noBulletList">
                         <li>Sett1</li>
                         <li>Sett2</li>
                         <li>Sett3</li>
                     </ul>
-                </li> -->
+                </li> 
+                -->
             </ul>
             <!-- <button (click)="currUserDetails()">Current User</button> -->
-            <button class="customButton fredoka" (click)="logout()" style="margin-right: 0.25rem;">Log Out</button>
+            <button class="customButton fredoka" (click)="logout()" style="margin-right: 0.2rem;">Log Out</button>
             <button class="customButton fredoka" [hidden]=" currUser.empEid=='' " (click)="resetPassword(currUser.empEid)" style="margin-right: 0rem;">Reset Password</button>
+            <!-- <div>
+                <h4 class="fredoka500" style="display: inline-block;">Email Status:</h4>{{currUser.emailVerified ? ' Verified ✔' : ' Not Verified ❌'}}
+                <button *ngIf="!currUser.emailVerified" class="customButton" style="display: block;">Verify Now</button>
+            </div> -->
+            <div *ngIf="authService.authState as user">
+                <h4 class="fredoka500" style="display: inline-block;">Email Status:</h4>{{user.emailVerified ? ' Verified ✔' : ' Not Verified ❌'}}
+                <!-- <button *ngIf="!user.emailVerified" class="customButton" style="display: block;">Verify Now</button> -->
+                <!--* If not verified dont allow entry, so verify now button is pointless -->
+                <div>UID: {{user.uid}}</div>
+            </div>
         </div>
     </div>
 </div>
