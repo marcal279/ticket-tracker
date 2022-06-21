@@ -10,7 +10,7 @@ import { Ticket } from '../../interfaces/ticket';
 export class TicketsService {
 
   TICKET_HEADERS = ['key', 'approvedAmount', 'closedDate', 'company', 'desc',
-   'duration', 'empEid', 'expectedDate', 'issueDate', 'lastUpdated', 'platform', 'priority',
+   'duration', 'empEid','estimatedAmount', 'expectedDate', 'issueDate', 'lastUpdated', 'platform', 'priority',
    'projLead', 'requestedBy', 'status', 'ticketType', 'tid', 'title', 'vendor', 'attachments'
   ]
   ticketHeaders(){
@@ -22,23 +22,23 @@ export class TicketsService {
   }
 
   // Imp function
-  newTicketObject(): Ticket{
+  newTicketObject(set2049 = false): Ticket{
     return {
       key: '',
-      ticketType: '',
+      ticketType: set2049 ? 'New Requirement' : '',
       title: '',
       desc: '',
       tid: '',
       company: '',
       platform: '',
       requestedBy: { dept: '', requester: '' },
-      empEid: 'admin@admin.com',
-      projLead: 'Thomas John',
+      empEid: 'admin@nxtdigital.in',
+      projLead: set2049 ? 'Ru Ediriwira' : 'Thomas John',
       vendor: '',
       status: 'New',
       issueDate: new Date(),
       duration: '',
-      expectedDate: new Date( new Date().setDate(new Date().getDate() + 7) ),
+      expectedDate: set2049 ? new Date(2049,0,1) : new Date( new Date().setDate(new Date().getDate() + 7) ),
       lastUpdated: new Date(),
       priority: '',// 'High'|'Medium'|'Low',
       estimatedAmount: ' ',
