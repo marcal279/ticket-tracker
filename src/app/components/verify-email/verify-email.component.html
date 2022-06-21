@@ -1,0 +1,56 @@
+<style>
+    .allContent{
+        display: flex;
+        height: 100%; width: 100%;
+        justify-content: center;
+        align-items: center;
+        background-color: rgb(170, 26, 134);
+    }
+
+    .brandName{
+        color: white;
+        position: absolute;
+        margin: 0.75rem;
+        /* font-family: 'Lobster', cursive; */
+        font-family: 'Quicksand', sans-serif;
+    }
+
+    .mat-card{
+        padding: 2rem;
+        border-radius: 1.25rem;
+        width: 37.5vw;
+    }
+
+    .mat-card-title{
+        margin-bottom: 2rem;
+    }
+
+    .looks-good-tick{
+        color: rgb(0, 196, 33); 
+        font-size: 2rem;
+        position: relative; 
+        top: 0.3rem; 
+        left: 0.5rem; 
+    }
+
+    .customButton{
+        /* display: block; */
+        background-color: rgb(170, 26, 134);
+        margin-left: 0rem;
+    }
+
+    .blue{ color:rgb(0, 132, 255) }
+    .pink{ color:rgb(170, 26, 134) }
+</style>
+
+<h2 class="brandName"> NXTDigital ODTS </h2>
+<div class="allContent">
+    <mat-card class="enableButtonHover">
+        <mat-card-title class="fredoka pink">Email Verification</mat-card-title>
+        <mat-card-subtitle>Email sent to the email ID you provided, please check your inbox</mat-card-subtitle>
+        <mat-card-content>
+            <button class="fredoka500 customButton" (click)="userAuthService.verifyEmail()">Resend email</button>
+            <button class="fredoka500 customButton" (click)="goToLogin()" style="margin-left: 1.2rem;">Go To Login</button>
+        </mat-card-content>
+    </mat-card>
+</div>
