@@ -17,6 +17,7 @@ import { Router } from '@angular/router';
 import * as TicketParameters from '../../shared/parameters/tickets.parameters';
 
 import { MAT_DATE_FORMATS } from '@angular/material/core';
+import * as moment from 'moment';
 
 export const CUSTOM_DATE_FORMATS = {
   parse: { dateInput: 'DD/MM/YYYY' },
@@ -115,6 +116,8 @@ export class TicketDialogComponent implements OnInit {
 
     this.currentTicket.tid = this.generateTID(this.currentTicket);
     this.currentTicket.issueDate = rightNow;
+    this.currentTicket.expectedDate = moment(this.currentTicket.expectedDate).toDate() // * see https://stackoverflow.com/questions/62665005/getting-error-while-using-firebase-in-react-for-using-update-function#:~:text=thanks%20for%20your%20answer%2C%20error%20was%20for%20at%20property%20because%20it%20was%20returned%20from%20moment%20package%2C%20so%20i%20use%20moment(at).valueOf()
+
     if(this.currentTicket.expectedDate && this.currentTicket.issueDate){
       this.currentTicket.duration = this.calcDuration(this.currentTicket.issueDate, this.currentTicket.expectedDate);
     }
@@ -149,6 +152,7 @@ export class TicketDialogComponent implements OnInit {
   updateMessage = '';
   updateTicket(ticket: any){
     let rightNow = new Date();
+    this.currentTicket.expectedDate = moment(this.currentTicket.expectedDate).toDate() // * see https://stackoverflow.com/questions/62665005/getting-error-while-using-firebase-in-react-for-using-update-function#:~:text=thanks%20for%20your%20answer%2C%20error%20was%20for%20at%20property%20because%20it%20was%20returned%20from%20moment%20package%2C%20so%20i%20use%20moment(at).valueOf()
 
     if(this.currentTicket.expectedDate && this.currentTicket.issueDate){
       this.currentTicket.duration = this.calcDuration(this.currentTicket.issueDate, this.currentTicket.expectedDate);
@@ -165,7 +169,7 @@ export class TicketDialogComponent implements OnInit {
     if(this.data.ticket.key){
       this.ticketService.updateDBTicket(this.data.ticket.key, this.currentTicket)
       .then( () => {
-        this.openSnackBar(`Updated record ${ticket.key} successfully!`);
+        this.openSnackBar(`Updated record ${ticket.tid} successfully!`);
       })
       .catch(err => alert(err));
     }
