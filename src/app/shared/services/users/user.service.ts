@@ -27,6 +27,7 @@ export class UserService {
       designation: '',
       supervisor: '',
       offExt: '',
+      // emailVerified: false
     }
   }
 
@@ -61,7 +62,8 @@ export class UserService {
       company: user.company,
       designation: user.designation,
       supervisor: user.supervisor,
-      offExtension: user.offExt
+      offExtension: user.offExt,
+      // emailVerified: user.emailVerified
     });
   }
 
