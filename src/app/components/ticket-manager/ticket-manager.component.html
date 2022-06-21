@@ -21,7 +21,7 @@
         width: 6rem;
     }
     .mat-column-title{
-        width: 7.5rem;
+        width: 10rem;
         /* margin-right: 7rem; */
     }
     .mat-column-company{
@@ -42,8 +42,11 @@
     .mat-column-expectedDate{
         width: 7rem;  
     }
-    .mat-column-duration{
+    /* .mat-column-duration{
         width: 4rem;  
+    } */
+    .mat-column-issueDate{
+        width: 7rem;  
     }
     .mat-column-status{
         /* width: 5rem;  */
@@ -192,7 +195,7 @@
                         style="position: relative; top: 4px;"
                         matTooltip="Download All" 
                         matTooltipPosition="above"
-                        matTooltipShowDelay="100" (click)="downloadCSV()">
+                        matTooltipShowDelay="100" (click)="downloadCSV__hardcoded()">
                             <mat-icon style="font-size: 1.45rem;">download</mat-icon>
                         </button>
                         <button class="customButton fredoka500" (click)="createTicket()"><mat-icon>add</mat-icon>New Ticket</button>
@@ -280,8 +283,11 @@
                                 </mat-form-field>
                             </div>
                             <div>
+                                <!-- These were causing usage order problems, so made static instead of dynamic
                                 <mat-slide-toggle color="primary" [(ngModel)]="onlyMyTicketsShown" [checked]="onlyMyTicketsShown" (change)="myTickets($event)">Only My Tickets</mat-slide-toggle>
-                                <mat-slide-toggle color="warn" style="margin-left: 1rem;" [(ngModel)]="onlyOverdue" [checked]="onlyOverdue" (change)="overdueTickets($event)">Only Overdue</mat-slide-toggle>
+                                <mat-slide-toggle color="warn" style="margin-left: 1rem;" [(ngModel)]="onlyOverdue" [checked]="onlyOverdue" (change)="overdueTickets($event)">Only Overdue</mat-slide-toggle> -->
+                                <mat-slide-toggle color="primary" [(ngModel)]="onlyMyTicketsShown" [checked]="onlyMyTicketsShown">Only My Tickets</mat-slide-toggle>
+                                <mat-slide-toggle color="warn" style="margin-left: 1rem;" [(ngModel)]="onlyOverdue" [checked]="onlyOverdue">Only Overdue</mat-slide-toggle>
                             </div>
                         </div>
                         <button class="customButton" style="margin-left: 0.5rem; margin-right: 0rem;" (click)="applyFilters()">Apply</button>
@@ -334,16 +340,24 @@
                         </mat-icon>
                     </td>
                 </ng-container>
-                <!-- generate all columns AFTER tickType EXCEPT status & expectedDate -->
-                <ng-container *ngFor="let column of displayedColumns.slice(1,-2); index as i" matColumnDef="{{column}}">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header>{{colNames[i]}}</th>
+                <!-- generate all columns AFTER tickType EXCEPT issueDate, expectedDate & status -->
+                <ng-container *ngFor="let column of displayedColumns.slice(1,-3); index as i" matColumnDef="{{column}}">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>{{colNames[i+1]}}</th>
                     <td mat-cell *matCellDef="let element">{{element[column]}}</td>
+                </ng-container>
+                <!-- Issue/Created date -->
+                <ng-container matColumnDef="issueDate">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Created On</th>
+                    <td mat-cell *matCellDef="let element">
+                        {{ element.issueDate | date }}
+                    </td>
                 </ng-container>
                 <!-- Expected date -->
                 <ng-container matColumnDef="expectedDate">
                     <th mat-header-cell *matHeaderCellDef mat-sort-header>Expected On</th>
                     <td mat-cell *matCellDef="let element">
-                        {{ element.expectedDate | date }}
+                        <ng-container *ngIf="!is2049(element.expectedDate); else naExpected">{{ element.expectedDate | date }}</ng-container>
+                        <ng-template #naExpected>NA</ng-template>
                     </td>
                 </ng-container>
                 <!-- status -->
@@ -365,14 +379,19 @@
                             [@detailExpand] = "element == expandedRow? 'expanded': 'collapsed'">
                             <div style="padding: 0rem 2rem 0.75rem 0.5rem;">
                                 <h2 class="ticketTitle" (click)="goToDetails(element.key)"> <span class="ticketTID">{{element.tid}}</span>{{element.title}} </h2>
-                                <p *ngIf="element.desc" style="font-size: larger; width: 40rem; overflow: auto; color: grey; font-style: italic;">{{element.desc}}</p>
-                                <p><strong>Platform: </strong>{{element.company}} {{element.platform}}</p>
+                                <pre *ngIf="element.desc" style="max-width: 65vw; max-height: 60vh; overflow-y: auto; font-family: 'Roboto';">{{element.desc}}</pre>
+                                <p><strong (click)="metaData(element)">Platform: </strong>{{element.company}} {{element.platform}}</p>
                                 <p><strong>Issued By: </strong>{{element.empEid}}
                                 <!-- <strong style="margin-left: 2rem;">Dept: </strong>{{element.dept}}</p> -->
-                                <p><strong>Created Date: </strong>{{element.issueDate | date}}
-                                    <strong style="margin-left: 2rem;" *ngIf="element.expectedDate">Expected: </strong>In {{element.duration}} on {{element.expectedDate | date}}
-                                    <!-- key: {{element.key}} -->
-                                    <a routerLink="/ticket/{{element.key}}" style="display: block; margin-top: 0.5rem;">See More</a>
+                                <p>
+                                    <strong>Created Date: </strong>{{element.issueDate | date}}
+                                    <span *ngIf="statusIsClosed(element.status)"><strong style="margin-left: 2rem;">Closed: </strong>{{element.closedDate | date}}</span>
+                                    <span *ngIf="!statusIsClosed(element.status)"><strong style="margin-left: 2rem;">Expected: </strong>
+                                        <ng-container *ngIf="!is2049(element.expectedDate); else naExpected">{{ element.expectedDate | date }}</ng-container>
+                                        <ng-template #naExpected>NA</ng-template>
+                                    </span>
+
+                                    <a routerLink="/ticket/{{element.key}}" style="display: block; margin-top: 0.5rem;">More details...</a>
                                 </p>
                                 <button class="fredoka actionButton updateButton"
                                     style="font-size: 1rem; padding: 0.25rem 0.5rem; margin-right: 0.5rem;"
@@ -423,10 +442,11 @@
                 </tr> -->
             </table>
             <mat-paginator #ticketPaginator [length]="allTickets.length" 
-            [pageSize]="5" [pageSizeOptions]="[5, 10, 15, 20]"
+            [pageSize]="5" [pageSizeOptions]="[5, 10, 15, 20, 40]"
             showFirstLastButtons aria-label="Select page">
             </mat-paginator>
         </div>
+        <button class="customButton fredoka500" routerLink="../bulk-import">Bulk Import</button>
     </div>
 </div>
 <!-- Ticket Manager running -->
