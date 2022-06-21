@@ -24,6 +24,8 @@ import { Router } from '@angular/router';
 import { UserAuthService } from '../../shared/services/user-auth/user-auth.service';
 import { UserService } from '../../shared/services/users/user.service';
 import { UserAction } from '../../shared/ngrx-state/app.actions';
+import * as moment from 'moment';
+import { AdminService } from 'src/app/shared/services/admin/admin.service';
 
 
 @Component({
@@ -84,8 +86,8 @@ export class TicketManagerComponent implements OnInit {
   selectedExpectedTimePeriod = 'nall-3';
 
   // table
-  displayedColumns: string[] = ['ticketType','tid','title','company','platform','empEid','priority','duration','expectedDate','status'];
-  colNames: string[] = ['Type', 'TID', 'Title', 'Company', 'Platform', 'Raised By', 'Priority', 'Duration', 'Expected On', 'Status'];
+  displayedColumns: string[] = ['ticketType','tid','title','company','platform','empEid','priority','issueDate','expectedDate','status'];
+  colNames: string[] = ['Type', 'TID', 'Title', 'Company', 'Platform', 'Raised By', 'Priority', 'Created On' ,'Expected On', 'Status'];
 
   // Values shown in dropdown
   ticketTypes = TicketParameters.ticketTypes;
@@ -112,7 +114,8 @@ export class TicketManagerComponent implements OnInit {
 
     // just in case unverified
     private authService: UserAuthService,
-    private userService: UserService) {
+    private userService: UserService,
+    private adminService: AdminService) {
       this.filterForm = formBuilder.group({
         ticketFilter: formBuilder.group({
           ticketType: 'All',
@@ -168,8 +171,14 @@ export class TicketManagerComponent implements OnInit {
     else paramListControl.patchValue([]);
   }
 
+  isMyTicket(ticket: Ticket){
+    // console.log('From filter: my empEid:', this.currUser.empEid, 'ticket empEid:', ticket.empEid);
+    if(this.currUser.empEid == ticket.empEid) return true;
+    return false;
+  }
+
   matchesFilters(ticket:Ticket){
-    console.log(this.filterForm)
+    // console.log(this.filterForm)
     // todo Remove this from here. These values initilaized for EVERY TICKET and makes complicated frontside. Not good 
     let filterTicketTypes = this.filterForm.get(['ticketFilter','ticketType'])?.value
     let filterPriorities = this.filterForm.get(['ticketFilter','priority'])?.value
@@ -179,7 +188,12 @@ export class TicketManagerComponent implements OnInit {
     
     if( filterTicketTypes.includes(ticket.ticketType) && filterPriorities.includes(ticket.priority)
      && filterCompanies.includes(ticket.company) && filterPlatforms.includes(ticket.platform)
-     && filterStatuses.includes(ticket.status) ) return true;
+     && filterStatuses.includes(ticket.status) ){
+      if(this.onlyMyTicketsShown && this.onlyOverdue) return (this.isMyTicket(ticket) && this.isOverdue(ticket))
+      else if(this.onlyMyTicketsShown) return this.isMyTicket(ticket);
+      else if (this.onlyOverdue) return this.isOverdue(ticket);
+      return true;
+    }
     
     return false;
     // alert(this.filterForm.value.ticketFilter.ticketType)
@@ -187,11 +201,18 @@ export class TicketManagerComponent implements OnInit {
   }
   
   applyFilters(){
-    this.filteredTickets = this.allTickets.filter((ticket)=>{
-      if(this.matchesFilters(ticket)) return ticket;
-      else return null;
-    });
-    this.dataSource.data = this.filteredTickets;
+    if(!this.currUser.empEid){
+      alert('Fetching user details, please try again in 5 seconds');
+      this.getAuthUser();
+      this.ngrxStoreUser();
+    }
+    else{
+      this.filteredTickets = this.allTickets.filter((ticket)=>{
+        if(this.matchesFilters(ticket)) return ticket;
+        else return null;
+      });
+      this.dataSource.data = [...this.filteredTickets].reverse();
+    }
   }
 
   resetFilterForm(){
@@ -209,10 +230,17 @@ export class TicketManagerComponent implements OnInit {
     this.resetFilterForm();
   }
 
-  // metaData(ticket: Ticket){
-  //   alert(JSON.stringify(ticket.closedDate));
-  // }
+  metaData(ticket: Ticket){
+    alert(JSON.stringify(ticket.issueDate));
+  }
 
+  giveDate(dateString: string){
+    return new Date(dateString.slice(0,dateString.indexOf('T')))
+  }
+
+  giveDateMoment(dateString: string){
+    return moment(dateString).toDate()
+  }
   
   openSnackBar(message: string, action: string = 'Close') {
     this.matSnack.open(message, action);
@@ -236,7 +264,7 @@ export class TicketManagerComponent implements OnInit {
       this.dataSource.paginator = this.ticketPaginator;
 
       this.allTickets = observer.reverse();   // original order, allTickets is extra assigning for nextIndex
-      console.log(this.allTickets);
+      // console.log(this.allTickets);
     });
   }
   //* SnapshotChanges explanation: 
@@ -284,6 +312,11 @@ export class TicketManagerComponent implements OnInit {
   }
 
 
+  is2049(date: Date): boolean{
+    return (new Date(date)).getTime() == (new Date(2049,0,1)).getTime()
+  }
+
+
 
   // only my tickets toggle
   searchBoxValue: string = '';
@@ -326,6 +359,9 @@ export class TicketManagerComponent implements OnInit {
       this.oldData = [];
     }
   }
+
+  myTicketsToggle(){alert(this.onlyMyTicketsShown)}
+  overdueTicketsToggle(){alert(this.onlyOverdue)}
 
 
   // time filters
@@ -434,25 +470,34 @@ export class TicketManagerComponent implements OnInit {
     }
   }
 
+  adminList: any;
+  readAdmins(){
+    this.adminService.getAdminList().subscribe((observer)=>{
+      this.adminList = observer;
+      // console.log('ADMINS: '); console.log(this.adminList);
+    })
+  }
   isAdmin(email:string){
-    if(email == 'marc.almeida.work@gmail.com' || 
-    email == 'thomas.john@nxtdigital.in' || email == 'tanuja.gujare@nxtdigital.in') return true;
-    return false;
+    if(this.adminList){
+      if(this.adminList.adminList.indexOf(email)>-1) return true;
+      else return false;
+    }
+    else return setTimeout(this.isAdmin(email),1000)
   }
 
   deleteTicket(ticket: any){
     if( confirm(`Are you sure you want to delete Ticket ${ticket.tid}?`) ){
       this.ticketService.deleteDBTicket(ticket.key).then(()=>{
-        this.openSnackBar("Successfully deleted ticket "+ticket.key)
+        this.openSnackBar("Successfully deleted ticket "+ticket.tid)
       }).catch(err=>alert("ERROR: "+err))
     }
   }
 
 
-  downloadCSV(){
+  downloadCSV(){  // !! Deprecated, see downloadCSV__hardcoded() below 
     let ticketsCSV = [];
     let ticketHeaders = this.ticketService.TICKET_HEADERS;
-    ticketsCSV.push(ticketHeaders.join(","));
+    ticketsCSV.push(ticketHeaders.join(','));
     this.allTickets.forEach((ticket, index)=>{
       let row = ""
       console.log(index,'Closed Date: '+ticket.closedDate)
@@ -477,7 +522,7 @@ export class TicketManagerComponent implements OnInit {
         }
         row = beforeCD + CD + afterCD + attachments
       }
-      console.log(row)
+      // console.log(row)
       ticketsCSV.push(row);
     })
     let finalCSVcontent = ticketsCSV.join("\r\n");
@@ -492,6 +537,83 @@ export class TicketManagerComponent implements OnInit {
     window.URL.revokeObjectURL(url);
     anchor.remove()
   }
+
+//    ['key', 'approvedAmount', 'closedDate', 'company', 'desc',
+//     'duration', 'empEid','estimatedAmount', 'expectedDate', 'issueDate', 'lastUpdated', 'platform', 'priority', 'projLead', 
+// 'requestedBy', 'status', 'ticketType', 'tid', 'title', 
+// 'updateHistory', 'vendor', 'attachments'
+//    ]
+
+
+  // !! Deprecated, see downloadCSV__hardcoded() below 
+  // myDownloadCSV(){
+  //   let ticketsCSV = [];
+  //   ticketsCSV.push((this.ticketService.TICKET_HEADERS).join(','));
+  //   this.allTickets.forEach(ticket => {
+  //     let row = '';
+  //     Object.values(ticket).forEach(val => { row = row+','+JSON.stringify(val) } );
+  //     ticketsCSV.push(row.slice(1))
+  //   })
+
+  //   let finalCSVcontent = ticketsCSV.join("\r\n");
+
+  //   // * Source: https://code-boxx.com/javascript-export-array-csv/
+  //   let cb = new Blob([finalCSVcontent],{type: "text/csv"});
+  //   var url = window.URL.createObjectURL(cb);
+  //   var anchor = document.createElement("a");
+  //   anchor.href = url;
+  //   anchor.download = "tickets.csv";
+  //   anchor.click();
+  //   window.URL.revokeObjectURL(url);
+  //   anchor.remove()
+  // }
+
+
+
+  downloadCSV__hardcoded(){
+    let ticketsCSV = [];
+
+    let orderedHeaders = [
+      'TID', 'Title', 'Description', 'Ticket Type', 'Priority', 'Company', 'Platform', 'Status',
+      'Raised By', 'Project Lead', 'Requested By', 'Vendor',
+      'Issue Date', 'Expected Date', 'Closed Date', 'Last Updated Date',
+      'Estimated Amount', 'Approved Amount'
+    ]
+
+    ticketsCSV.push(orderedHeaders.join(','));
+    this.allTickets.forEach(ticket => {
+      let row = '';
+      let closed = String(ticket.closedDate) == "undefined" ? 'NA' : ticket.closedDate;
+      let requestedBy = ticket.requestedBy.requester ? `${ticket.requestedBy.requester}, ${ticket.requestedBy.dept}` : ''
+      // let attachmentsLength = ticket.zattachments ? 0 : Number(ticket.zattachments.length);
+      
+      let tickValues = [
+        ticket.tid, ticket.title, ticket.desc, ticket.ticketType, ticket.priority, ticket.company, ticket.platform, ticket.status, 
+        ticket.empEid, ticket.projLead, requestedBy, String(ticket.vendor),
+        ticket.issueDate, ticket.expectedDate, closed, ticket.lastUpdated,
+        String(ticket.estimatedAmount), String(ticket.approvedAmount)
+      ] // 20, duration, updateHist
+      
+      row = tickValues.join('","')
+      ticketsCSV.push(`"${row}"`)
+    })
+
+    let finalCSVcontent = ticketsCSV.join("\r\n");
+
+    // * Source: https://code-boxx.com/javascript-export-array-csv/
+    let cb = new Blob([finalCSVcontent],{type: "text/csv"});
+    var url = window.URL.createObjectURL(cb);
+    var anchor = document.createElement("a");
+    anchor.href = url;
+    anchor.download = "tickets.csv";
+    anchor.click();
+    window.URL.revokeObjectURL(url);
+    anchor.remove()
+  }
+
+
+
+
 
   rxjsGetCurrentUser(){
     this.stateData.currentUser.forEach((user)=> {
@@ -508,13 +630,14 @@ export class TicketManagerComponent implements OnInit {
       // this.ngrxCurrUser = ngrxUser.currUser;
       // console.log(this.ngrxCurrUser);
       this.currUser = observer.currUser;
-      console.log(this.currUser);
+      // console.log(this.currUser);
     })
   }
 
   ngOnInit(): void {
     this.retrieveTickets();
     this.resetFilterForm();
+    this.readAdmins();
     
     this.ngrxGetUser();
   }
