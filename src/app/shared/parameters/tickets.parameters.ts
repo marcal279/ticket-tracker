@@ -12,13 +12,16 @@ export const companies = [
 export const platformConsolidatedList = [
     { 'code': 'LP', 'name': 'LCO Portal' },
     { 'code': 'LA', 'name': 'LCO App' },
+    { 'code': 'LAA', 'name': 'LCO Admin Portal' },
     { 'code': 'SCP', 'name': 'Selfcare Portal' },
     { 'code': 'SCA', 'name': 'Selfcare App' },
+    { 'code': 'SCAP', 'name': 'Selfcare Admin Portal' },
     { 'code': 'DCP', 'name': 'DP Collection Portal' },
     { 'code': 'DCA', 'name': 'DP Collection App' },
-    { 'code': 'WBS', 'name': 'Website' },
-    { 'code': 'LAA', 'name': 'LCO Admin App' },
     { 'code': 'DCAA', 'name': 'DP Collection Admin' },
+    { 'code': 'WBS', 'name': 'Website' },
+    { 'code': 'MSO', 'name': 'MSO Portal' },
+    { 'code': 'VLS', 'name': 'Voolsy Screen' },
     { 'code': 'OTH', 'name': 'Other' },
 ]
 export const departments = ['Finance','Ops','Tech','Strategy','Customer Care','Legal','Logistics'];
@@ -38,3 +41,9 @@ export const statuses = [
 export const priorities = ['High','Medium','Low']
 
 export const knownVendors = ['Mobiotics','Mobiezy','Designride','Paymytv','Paycable']
+
+
+// Admin Section
+export const adminList = ['marc.almeida.work@gmail.com', 'thomas.john@nxtdigital.in', 'tanuja.gujare@nxtdigital.in', 'david.middlename.allen@gmail.com']
+export const temporaryAllowed = []
+export const allowedDomains = ['nxtdigital.in', 'mobiotics.com']
