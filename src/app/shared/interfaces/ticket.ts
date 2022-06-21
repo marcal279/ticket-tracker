@@ -18,7 +18,7 @@ export interface Ticket{
     // * Dates
     issueDate: Date,
     duration?: string,
-    expectedDate: Date,
+    expectedDate?: Date,
     closedDate?: Date,
     lastUpdated: Date,
     // lastViewed: Date,
