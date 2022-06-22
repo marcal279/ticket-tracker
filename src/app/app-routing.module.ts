@@ -9,6 +9,7 @@ import { ProfilePageComponent } from "./components/profile-page/profile-page.com
 import { TicketDetailsComponent } from "./components/ticket-details/ticket-details.component";
 import { ReportGeneratorComponent } from "./components/report-generator/report-generator.component";
 import { AccountUtilitiesComponent } from "./components/account-utilities/account-utilities.component";
+import { VerifyEmailComponent } from "./components/verify-email/verify-email.component";
 
 const routes: Routes = [
     {path: 'login', component: LoginComponent},
@@ -20,6 +21,7 @@ const routes: Routes = [
     {path: 'ticket/:key', component: TicketDetailsComponent},
     {path: 'reports', component: ReportGeneratorComponent},
     {path: 'utilities', component: AccountUtilitiesComponent},
+    {path: 'verify-email', component: VerifyEmailComponent},
 ]
 
 @NgModule({
