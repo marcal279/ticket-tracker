@@ -8,7 +8,7 @@
     .filterForm{
         margin-left: 1.5rem;
         width: 60vw;
-        border: 1px solid rgb(0, 102, 255);
+        border: 1px solid #AA1A86;
         border-radius: 1.25rem;
         padding: 0.75rem 1.5rem 1rem 0rem;
     }
@@ -24,7 +24,7 @@
     <div style="margin: 1.5rem 0rem 1rem 5rem; width: 70%;">
         <div>
             <img class="headingIcon" 
-                src="https://img.icons8.com/fluency-systems-regular/30/0551DD/bar-chart.png" >
+                src="https://img.icons8.com/fluency-systems-regular/30/AA1A86/bar-chart.png" >
             <h2 style="display: inline-block;" class="fredoka500">Report Generator</h2>
             <p class="fredoka" style="color: rgb(102, 102, 102); margin-left: 2rem;">Generate Reports for required time frames with appropriate filters for efficient and seamless analysis</p>
         </div>
@@ -110,7 +110,7 @@
                     <button class="customButton fredoka" style="display: block; margin-left: 79%;" (click)="generateReport()">Generate Report</button>
                 </div>
             </form>
-            <div style="padding: 1rem 0rem 0.5rem 1rem; justify-content: center; border: 1px solid rgb(0, 102, 255);
+            <div style="padding: 1rem 0rem 0.5rem 1rem; justify-content: center; border: 1px solid #AA1A86;
             border-radius: 1.25rem;" [hidden]="!generated" class="enableButtonHover oneHalfLeft" [class.blueBorder] = "true">
                 <div [hidden]="!(generated && this.filteredTickets.length!=0)">
                     <div style="display: flex; justify-content: space-between;">
@@ -136,4 +136,5 @@
     
     <div style="width: 24%; padding: 2rem; justify-content: center;">
     </div>
+    
 </body>

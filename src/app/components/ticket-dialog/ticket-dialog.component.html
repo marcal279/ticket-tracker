@@ -14,6 +14,7 @@
 
 <mat-dialog-content>
     <h2 class="fredoka500">{{data.ticketDialogTitle}} Ticket</h2>
+    <!-- <h2 class="fredoka500" (click)="metaData(currentTicket)">{{data.ticketDialogTitle}} Ticket</h2> -->
 
     <mat-form-field>
         <mat-select placeholder="Select Ticket Type" [(value)]="this.currentTicket.ticketType" appearance="fill" required>

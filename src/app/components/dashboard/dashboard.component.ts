@@ -227,6 +227,14 @@ export class DashboardComponent implements OnInit, OnDestroy {
           "Dec"
         ]
       },
+      // theme: {
+      //   // mode: 'light', 
+      //   // palette: 'palette10', 
+      //   monochrome: {
+      //     enabled: true,
+      //     // color: '#AA1A86',
+      //   },
+      // }
       // 0053FF
     };
 

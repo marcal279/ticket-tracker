@@ -29,7 +29,7 @@
     }
 
     .notActive{
-        color: #D58EF5;
+        color: #61A6FD;
     }
 
     .displayNone{
@@ -61,8 +61,8 @@
 
 <div id="sideNavIcons" style="overflow: hidden;">
     <ul style="list-style-type: none;">
-            <img src="https://img.icons8.com/fluency-systems-regular/30/0551DD/menu--v1.png" 
         <li style="padding-left: 0.76rem;" (click)="toggleSideNav()">
+            <img src="https://img.icons8.com/fluency-systems-regular/30/0551DD/menu--v1.png" 
             style="margin-bottom: 1.5rem; padding-left: 0rem; display: inline-block;" id="menuIcon">
             <!-- <span class="iconName" [hidden]="!sideNavOpen" style="bottom: 2rem;">Menu</span> -->
             <span class="iconName" [hidden]="!sideNavOpen" [ngClass]="{slideRight: false}" style="bottom: 2rem;">Menu</span>
@@ -75,7 +75,7 @@
                 src="https://img.icons8.com/fluency-systems-regular/25/0551DD/{{icon}}.png" #{{icon}}>
             
             <img *ngIf="!pageActive(icon)" 
-                src="https://img.icons8.com/fluency-systems-regular/25/61A6F5/{{icon}}.png" #{{icon}}>    
+                src="https://img.icons8.com/fluency-systems-regular/25/61A6F5/{{icon}}.png" #{{icon}}> 
             
             <!-- <span class="iconName" [ngClass]="{notActive: !pageActive(icon)}" [hidden]="!sideNavOpen">{{givePageName(icon)}}</span> -->
             <span class="iconName" [hidden]="!sideNavOpen" [ngClass]="{notActive: !pageActive(icon), slideRight: false}">{{givePageName(icon)}}</span>
@@ -88,7 +88,6 @@
             
             <img *ngIf="!pageActive('user')" 
                 src="https://img.icons8.com/fluency-systems-regular/25/61A6F5/user.png" #user>
-            <!-- <img style="height: 40px; border-radius: 50%; margin-left: -10px;" src="../../assets/images/profile-marc.jpg" #user> -->
 
             <span class="iconName" [hidden]="!sideNavOpen" [ngClass]="{notActive: !pageActive('user'), slideRight: false}" style="padding-right: 6rem;">My Profile</span>
         </li>

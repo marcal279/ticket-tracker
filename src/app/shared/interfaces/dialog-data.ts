@@ -3,4 +3,5 @@ export interface DialogData{
     ticket: any,
     currEmail: string,
     nextIndex: number,
+    
 }
