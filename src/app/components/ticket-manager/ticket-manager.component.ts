@@ -259,7 +259,8 @@ export class TicketManagerComponent implements OnInit {
       ({ key: c.payload.key, ...c.payload.val() }) )
       )
     ).subscribe(observer => {
-      this.dataSource.data = observer.reverse();  // to give latest tickets first
+      // this.dataSource.data = observer.reverse();  // to give earliest tickets first
+      this.dataSource.data = observer;  // to give latest tickets first
       this.dataSource.sort = this.sort;
       this.dataSource.paginator = this.ticketPaginator;
 
