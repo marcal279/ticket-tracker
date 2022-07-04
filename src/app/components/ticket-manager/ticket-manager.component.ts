@@ -259,8 +259,8 @@ export class TicketManagerComponent implements OnInit {
       ({ key: c.payload.key, ...c.payload.val() }) )
       )
     ).subscribe(observer => {
-      // this.dataSource.data = observer.reverse();  // to give earliest tickets first
-      this.dataSource.data = observer;  // to give latest tickets first
+      this.dataSource.data = observer.reverse();  // to give latest tickets first
+      // this.dataSource.data = observer;  // to give earliest tickets first
       this.dataSource.sort = this.sort;
       this.dataSource.paginator = this.ticketPaginator;
 
@@ -471,6 +471,7 @@ export class TicketManagerComponent implements OnInit {
     }
   }
 
+  //!! requires fix, using hardcoded for now. See just below this 
   adminList: any;
   readAdmins(){
     this.adminService.getAdminList().subscribe((observer)=>{
@@ -478,12 +479,22 @@ export class TicketManagerComponent implements OnInit {
       // console.log('ADMINS: '); console.log(this.adminList);
     })
   }
-  isAdmin(email:string){
+  isAdmin_DB(email: string): boolean{
     if(this.adminList){
-      if(this.adminList.adminList.indexOf(email)>-1) return true;
-      else return false;
+      if(this.adminList.adminList.indexOf(email)<0) return false;
+      return true;
     }
-    else return setTimeout(this.isAdmin(email),3000);
+    else{
+      setTimeout(()=>{}, 2000)
+      return this.isAdmin_DB(email);
+    }
+  }
+
+  //* This working
+  adminListHardcoded = TicketParameters.adminList;
+  isAdmin(email: string){
+    if(this.adminListHardcoded.indexOf(email)) return true;
+    return false;
   }
 
   deleteTicket(ticket: any){
@@ -638,7 +649,9 @@ export class TicketManagerComponent implements OnInit {
   ngOnInit(): void {
     this.retrieveTickets();
     this.resetFilterForm();
-    this.readAdmins();
+    // this.readAdmins(); //* requires fix
+
+    // // this.adminFlag = this.isAdmin_FromDB(this.currUser.empEid)
     
     this.ngrxGetUser();
   }

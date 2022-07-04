@@ -44,6 +44,6 @@ export const knownVendors = ['Mobiotics','Mobiezy','Designride','Paymytv','Payca
 
 
 // Admin Section
-export const adminList = ['marc.almeida.work@gmail.com', 'thomas.john@nxtdigital.in', 'tanuja.gujare@nxtdigital.in', 'david.middlename.allen@gmail.com']
+export const adminList = ['marc.almeida.work@gmail.com', 'david.middlename.allen@gmail.com']
 export const temporaryAllowed = []
 export const allowedDomains = ['nxtdigital.in', 'mobiotics.com']
