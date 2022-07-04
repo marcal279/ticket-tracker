@@ -30,6 +30,7 @@ import { TicketDetailsComponent } from './components/ticket-details/ticket-detai
 import { ReportGeneratorComponent } from './components/report-generator/report-generator.component';
 import { AttachDialogComponent } from './components/attach-dialog/attach-dialog.component';
 import { AccountUtilitiesComponent } from './components/account-utilities/account-utilities.component';
+import { VerifyEmailComponent } from "./components/verify-email/verify-email.component";
 
 // Routing
 import { AppRoutingModule } from './app-routing.module';
@@ -52,7 +53,8 @@ import { MAT_DATE_LOCALE } from '@angular/material/core';
     TicketDetailsComponent,
     ReportGeneratorComponent,
     AttachDialogComponent,
-    AccountUtilitiesComponent
+    AccountUtilitiesComponent,
+    VerifyEmailComponent
   ],
   imports: [
     BrowserModule,
