@@ -448,5 +448,6 @@
         </div>
         <button class="customButton fredoka500" routerLink="../bulk-import">Bulk Import</button>
     </div>
+    <span *ngIf="isAdmin(this.currUser.empEid)">Admin Alert</span>
 </div>
 <!-- Ticket Manager running -->
