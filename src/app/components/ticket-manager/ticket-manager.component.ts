@@ -482,7 +482,7 @@ export class TicketManagerComponent implements OnInit {
       if(this.adminList.adminList.indexOf(email)>-1) return true;
       else return false;
     }
-    else return setTimeout(this.isAdmin(email),1000)
+    else return setTimeout(this.isAdmin(email),3000);
   }
 
   deleteTicket(ticket: any){
