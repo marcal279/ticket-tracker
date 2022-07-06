@@ -1,7 +1,21 @@
 # TicketTracker
+
+## Screenshots
+A few screengrabs from the application itself:
+
 ![This look](https://user-images.githubusercontent.com/73192810/169275207-774df71b-4243-4c04-bcec-77db7c9d3126.png)
+![Screenshot (452)](https://user-images.githubusercontent.com/73192810/177175833-74c55b0d-7108-4732-9719-22fc95e5a9a0.png)
+![Screenshot (453)](https://user-images.githubusercontent.com/73192810/177175841-faa0c62d-bb10-4995-9697-0c06eb230db8.png)
+![Screenshot (45989)](https://user-images.githubusercontent.com/73192810/177175845-9a2f64ff-2c0d-44d9-af9b-b028d368365e.png)
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 13.2.6.
+
+## Login Credentials
+Username: david.middlename.allen@gmail.com
+Password: 
+
+## Install Dependencies
+Run `npm install` after downloading files to install all dependencies for the project
 
 ## Development server
 
