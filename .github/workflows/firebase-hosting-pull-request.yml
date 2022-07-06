@@ -12,5 +12,5 @@ jobs:
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: '${{ secrets.GITHUB_TOKEN }}'
-          firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_NXT_TICKET_MASTER }}'
-          projectId: nxt-ticket-master
+          firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_TICKET_TRACKER_ANGULAR }}'
+          projectId: ticket-tracker-angular
