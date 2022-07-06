@@ -7,7 +7,7 @@ import { User } from '../../shared/interfaces/user';
 import { UserAuthService } from '../../shared/services/user-auth/user-auth.service';
 import { UserService } from '../../shared/services/users/user.service';
 
-import {allowedDomains} from '../../shared/parameters/tickets.parameters';
+import * as TicketParameters from '../../shared/parameters/tickets.parameters';
 
 @Component({
   selector: 'app-signup',
@@ -32,7 +32,7 @@ export class SignupComponent implements OnInit {
   passwordVal = ''; passwHide = true;
   passwordMatchVal = '';
 
-  tempAllowedEmails = ['david.middlename.allen@gmail.com']
+  tempAllowedEmails = [...TicketParameters.temporaryAllowed]  //* only these emails allowed for signup
   isValidEmail(emailID:string) : Boolean{
     if(this.isAllowedDomain(emailID.slice(emailID.indexOf('@')+1)) || this.tempAllowedEmails.indexOf(emailID)>-1) return true;
     return false;
@@ -46,7 +46,7 @@ export class SignupComponent implements OnInit {
     })
   }
 
-  allowedDomainsHardcoded = [...allowedDomains]
+  allowedDomainsHardcoded = [...TicketParameters.allowedDomains]
   isAllowedDomain(domain:string){
     if(this.allowedDomainsHardcoded.indexOf(domain)>-1) return true;
     return false
