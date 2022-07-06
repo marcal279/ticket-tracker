@@ -11,8 +11,8 @@ A few screengrabs from the application itself:
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 13.2.6.
 
 ## Login Credentials
-Username: david.middlename.allen@gmail.com
-Password: 
+Username: marc.almeida.work@gmail.com
+Password: open@123
 
 ## Install Dependencies
 Run `npm install` after downloading files to install all dependencies for the project
