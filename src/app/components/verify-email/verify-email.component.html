@@ -4,7 +4,7 @@
         height: 100%; width: 100%;
         justify-content: center;
         align-items: center;
-        background-color: rgb(170, 26, 134);
+        background-color: rgb(5, 81, 221);
     }
 
     .brandName{
@@ -35,18 +35,18 @@
 
     .customButton{
         /* display: block; */
-        background-color: rgb(170, 26, 134);
+        background-color: rgb(5, 81, 221);
         margin-left: 0rem;
     }
 
-    .blue{ color:rgb(0, 132, 255) }
+    .blue{ color:rgb(5, 81, 221) }
     .pink{ color:rgb(170, 26, 134) }
 </style>
 
 <h2 class="brandName"> NXTDigital ODTS </h2>
 <div class="allContent">
     <mat-card class="enableButtonHover">
-        <mat-card-title class="fredoka pink">Email Verification</mat-card-title>
+        <mat-card-title class="fredoka blue">Email Verification</mat-card-title>
         <mat-card-subtitle>Email sent to the email ID you provided, please check your inbox</mat-card-subtitle>
         <mat-card-content>
             <button class="fredoka500 customButton" (click)="userAuthService.verifyEmail()">Resend email</button>
