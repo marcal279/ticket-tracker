@@ -27,7 +27,7 @@
     "@ngrx/store": "^13.1.0",
     "@ngrx/store-devtools": "^13.1.0",
     "apexcharts": "^3.35.0",
-    "moment": "^2.29.3",
+    "moment": "^2.29.4",
     "ng-apexcharts": "^1.7.1",
     "rxjs": "~7.5.0",
     "tslib": "^2.3.0",
